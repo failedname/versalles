@@ -11,9 +11,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'vivero',
-        'USER': 'postgres',
-        'PASSWORD': '3a026d4c679acdcff8d984ed07af1293',
-        'HOST': 'dokku-postgres-vivero',
+        'USER': 'javier',
+        'PASSWORD': 'luna',
+        'HOST': 'localhost',
         'PORT': '5432',
 
     }
