@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    {% load static from staticfiles %}
+    <meta name="viewport"  content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <title>{% block title %}{% endblock title %}</title>
+    <link rel="stylesheet" href="{% static 'semantic-ui/semantic.min.css'%}" >
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'img/vivero.ico' %}" />
+    {% block css %}{% endblock css %}
+    {% block js1 %}{% endblock js1 %}
+
+  </head>
+  <body >
+
+
+
+    {% block nav %}
+    <div id=menu  class="ui  top attached stackable  menu " >
+        <a id="menuSidebar" class="item">
+          <i class="sidebar icon"></i>
+          Menu
+        </a>
+    </div>
+    {% endblock nav %}
+    <div class="ui bottom attached segment pushable">
+      <div class="ui Green left inline vertical sidebar menu">
+        <a href="{% url 'dashboard:panel' %}" class="item header">
+          <i class="home icon"></i>
+          Inicio
+        </a>
+        <div class="item">
+          <div class="menu">
+            <a href="/admin" class="item" target="_blank">Admin</a>
+
+          </div>
+
+        </div>
+        <div class="item">
+          <div class="header">
+            Ventas
+          </div>
+          <div class="menu">
+            <a href="{% url 'ventas:viverofactura' %}" class="item">
+              <i class="shop icon"></i>
+              Nueva Factura
+            </a>
+            <a href="{% url 'ventas:selfacturas' %}" class="item">
+              <i class="shop icon"></i>
+              Facturas
+            </a>
+          </div>
+        </div>
+        <div class="item">
+          <div class="header">
+            Compras
+          </div>
+          <div class="menu">
+            <a  class="item" href="{% url 'compras:seleccion' %}">
+              <i class="shop icon"></i>
+              Nueva Compra
+            </a>
+          </div>
+
+        </div>
+        <div class="item">
+          <div class="header">
+            Productos
+          </div>
+          <div class="menu">
+            <a href="" class="item">
+              <i class="shop icon"></i>
+              Nuevo Producto
+            </a>
+
+          </div>
+
+        </div>
+        <div class="item">
+          <div class="header">
+            Pedidos
+          </div>
+          <div class="menu">
+            <a  class="item" href="">
+              <i class="shop icon"></i>
+              Nueva Pedido
+            </a>
+          </div>
+
+        </div>
+
+      </div>
+      <div class="pusher " style="padding-top:30px">
+      {% block content %}
+      {% endblock content %}
+      </div>
+
+   </div>
+
+
+
+
+
+	  {% block footer %}{% endblock footer %}
+
+    <script type="text/javascript" src="{% static 'js/jquery.js'%}"></script>
+    <script type="text/javascript" src="{% static 'semantic-ui/semantic.min.js'%}"></script>
+    <script type="text/javascript" src="{% static 'js/menu.js'%}"></script>
+
+
+    {% block js %}{% endblock js %}
+
+
+
+
+  </body>
+</html>

@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}.:Facturas:.{% endblock %}
+{% load static from staticfiles %}
+
+{% block css %}<link rel="stylesheet" href="{% static 'css/pagination.css'%}" >
+{% endblock css %}
+{% block content %}
+{% csrf_token %}
+  <section class="ui grid container">
+    <div class="ui  wide sixteen column">
+      <table  class="ui celled table">
+        <thead>
+          <tr>
+            <th>FACTURA</th>
+            <th>FECHA</th>
+            <th>CC/NIT</th>
+            <th>NOMBRE</th>
+            <th>TOTAL</th>
+            <th>ESTADO</th>
+            <th>ACCIONES</th>
+          </tr>
+        </thead>
+        <tbody id="TableFact">
+
+        </tbody >
+
+      </table>
+      <div id="pagging" >
+
+      </div>
+
+    </div>
+
+  </section>
+
+{% endblock %}
+{% block js %}
+  <script type="text/javascript">
+    let data = JSON.parse('{{data|safe}}')
+  </script>
+  <script type="text/javascript" src="{% static 'js/pagination.js' %}" ></script>
+  <script type="text/javascript" src="{% static 'js/ventas/facturas.js' %}" ></script>
+
+
+{% endblock %}
