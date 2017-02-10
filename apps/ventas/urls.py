@@ -12,7 +12,7 @@ urlpatterns = [
         AllFacturas, name='allfacturas'),
     url(r'^seleccionar/nuevafactura/(?P<pro>\w+)/$',
         nueva_factura, name='nuevafactura'),
-    url(r'^seleccionar/nuevafactura/(?P<pro>\w+)/productos/(?P<pros>\w+)/$',
+    url(r'^seleccionar/nuevafactura/(?P<pro>\w+)/productos/$',
         search_productos, name='searchpro'),
     url(r'^seleccionar/nuevafactura/(?P<pro>\w+)/savefactura/$',
         save_facturaReal, name='saveInvoicereal'),

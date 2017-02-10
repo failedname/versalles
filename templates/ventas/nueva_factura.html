@@ -42,12 +42,23 @@
   <h4 class="ui dividing header">Infomacion de Productos</h4>
   <div class="fields">
     <div class="six wide field">
+      <label for="">Precios</label>
+      <select class="ui fluid dropdown" id="selectprecios">
+        <option value=""></option>
+        <option value="generales">precios generales</option>
+        <option value="compra">precios de compra</option>
+        <option value="mayor">precios al x mayor</option>
+      </select>
+    </div>
+  </div>
+  <div class="fields">
+    <div class="six wide field">
       <div id="producto_search" class="ui fluid search">
         <div class="ui icon input">
           <input id="pro_search" class="prompt" type="text" placeholder="Buscar...">
           <i class="search icon"></i>
         </div>
-        <div class="results"></div>
+        <div id="result" class="results"></div>
       </div>
     </div>
   </div>

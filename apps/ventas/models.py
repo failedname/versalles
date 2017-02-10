@@ -61,7 +61,16 @@ class Producto(models.Model):
                                      Presentacion, verbose_name='Presentación')
     vivero = models.ForeignKey(Vivero, null=True)
     precio_compra = models.IntegerField(blank=True, null=True)
-    tran_porce = models.IntegerField(verbose_name='Trasporte %', null=True)
+    tran_porce = models.IntegerField(blank=True, verbose_name='Trasporte %', null=True)
+    mayor_porce = models.IntegerField(blank=True, verbose_name='Utilidad x mayor %', null=True)
+    precioxmayor = models.IntegerField(blank=True, verbose_name='precio al por mayor', null=True)
+    valor_real_compra = models.IntegerField(blank=True, verbose_name='valor compra real', null=True)
+
+    def save(self):
+        preciocompra = ((self.tran_porce / 100) * self.precio_compra) + self.precio_compra
+        self.valor_real_compra = preciocompra
+        self.precioxmayor = ((self.mayor_porce / 100) * preciocompra) + preciocompra
+        super(Producto, self).save()
 
     class Meta:
         verbose_name = 'Producto'

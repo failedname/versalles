@@ -27,37 +27,107 @@ $('#search-cliente')
   }
 
 })
-$('#producto_search')
 
-.search({
-  apiSettings:{
-    url:'productos/{query}/'
+var valSel = 'generales'
+document.getElementById('selectprecios').addEventListener('change', () => {
+  valSel = document.getElementById('selectprecios').value
+})
+var inputSearch = document.getElementById('pro_search')
+inputSearch.addEventListener('keyup', () => {
 
-  },
-  fields: {
-    results: 'data',
-    title: 'nombre',
-    price: 'precio',
-    description: 'pres'
+  let valInput = inputSearch.value
+  $.ajax({
+    url: 'productos/',
+    type: 'POST',
+    data: {valinput: valInput, precio: valSel}
+  })
+  .done(function(data) {
+      var idClass = document.getElementById('result')
+      var html = ''
+      var objeto = data.data
 
-  },
-  searchFields: [
-    'nombre'
+      if (!data.sin) {
 
-  ],
-  error: {
-    noResults: 'No hay resultados'
-  },
-  cache: false,
-  onSelect: function (results, res) {
-    document.getElementById('id_codigo').value = results.id
-    document.getElementById('id_producto').value=results.nombre
-    document.getElementById('id_iva').value=results.iva
-    document.getElementById('id_precio').value=results.precio
-    document.getElementById('id_cantidad').focus()
-  }
+        for (var i = 0, len = objeto.length; i < len; i++) {
+          if (i < 9) {
+            html += `<a data-id="${objeto[i].id}" data-iva="${objeto[i].iva}"
+                       data-nombre="${objeto[i].nombre}" data-precio="${objeto[i].precio}" class="result" >
+                      <div class="content">
+                        <div class="title">${objeto[i].nombre}</div>
+                        <div class="description">${objeto[i].presentacion}</div>
+                        <div class="price">${objeto[i].precio}</div>
+                      </div>
+                    </a>
+                    `
+          }
+
+
+        }
+        idClass.className = 'results transition visible'
+        idClass.innerHTML = html
+      } else {
+        idClass.className = 'results transition hidden'
+      }
+
+
+
+
+  })
+  .fail(function() {
+    console.log("error");
+  })
+  .always(function() {
+    var idClass = document.getElementById('result')
+    for (var j = 0; j < idClass.children.length; j++ ) {
+      var enlace = idClass.children[j]
+          enlace.addEventListener('click',function ()  {
+            var codigo = this.getAttribute('data-id')
+            var nombre = this.getAttribute('data-nombre')
+            var iva = this.getAttribute('data-iva')
+            var precio = this.getAttribute('data-precio')
+            document.getElementById('id_codigo').value = codigo
+            document.getElementById('id_producto').value=nombre
+            document.getElementById('id_iva').value=iva
+            document.getElementById('id_precio').value=precio
+            document.getElementById('id_cantidad').focus()
+            idClass.className = 'results transition hidden'
+          })
+    }
+  })
 
 })
+
+// $('#producto_search')
+//
+// .search({
+//   apiSettings:{
+//     url:'productos/{query}/'
+//
+//   },
+//   fields: {
+//     results: 'data',
+//     title: 'nombre',
+//     price: 'precio',
+//     description: 'pres'
+//
+//   },
+//   searchFields: [
+//     'nombre'
+//
+//   ],
+//   error: {
+//     noResults: 'No hay resultados'
+//   },
+//   cache: false,
+//   onSelect: function (results, res) {
+//     document.getElementById('id_codigo').value = results.id
+//     document.getElementById('id_producto').value=results.nombre
+//     document.getElementById('id_iva').value=results.iva
+//     document.getElementById('id_precio').value=results.precio
+//     document.getElementById('id_cantidad').focus()
+//   }
+//
+// })
 
 var btnAgregar = document.getElementById('btnAgregar')
 

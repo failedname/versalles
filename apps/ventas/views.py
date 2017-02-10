@@ -83,28 +83,46 @@ def nueva_factura(request, pro):
     return render(request, template_name, {'data': json.dumps(data)})
 
 
-def search_productos(request, pros, pro):
-    print(pros)
-    data = {}
-    data = []
-    prods = Producto.objects.select_related(
+def search_productos(request, pro):
+    print(request.POST['precio'])
+
+    if (len(request.POST['valinput']) > 0):
+        prods = Producto.objects.select_related(
             'id_presentacion').filter(
-                nombre__contains=pros, vivero_id=pro)
+                nombre__contains=request.POST['valinput'], vivero_id=pro)
+        if (request.POST['precio'] == 'generales'):
 
-    if len(prods) >= 1:
-        for tot in prods:
-            data.append({
-                'id': tot.pk,
-                'nombre':  tot.nombre,
-                'precio':  tot.precio_venta,
-                'pres': tot.id_presentacion.tipo,
-                'iva': tot.iva_porce
-            })
-        return JsonResponse({'data': data}, safe=True)
+            data = [{
+                'id': res.pk,
+                'nombre': res.nombre,
+                'iva': res.iva_porce,
+                'precio': res.precio_venta,
+                'presentacion': res.id_presentacion.tipo
+
+            }for res in prods]
+            return JsonResponse({'data': data}, safe=False)
+        elif (request.POST['precio'] == 'compra'):
+            data = [{
+                'id': res.pk,
+                'nombre': res.nombre,
+                'iva': res.iva_porce,
+                'precio': res.valor_real_compra,
+                'presentacion': res.id_presentacion.tipo
+
+            }for res in prods]
+            return JsonResponse({'data': data}, safe=False)
+        elif (request.POST['precio'] == 'mayor'):
+            data = [{
+                'id': res.pk,
+                'nombre': res.nombre,
+                'iva': res.iva_porce,
+                'precio': res.precioxmayor,
+                'presentacion': res.id_presentacion.tipo
+
+            }for res in prods]
+            return JsonResponse({'data': data}, safe=False)
     else:
-        return JsonResponse({'data': data}, safe=True)
-
-    return JsonResponse({'data': 'hola'}, safe=True)
+        return JsonResponse({'sin': 'hola'}, safe=False)
 
 
 def save_facturaReal(request, pro):

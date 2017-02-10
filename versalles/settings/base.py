@@ -8,7 +8,7 @@ SECRET_KEY = '7*j9m*mok(+66l*1=%@yq#^jv=x)qq4a46%tj65bqydj(e@%)@'
 STATIC_ROOT= os.sep.join(os.path.abspath(__file__).split(os.sep)[:-3] + ['static'])
 STATICFILES_DIRS = (BASE_DIR, 'statics')
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
-SESSION_SAVE_EVERY_REQUEST = True
+# SESSION_SAVE_EVERY_REQUEST = True
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 SMUGGLER_FIXTURE_DIR = '/dumps/'
