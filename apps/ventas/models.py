@@ -60,9 +60,9 @@ class Producto(models.Model):
     id_presentacion = models.ForeignKey(
                                      Presentacion, verbose_name='Presentación')
     vivero = models.ForeignKey(Vivero, null=True)
-    precio_compra = models.IntegerField(blank=True, null=True)
-    tran_porce = models.IntegerField(blank=True, verbose_name='Trasporte %', null=True)
-    mayor_porce = models.IntegerField(blank=True, verbose_name='Utilidad x mayor %', null=True)
+    precio_compra = models.IntegerField(null=True)
+    tran_porce = models.IntegerField(verbose_name='Trasporte %', null=True)
+    mayor_porce = models.IntegerField(verbose_name='Utilidad x mayor %', null=True)
     precioxmayor = models.IntegerField(blank=True, verbose_name='precio al por mayor', null=True)
     valor_real_compra = models.IntegerField(blank=True, verbose_name='valor compra real', null=True)
 
