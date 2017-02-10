@@ -84,7 +84,6 @@ def nueva_factura(request, pro):
 
 
 def search_productos(request, pro):
-    print(request.POST['precio'])
 
     if (len(request.POST['valinput']) > 0):
         prods = Producto.objects.select_related(
