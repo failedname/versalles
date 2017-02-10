@@ -18,7 +18,9 @@ class ClienteAdmin(admin.ModelAdmin):
 @admin.register(Producto)
 class ProductoAdmin(admin.ModelAdmin):
     list_display = ('nombre', 'precio_venta', 'iva_porce',
-                    'id_categoria', 'id_presentacion', 'precio_compra')
+                    'id_categoria', 'id_presentacion',
+                    'precio_compra', 'tran_porce', 'valor_real_compra',
+                    'precioxmayor', 'mayor_porce')
     list_per_page = 50
     search_fields = ('nombre',)
 
