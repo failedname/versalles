@@ -1,6 +1,6 @@
-document.addEventListener('DOMContentLoaded', cargar)
+document.addEventListener('DOMContentLoaded', cargar(data))
 
-function moneda(number){
+function moneda (number) {
   let dato = new Intl.NumberFormat('es-CO', {style: 'currency', currency: 'USD'}).format(number)
   return dato
 }
@@ -46,7 +46,7 @@ function searchFac (fac) {
 
 }
 
-function cargar () {
+function cargar (data) {
   $.ajaxSetup({
       beforeSend: function(xhr, settings) {
         if(settings.type == "POST"){
@@ -80,13 +80,15 @@ function cargar () {
   function simpleTemplating (data) {
     var html = ''
     $.each(data, function (index, item) {
+      let print = item.estado === 'cerrada' ? `<a key="${item.id}"  data-tooltip="Imprimir"><i  class="large circular link teal print icon"></i></a>`: `<a onclick="return false"  data-tooltip="Imprimir" ><i  class="large circular link teal print icon"></i></a>`
+      let estado  = item.estado === 'cerrada' ? `<td class="positive">${item.estado}</td>`: `<td class="negative">${item.estado}</td>`
       var data = moneda(item.total)
       html += `<tr><td>${item.codigo}</td><td>${item.fecha}</td>
                 <td>${item.identificacion}</td>
                 <td>${item.nombre}</td><td >${data}</td>
-                <td class="positive">${item.estado}</td>
+                ${estado}
                 <td><a href="/ventas/facturas/1/detallefac/${item.codigo}"  data-tooltip="Ver" ><i  class="large circular link teal unhide icon"></i></a>
-                  <a  data-tooltip="Imprimir"><i  class="large circular link teal print icon"></i></a>
+                    ${print}
                 </td>
               </tr>`
     })

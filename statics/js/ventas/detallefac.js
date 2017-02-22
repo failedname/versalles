@@ -5,6 +5,7 @@ function detalleFac () {
   let table = document.getElementById('dattable')
   let html = `<p>Factura: ${detalle[0].factura}</p>
               <p>Cliente: ${detalle[0].cliente}</p>
+              <p>Fecha: ${detalle[0].fecha}</p>
               <p>NIT/CC: ${detalle[0].identificacion}</p>
               <p>Dirección: ${detalle[0].direccion}</p>
               <p>Telefono: ${detalle[0].telefono}</p>
@@ -16,10 +17,10 @@ for (var i = 0; i < tamaño; i++) {
   htmlbody  += `<tr>
                 <td>${detalle[i].codigo}</td>
                 <td>${detalle[i].nombre}</td>
-                <td>${detalle[i].valor}</td>
-                <td>${detalle[i].iva}</td>
+                <td>${moneda(detalle[i].valor)}</td>
+                <td>${moneda(detalle[i].iva)}</td>
                 <td>${detalle[i].cantidad}</td>
-                <td>${detalle[i].total}</td>
+                <td>${moneda(detalle[i].total)}</td>
               </tr>
               `
 }

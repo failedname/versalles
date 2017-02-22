@@ -29,9 +29,10 @@ def SearchFac(request, pro, fac):
     template_name = 'ventas/detailInvoice.html'
     detfac = Detalle_FacturaReal.objects.select_related(
                                                         'factura', 'factura__cliente', 'producto').filter(
-                                                        factura__vivero_id= pro, factura__codigo= fac)
+                                                        factura__vivero_id=pro, factura__codigo= fac)
     data = [{
         'factura': res.factura.codigo,
+        'fecha': str(res.factura.fecha),
         'cliente': res.factura.cliente.nombre,
         'identificacion': res.factura.cliente.nit_cc,
         'direccion': res.factura.cliente.direccion,
@@ -59,6 +60,7 @@ def AllFacturas(request, pro):
                                             factura__vivero_id=pro).distinct(
                                             'factura_id')
     fact = [{
+        'id': res.factura.pk,
         'codigo': res.factura.codigo,
         'fecha': str(res.factura.fecha),
         'identificacion': res.factura.cliente.nit_cc,
@@ -88,7 +90,7 @@ def search_productos(request, pro):
     if (len(request.POST['valinput']) > 0):
         prods = Producto.objects.select_related(
             'id_presentacion').filter(
-                nombre__contains=request.POST['valinput'], vivero_id=pro)
+                nombre__contains=request.POST['valinput'], vivero_id=pro)[:9]
         if (request.POST['precio'] == 'generales'):
 
             data = [{

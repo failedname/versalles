@@ -28,7 +28,7 @@ $('#search-cliente')
 
 })
 
-var valSel = 'generales'
+var valSel = ''
 document.getElementById('selectprecios').addEventListener('change', () => {
   valSel = document.getElementById('selectprecios').value
 })
