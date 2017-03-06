@@ -28,10 +28,11 @@ def SelFacturas(request):
 def SearchFac(request, pro, fac):
     template_name = 'ventas/detailInvoice.html'
     detfac = Detalle_FacturaReal.objects.select_related(
-                                                        'factura', 'factura__cliente', 'producto').filter(
+                                                        'factura', 'factura__cliente', 'factura__estado', 'producto').filter(
                                                         factura__vivero_id=pro, factura__codigo= fac)
     data = [{
         'factura': res.factura.codigo,
+        'estado': res.factura.estado.estado,
         'fecha': str(res.factura.fecha),
         'cliente': res.factura.cliente.nombre,
         'identificacion': res.factura.cliente.nit_cc,

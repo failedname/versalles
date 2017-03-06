@@ -18,6 +18,8 @@ urlpatterns = [
         save_facturaReal, name='saveInvoicereal'),
     url(r'^facturas/(?P<pro>\w+)/detallefac/(?P<fac>\w+)/$',
         SearchFac, name='detallefactura'),
+    url(r'^facturas/(?P<pro>\w+)/detallefac/(?P<fac>\w+)/generar/$',
+        SearchFac, name='generarcopiafactura'),
 
 
 ]
