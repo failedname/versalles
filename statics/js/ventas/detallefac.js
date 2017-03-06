@@ -4,7 +4,7 @@ function detalleFac () {
   let action = document.getElementById('action')
   let print = detalle[0].estado === 'cerrada' ? `<a href="#" id="print" data-id="${detalle[0].factura}" data-tooltip="Imprimir Copia" ><i  class="large circular link teal print icon"></i></a>`: null
   action.innerHTML = print
-  console.log(print)
+  console.log(detalle[0].estado)
   // let generar= document.getElementById('print')
   // console.log(generar)
   //     generar.addEventListener('click', generarPdf)
