@@ -320,30 +320,10 @@ function FacturaPdf (data, nume) {
   doc.text(30, 82, dire.toString().toUpperCase())
 
 
-  doc.rect(5, 94, 200, 180)
-  doc.setTextColor(100)
-  doc.text(7, 238, 'Observaciones:')
-  doc.rect(5, 234, 120, 30)
-  doc.text(127, 240, 'Valor Bruto:')
-  doc.text(127, 247, 'IVA:')
-  doc.text(127, 254, 'Dscto:')
-  doc.setTextColor(0)
-  doc.text(127, 261, 'VALOR A PAGAR:')
-  doc.rect(125, 234, 80, 30)
-  doc.setFontSize(8)
-  doc.text(7, 269, 'Elaborado por:')
-  doc.rect(5, 264, 130, 10)
-  doc.text(137, 269, 'Recibida por:')
-  doc.rect(135, 264, 70, 10)
-  doc.setFontSize(7)
-  var numer = nume[0].resu
-  var fecha = nume[0].fecha
-  var ini = nume[0].ini
-  var fin = nume[0].fin
-  var vivero = data[0].vivero.toUpperCase()
-  var vivero_nit = data[0].nit_vivero
-  doc.text(5, 280, `NUMERACION HABILITADA SEGUN RESOLUCION DIAN ${numer} DEL ${fecha} DEL ${ini} al ${fin} `)
-  doc.text(5, 290, `FACTURACION POR COMPUTADOR, IMPRESO POR ${vivero} NIT ${vivero_nit}`)
+
+
+
+
   var columns = ['CODIGO', 'PRODUCTO', 'VALOR U', 'CANTIDAD', 'IVA', 'TOTAL']
   var rows = []
   var tot = 0
@@ -359,7 +339,9 @@ function FacturaPdf (data, nume) {
   }
 
 
-  doc.autoTable(columns, rows, {theme: 'grid', rowHeight: 10, startY: 96, margin: 5, cellPadding: 30, headerStyles: {
+  doc.autoTable(columns, rows, {addPageContent: function(data) {
+            console.log(doc)
+        },theme: 'grid', startY: 96, margin: 5, cellPadding: 30, headerStyles: {
     fontSize:6,
     font: 'courier',
     fontStyle: 'bold',
@@ -368,22 +350,50 @@ function FacturaPdf (data, nume) {
       fontSize:6,
       font: 'courier',
       cellPadding:1,
-      rowHeight: 6
+      cell: 6
   }})
+  let largo= (rows.length * 6) + 6
+  doc.setTextColor(100)
+  doc.text(7, 110 + largo, 'Observaciones:')
+  doc.rect(5, 106 + largo, 120, 30)
+  doc.text(127, 110 + largo, 'Valor Bruto:')
+  doc.text(127, 117 + largo, 'IVA:')
+  doc.text(127, 124 + largo, 'Dscto:')
+  doc.setTextColor(0)
+  doc.text(127, 131 + largo, 'VALOR A PAGAR:')
+  doc.rect(125, 106 + largo, 80, 30)
+  doc.setFontSize(8)
+  doc.text(7, 139 + largo, 'Elaborado por:')
+  doc.rect(5, 136 + largo, 130, 10)
+  doc.text(137, 139 + largo, 'Recibida por:')
+  doc.rect(135, 136 + largo, 70, 10)
+  doc.setFontSize(7)
+  var numer = nume[0].resu
+  var fecha = nume[0].fecha
+  var ini = nume[0].ini
+  var fin = nume[0].fin
+  var vivero = data[0].vivero.toUpperCase()
+  var vivero_nit = data[0].nit_vivero
+  doc.text(5, 150 + largo, `NUMERACION HABILITADA SEGUN RESOLUCION DIAN ${numer} DEL ${fecha} DEL ${ini} al ${fin} `)
+  doc.text(5, 157 + largo, `FACTURACION POR COMPUTADOR, IMPRESO POR ${vivero} NIT ${vivero_nit}`)
   doc.setFontSize(10)
   var TotFormat = moneda(tot)
   let BrutoFormat = moneda(bruto)
   let IvaFormat = moneda(iva)
   let DescFormat  = moneda(desc)
-  doc.text(167, 240, BrutoFormat.toString())
-  doc.text(167, 247, IvaFormat.toString())
-  doc.text(167, 254, DescFormat.toString())
-  doc.text(167, 261, TotFormat.toString())
+  doc.text(167, 110 + largo , BrutoFormat.toString())
+  doc.text(167, 117 + largo, IvaFormat.toString())
+  doc.text(167, 124 + largo, DescFormat.toString())
+  doc.text(167, 131 + largo, TotFormat.toString())
   doc.output('dataurlnewwindow')
+
+
 }
 
 function moneda(number){
   let dato = new Intl.NumberFormat('es-CO', {style: 'currency', currency: 'USD'}).format(number)
   return dato
 }
+
+
 })

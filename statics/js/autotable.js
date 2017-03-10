@@ -1,10 +1,2343 @@
-/**
- * jsPDF AutoTable plugin v2.0.36
- * Copyright (c) 2014 Simon Bengtsson, https://github.com/simonbengtsson/jsPDF-AutoTable
- *
+/*!
+ * jsPDF AutoTable plugin v2.3.0
+ * Copyright (c) 2014 Simon Bengtsson, https://github.com/simonbengtsson/jsPDF-AutoTable 
+ * 
  * Licensed under the MIT License.
  * http://opensource.org/licenses/mit-license
- *
- * @preserve
+ * 
+ * */if (typeof window === 'object') window.jspdfAutoTableVersion = '2.3.0';/*
  */
-!function(t){"use strict";function e(){return{theme:"striped",styles:{},headerStyles:{},bodyStyles:{},alternateRowStyles:{},columnStyles:{},startY:!1,margin:40,pageBreak:"auto",tableWidth:"auto",createdHeaderCell:function(t,e){},createdCell:function(t,e){},drawHeaderRow:function(t,e){},drawRow:function(t,e){},drawHeaderCell:function(t,e){},drawCell:function(t,e){},beforePageContent:function(t){},afterPageContent:function(t){},afterPageAdd:function(t){}}}function n(){return{cellPadding:5,fontSize:10,font:"helvetica",lineColor:200,lineWidth:0,fontStyle:"normal",overflow:"ellipsize",fillColor:!1,textColor:20,halign:"left",valign:"top",rowHeight:20,columnWidth:"auto"}}function r(t){return t&&"object"==typeof t&&"default"in t?t.default:t}function o(t,e){return e={exports:{}},t(e,e.exports),e.exports}function i(t,e,n){t&&"object"===("undefined"==typeof t?"undefined":v(t))||console.error("The headers should be an object or array, is: "+("undefined"==typeof t?"undefined":v(t))),e&&"object"===("undefined"==typeof e?"undefined":v(e))||console.error("The data should be an object or array, is: "+("undefined"==typeof e?"undefined":v(e))),n&&"object"!==("undefined"==typeof n?"undefined":v(n))&&console.error("The data should be an object or array, is: "+("undefined"==typeof e?"undefined":v(e))),Array.prototype.forEach||console.error("The current browser does not support Array.prototype.forEach which is required for jsPDF-AutoTable. You can try polyfilling it by including this script https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/forEach#Polyfill")}function f(t,e){br=new x;var n=/\r\n|\r|\n/g,r=new O(t);r.index=-1;var o=W.styles([P[pr.theme].table,P[pr.theme].header]);r.styles=Object.assign({},o,pr.styles,pr.headerStyles),t.forEach(function(t,e){var o=e;"object"===("undefined"==typeof t?"undefined":v(t))&&(e="undefined"!=typeof t.dataKey?t.dataKey:t.key),"undefined"!=typeof t.width&&console.error("Use of deprecated option: column.width, use column.styles.columnWidth instead.");var i=new S(e,o);i.styles=pr.columnStyles[i.dataKey]||{},br.columns.push(i);var f=new j;f.raw="object"===("undefined"==typeof t?"undefined":v(t))?t.title:t,f.styles=Object.assign({},r.styles),f.text=""+f.raw,f.contentWidth=2*f.styles.cellPadding+b(f.text,f.styles),f.text=f.text.split(n),r.cells[e]=f,pr.createdHeaderCell(f,{column:i,row:r,settings:pr})}),br.headerRow=r,e.forEach(function(t,e){var r=new O(t),o=e%2===0,i=W.styles([P[pr.theme].table,o?P[pr.theme].alternateRow:{}]),f=Object.assign({},pr.styles,pr.bodyStyles,o?pr.alternateRowStyles:{});r.styles=Object.assign({},i,f),r.index=e,br.columns.forEach(function(e){var o=new j;o.raw=t[e.dataKey],o.styles=Object.assign({},r.styles,e.styles),o.text="undefined"!=typeof o.raw?""+o.raw:"",r.cells[e.dataKey]=o,pr.createdCell(o,p({column:e,row:r})),o.contentWidth=2*o.styles.cellPadding+b(o.text,o.styles),o.text=o.text.split(n)}),br.rows.push(r)})}function a(t,e){var n=0;br.columns.forEach(function(t){t.contentWidth=br.headerRow.cells[t.dataKey].contentWidth,br.rows.forEach(function(e){var n=e.cells[t.dataKey].contentWidth;n>t.contentWidth&&(t.contentWidth=n)}),t.width=t.contentWidth,n+=t.contentWidth}),br.contentWidth=n;var r=e-pr.margin.left-pr.margin.right,o=r;"number"==typeof pr.tableWidth?o=pr.tableWidth:"wrap"===pr.tableWidth&&(o=br.contentWidth),br.width=o<r?o:r;var i=[],f=0,a=br.width/br.columns.length,c=0;br.columns.forEach(function(t){var e=W.styles([P[pr.theme].table,pr.styles,t.styles]);"wrap"===e.columnWidth?t.width=t.contentWidth:"number"==typeof e.columnWidth?t.width=e.columnWidth:("auto"===e.columnWidth,t.contentWidth<=a&&br.contentWidth>br.width?t.width=t.contentWidth:(i.push(t),f+=t.contentWidth,t.width=0)),c+=t.width}),u(i,c,f,a),br.height=0;var l=br.rows.concat(br.headerRow);l.forEach(function(e,n){var r=0;br.columns.forEach(function(n){var o=e.cells[n.dataKey];y(o.styles);var i=n.width-2*o.styles.cellPadding;if("linebreak"===o.styles.overflow)try{o.text=t.splitTextToSize(o.text,i+1,{fontSize:o.styles.fontSize})}catch(e){if(!(e instanceof TypeError&&Array.isArray(o.text)))throw e;o.text=t.splitTextToSize(o.text.join(" "),i+1,{fontSize:o.styles.fontSize})}else"ellipsize"===o.styles.overflow?o.text=g(o.text,i,o.styles):"visible"===o.styles.overflow||("hidden"===o.styles.overflow?o.text=g(o.text,i,o.styles,""):"function"==typeof o.styles.overflow?o.text=o.styles.overflow(o.text,i):console.error("Unrecognized overflow type: "+o.styles.overflow));var f=Array.isArray(o.text)?o.text.length-1:0;f>r&&(r=f)}),e.heightStyle=e.styles.rowHeight,e.height=e.heightStyle+r*e.styles.fontSize*z,br.height+=e.height})}function u(t,e,n,r){for(var o=br.width-e-n,i=0;i<t.length;i++){var f=t[i],a=f.contentWidth/n,c=f.contentWidth+o*a<r;if(o<0&&c){t.splice(i,1),n-=f.contentWidth,f.width=r,e+=f.width,u(t,e,n,r);break}f.width=f.contentWidth+o*a}}function c(t){pr.afterPageContent(p()),t(),pr.afterPageAdd(p()),br.pageCount++,dr={x:pr.margin.left,y:pr.margin.top},pr.beforePageContent(p()),pr.drawHeaderRow(br.headerRow,p({row:br.headerRow}))!==!1&&d(br.headerRow,pr.drawHeaderCell)}function l(t){var e=dr.y+t+pr.margin.bottom;return e>=yr.height}function s(t){br.rows.forEach(function(e,n){if(l(e.height)){c(t)}e.y=dr.y,pr.drawRow(e,p({row:e}))!==!1&&d(e,pr.drawCell)})}function d(t,e){dr.x=pr.margin.left;for(var n=0;n<br.columns.length;n++){var r=br.columns[n],o=t.cells[r.dataKey];if(o){y(o.styles),o.x=dr.x,o.y=dr.y,o.height=t.height,o.width=r.width,"top"===o.styles.valign?o.textPos.y=dr.y+o.styles.cellPadding:"bottom"===o.styles.valign?o.textPos.y=dr.y+t.height-o.styles.cellPadding:o.textPos.y=dr.y+t.height/2,"right"===o.styles.halign?o.textPos.x=o.x+o.width-o.styles.cellPadding:"center"===o.styles.halign?o.textPos.x=o.x+o.width/2:o.textPos.x=o.x+o.styles.cellPadding;var i=p({column:r,row:t});if(e(o,i)!==!1){var f=h(o.styles);f&&sr.rect(o.x,o.y,o.width,o.height,f),sr.autoTableText(o.text,o.textPos.x,o.textPos.y,{halign:o.styles.halign,valign:o.styles.valign})}dr.x+=o.width}}dr.y+=t.height}function h(t){var e=t.lineWidth>0,n=t.fillColor!==!1;return e&&n?"DF":e?"S":!!n&&"F"}function y(t){Object.keys(hr).forEach(function(e){var n=t[e],r=hr[e];"undefined"!=typeof n&&(n.constructor===Array?r.apply(this,n):r(n))})}function p(t){return Object.assign({pageCount:br.pageCount,settings:pr,table:br,doc:sr,cursor:dr},t||{})}function b(t,e){y(e);var n=sr.getStringUnitWidth(t);return n*e.fontSize}function g(t,e,n,r){if(r="undefined"!=typeof r?r:"...",Array.isArray(t))return t.forEach(function(o,i){t[i]=g(o,e,n,r)}),t;if(e>=b(t,n))return t;for(;e<b(t+r,n)&&!(t.length<2);)t=t.substring(0,t.length-1);return t.trim()+r}t="default"in t?t.default:t;var v="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(t){return typeof t}:function(t){return t&&"function"==typeof Symbol&&t.constructor===Symbol?"symbol":typeof t},w=function(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")},m=function(){function t(t,e){for(var n=0;n<e.length;n++){var r=e[n];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(t,r.key,r)}}return function(e,n,r){return n&&t(e.prototype,n),r&&t(e,r),e}}(),x=function t(){w(this,t),this.height=0,this.width=0,this.contentWidth=0,this.rows=[],this.columns=[],this.headerRow=null,this.settings={},this.pageCount=1},O=function t(e){w(this,t),this.raw=e||{},this.index=0,this.styles={},this.cells={},this.height=0,this.y=0},j=function t(e){w(this,t),this.raw=e,this.styles={},this.text="",this.contentWidth=0,this.textPos={},this.height=0,this.width=0,this.x=0,this.y=0},S=function t(e,n){w(this,t),this.dataKey=e,this.index=n,this.options={},this.styles={},this.contentWidth=0,this.width=0,this.x=0},z=1.15,P={striped:{table:{fillColor:255,textColor:80,fontStyle:"normal"},header:{textColor:255,fillColor:[41,128,185],rowHeight:23,fontStyle:"bold"},body:{},alternateRow:{fillColor:245}},grid:{table:{fillColor:255,textColor:80,fontStyle:"normal",lineWidth:.1},header:{textColor:255,fillColor:[26,188,156],rowHeight:23,fontStyle:"bold",lineWidth:0},body:{},alternateRow:{}},plain:{header:{fontStyle:"bold"}}},W=function(){function t(){w(this,t)}return m(t,null,[{key:"initSettings",value:function(t){var n=Object.assign({},e(),t);"undefined"!=typeof n.extendWidth&&(n.tableWidth=n.extendWidth?"auto":"wrap",console.error("Use of deprecated option: extendWidth, use tableWidth instead.")),"undefined"!=typeof n.margins&&("undefined"==typeof n.margin&&(n.margin=n.margins),console.error("Use of deprecated option: margins, use margin instead.")),[["padding","cellPadding"],["lineHeight","rowHeight"],"fontSize","overflow"].forEach(function(t){var e="string"==typeof t?t:t[0],r="string"==typeof t?t:t[1];"undefined"!=typeof n[e]&&("undefined"==typeof n.styles[r]&&(n.styles[r]=n[e]),console.error("Use of deprecated option: "+e+", use the style "+r+" instead."))});var r=n.margin;return n.margin={},"number"==typeof r.horizontal&&(r.right=r.horizontal,r.left=r.horizontal),"number"==typeof r.vertical&&(r.top=r.vertical,r.bottom=r.vertical),["top","right","bottom","left"].forEach(function(t,e){if("number"==typeof r)n.margin[t]=r;else{var o=Array.isArray(r)?e:t;n.margin[t]="number"==typeof r[o]?r[o]:40}}),n}},{key:"styles",value:function(t){return t.unshift(n()),t.unshift({}),Object.assign.apply(this,t)}}]),t}(),E=o(function(t){var e=t.exports="undefined"!=typeof window&&window.Math==Math?window:"undefined"!=typeof self&&self.Math==Math?self:Function("return this")();"number"==typeof __g&&(__g=e)}),C=r(E),A=Object.freeze({default:C}),T=o(function(t){var e={}.hasOwnProperty;t.exports=function(t,n){return e.call(t,n)}}),k=r(T),F=Object.freeze({default:k}),_=o(function(t){t.exports=function(t){try{return!!t()}catch(t){return!0}}}),R=r(_),K=Object.freeze({default:R}),I=o(function(t){t.exports=!r(K)(function(){return 7!=Object.defineProperty({},"a",{get:function(){return 7}}).a})}),H=r(I),N=Object.freeze({default:H}),M=o(function(t){var e=t.exports={version:"2.4.0"};"number"==typeof __e&&(__e=e)}),U=r(M),Y=M.version,D=Object.freeze({default:U,version:Y}),B=o(function(t){t.exports=function(t){return"object"==typeof t?null!==t:"function"==typeof t}}),J=r(B),G=Object.freeze({default:J}),q=o(function(t){var e=r(G);t.exports=function(t){if(!e(t))throw TypeError(t+" is not an object!");return t}}),L=r(q),Q=Object.freeze({default:L}),V=o(function(t){var e=r(G),n=r(A).document,o=e(n)&&e(n.createElement);t.exports=function(t){return o?n.createElement(t):{}}}),X=r(V),Z=Object.freeze({default:X}),$=o(function(t){t.exports=!r(N)&&!r(K)(function(){return 7!=Object.defineProperty(r(Z)("div"),"a",{get:function(){return 7}}).a})}),tt=r($),et=Object.freeze({default:tt}),nt=o(function(t){var e=r(G);t.exports=function(t,n){if(!e(t))return t;var r,o;if(n&&"function"==typeof(r=t.toString)&&!e(o=r.call(t)))return o;if("function"==typeof(r=t.valueOf)&&!e(o=r.call(t)))return o;if(!n&&"function"==typeof(r=t.toString)&&!e(o=r.call(t)))return o;throw TypeError("Can't convert object to primitive value")}}),rt=r(nt),ot=Object.freeze({default:rt}),it=o(function(t,e){var n=r(Q),o=r(et),i=r(ot),f=Object.defineProperty;e.f=r(N)?Object.defineProperty:function(t,e,r){if(n(t),e=i(e,!0),n(r),o)try{return f(t,e,r)}catch(t){}if("get"in r||"set"in r)throw TypeError("Accessors not supported!");return"value"in r&&(t[e]=r.value),t}}),ft=r(it),at=it.f,ut=Object.freeze({default:ft,f:at}),ct=o(function(t){t.exports=function(t,e){return{enumerable:!(1&t),configurable:!(2&t),writable:!(4&t),value:e}}}),lt=r(ct),st=Object.freeze({default:lt}),dt=o(function(t){var e=r(ut),n=r(st);t.exports=r(N)?function(t,r,o){return e.f(t,r,n(1,o))}:function(t,e,n){return t[e]=n,t}}),ht=r(dt),yt=Object.freeze({default:ht}),pt=o(function(t){var e=0,n=Math.random();t.exports=function(t){return"Symbol(".concat(void 0===t?"":t,")_",(++e+n).toString(36))}}),bt=r(pt),gt=Object.freeze({default:bt}),vt=o(function(t){var e=r(A),n=r(yt),o=r(F),i=r(gt)("src"),f="toString",a=Function[f],u=(""+a).split(f);r(D).inspectSource=function(t){return a.call(t)},(t.exports=function(t,r,f,a){var c="function"==typeof f;c&&(o(f,"name")||n(f,"name",r)),t[r]!==f&&(c&&(o(f,i)||n(f,i,t[r]?""+t[r]:u.join(String(r)))),t===e?t[r]=f:a?t[r]?t[r]=f:n(t,r,f):(delete t[r],n(t,r,f)))})(Function.prototype,f,function(){return"function"==typeof this&&this[i]||a.call(this)})}),wt=r(vt),mt=Object.freeze({default:wt}),xt=o(function(t){t.exports=function(t){if("function"!=typeof t)throw TypeError(t+" is not a function!");return t}}),Ot=r(xt),jt=Object.freeze({default:Ot}),St=o(function(t){var e=r(jt);t.exports=function(t,n,r){if(e(t),void 0===n)return t;switch(r){case 1:return function(e){return t.call(n,e)};case 2:return function(e,r){return t.call(n,e,r)};case 3:return function(e,r,o){return t.call(n,e,r,o)}}return function(){return t.apply(n,arguments)}}}),zt=r(St),Pt=Object.freeze({default:zt}),Wt=o(function(t){var e=r(A),n=r(D),o=r(yt),i=r(mt),f=r(Pt),a="prototype",u=function(t,r,c){var l,s,d,h,y=t&u.F,p=t&u.G,b=t&u.S,g=t&u.P,v=t&u.B,w=p?e:b?e[r]||(e[r]={}):(e[r]||{})[a],m=p?n:n[r]||(n[r]={}),x=m[a]||(m[a]={});p&&(c=r);for(l in c)s=!y&&w&&void 0!==w[l],d=(s?w:c)[l],h=v&&s?f(d,e):g&&"function"==typeof d?f(Function.call,d):d,w&&i(w,l,d,t&u.U),m[l]!=d&&o(m,l,h),g&&x[l]!=d&&(x[l]=d)};e.core=n,u.F=1,u.G=2,u.S=4,u.P=8,u.B=16,u.W=32,u.U=64,u.R=128,t.exports=u}),Et=r(Wt),Ct=Object.freeze({default:Et}),At=o(function(t){var e=r(gt)("meta"),n=r(G),o=r(F),i=r(ut).f,f=0,a=Object.isExtensible||function(){return!0},u=!r(K)(function(){return a(Object.preventExtensions({}))}),c=function(t){i(t,e,{value:{i:"O"+ ++f,w:{}}})},l=function(t,r){if(!n(t))return"symbol"==typeof t?t:("string"==typeof t?"S":"P")+t;if(!o(t,e)){if(!a(t))return"F";if(!r)return"E";c(t)}return t[e].i},s=function(t,n){if(!o(t,e)){if(!a(t))return!0;if(!n)return!1;c(t)}return t[e].w},d=function(t){return u&&h.NEED&&a(t)&&!o(t,e)&&c(t),t},h=t.exports={KEY:e,NEED:!1,fastKey:l,getWeak:s,onFreeze:d}}),Tt=r(At),kt=At.KEY,Ft=At.NEED,_t=At.fastKey,Rt=At.getWeak,Kt=At.onFreeze,It=Object.freeze({default:Tt,KEY:kt,NEED:Ft,fastKey:_t,getWeak:Rt,onFreeze:Kt}),Ht=o(function(t){var e=r(A),n="__core-js_shared__",o=e[n]||(e[n]={});t.exports=function(t){return o[t]||(o[t]={})}}),Nt=r(Ht),Mt=Object.freeze({default:Nt}),Ut=o(function(t){var e=r(Mt)("wks"),n=r(gt),o=r(A).Symbol,i="function"==typeof o,f=t.exports=function(t){return e[t]||(e[t]=i&&o[t]||(i?o:n)("Symbol."+t))};f.store=e}),Yt=r(Ut),Dt=Object.freeze({default:Yt}),Bt=o(function(t){var e=r(ut).f,n=r(F),o=r(Dt)("toStringTag");t.exports=function(t,r,i){t&&!n(t=i?t:t.prototype,o)&&e(t,o,{configurable:!0,value:r})}}),Jt=r(Bt),Gt=Object.freeze({default:Jt}),qt=o(function(t,e){e.f=r(Dt)}),Lt=r(qt),Qt=qt.f,Vt=Object.freeze({default:Lt,f:Qt}),Xt=o(function(t){t.exports=!1}),Zt=r(Xt),$t=Object.freeze({default:Zt}),te=o(function(t){var e=r(A),n=r(D),o=r($t),i=r(Vt),f=r(ut).f;t.exports=function(t){var r=n.Symbol||(n.Symbol=o?{}:e.Symbol||{});"_"==t.charAt(0)||t in r||f(r,t,{value:i.f(t)})}}),ee=r(te),ne=Object.freeze({default:ee}),re=o(function(t){var e={}.toString;t.exports=function(t){return e.call(t).slice(8,-1)}}),oe=r(re),ie=Object.freeze({default:oe}),fe=o(function(t){var e=r(ie);t.exports=Object("z").propertyIsEnumerable(0)?Object:function(t){return"String"==e(t)?t.split(""):Object(t)}}),ae=r(fe),ue=Object.freeze({default:ae}),ce=o(function(t){t.exports=function(t){if(void 0==t)throw TypeError("Can't call method on  "+t);return t}}),le=r(ce),se=Object.freeze({default:le}),de=o(function(t){var e=r(ue),n=r(se);t.exports=function(t){return e(n(t))}}),he=r(de),ye=Object.freeze({default:he}),pe=o(function(t){var e=Math.ceil,n=Math.floor;t.exports=function(t){return isNaN(t=+t)?0:(t>0?n:e)(t)}}),be=r(pe),ge=Object.freeze({default:be}),ve=o(function(t){var e=r(ge),n=Math.min;t.exports=function(t){return t>0?n(e(t),9007199254740991):0}}),we=r(ve),me=Object.freeze({default:we}),xe=o(function(t){var e=r(ge),n=Math.max,o=Math.min;t.exports=function(t,r){return t=e(t),t<0?n(t+r,0):o(t,r)}}),Oe=r(xe),je=Object.freeze({default:Oe}),Se=o(function(t){var e=r(ye),n=r(me),o=r(je);t.exports=function(t){return function(r,i,f){var a,u=e(r),c=n(u.length),l=o(f,c);if(t&&i!=i){for(;c>l;)if(a=u[l++],a!=a)return!0}else for(;c>l;l++)if((t||l in u)&&u[l]===i)return t||l||0;return!t&&-1}}}),ze=r(Se),Pe=Object.freeze({default:ze}),We=o(function(t){var e=r(Mt)("keys"),n=r(gt);t.exports=function(t){return e[t]||(e[t]=n(t))}}),Ee=r(We),Ce=Object.freeze({default:Ee}),Ae=o(function(t){var e=r(F),n=r(ye),o=r(Pe)(!1),i=r(Ce)("IE_PROTO");t.exports=function(t,r){var f,a=n(t),u=0,c=[];for(f in a)f!=i&&e(a,f)&&c.push(f);for(;r.length>u;)e(a,f=r[u++])&&(~o(c,f)||c.push(f));return c}}),Te=r(Ae),ke=Object.freeze({default:Te}),Fe=o(function(t){t.exports="constructor,hasOwnProperty,isPrototypeOf,propertyIsEnumerable,toLocaleString,toString,valueOf".split(",")}),_e=r(Fe),Re=Object.freeze({default:_e}),Ke=o(function(t){var e=r(ke),n=r(Re);t.exports=Object.keys||function(t){return e(t,n)}}),Ie=r(Ke),He=Object.freeze({default:Ie}),Ne=o(function(t){var e=r(He),n=r(ye);t.exports=function(t,r){for(var o,i=n(t),f=e(i),a=f.length,u=0;a>u;)if(i[o=f[u++]]===r)return o}}),Me=r(Ne),Ue=Object.freeze({default:Me}),Ye=o(function(t,e){e.f=Object.getOwnPropertySymbols}),De=r(Ye),Be=Ye.f,Je=Object.freeze({default:De,f:Be}),Ge=o(function(t,e){e.f={}.propertyIsEnumerable}),qe=r(Ge),Le=Ge.f,Qe=Object.freeze({default:qe,f:Le}),Ve=o(function(t){var e=r(He),n=r(Je),o=r(Qe);t.exports=function(t){var r=e(t),i=n.f;if(i)for(var f,a=i(t),u=o.f,c=0;a.length>c;)u.call(t,f=a[c++])&&r.push(f);return r}}),Xe=r(Ve),Ze=Object.freeze({default:Xe}),$e=o(function(t){var e=r(ie);t.exports=Array.isArray||function(t){return"Array"==e(t)}}),tn=r($e),en=Object.freeze({default:tn}),nn=o(function(t){var e=r(ut),n=r(Q),o=r(He);t.exports=r(N)?Object.defineProperties:function(t,r){n(t);for(var i,f=o(r),a=f.length,u=0;a>u;)e.f(t,i=f[u++],r[i]);return t}}),rn=r(nn),on=Object.freeze({default:rn}),fn=o(function(t){t.exports=r(A).document&&document.documentElement}),an=r(fn),un=Object.freeze({default:an}),cn=o(function(t){var e=r(Q),n=r(on),o=r(Re),i=r(Ce)("IE_PROTO"),f=function(){},a="prototype",u=function(){var t,e=r(Z)("iframe"),n=o.length,i="<",f=">";for(e.style.display="none",r(un).appendChild(e),e.src="javascript:",t=e.contentWindow.document,t.open(),t.write(i+"script"+f+"document.F=Object"+i+"/script"+f),t.close(),u=t.F;n--;)delete u[a][o[n]];return u()};t.exports=Object.create||function(t,r){var o;return null!==t?(f[a]=e(t),o=new f,f[a]=null,o[i]=t):o=u(),void 0===r?o:n(o,r)}}),ln=r(cn),sn=Object.freeze({default:ln}),dn=o(function(t,e){var n=r(ke),o=r(Re).concat("length","prototype");e.f=Object.getOwnPropertyNames||function(t){return n(t,o)}}),hn=r(dn),yn=dn.f,pn=Object.freeze({default:hn,f:yn}),bn=o(function(t){var e=r(ye),n=r(pn).f,o={}.toString,i="object"==typeof window&&window&&Object.getOwnPropertyNames?Object.getOwnPropertyNames(window):[],f=function(t){try{return n(t)}catch(t){return i.slice()}};t.exports.f=function(t){return i&&"[object Window]"==o.call(t)?f(t):n(e(t))}}),gn=r(bn),vn=bn.f,wn=Object.freeze({default:gn,f:vn}),mn=o(function(t,e){var n=r(Qe),o=r(st),i=r(ye),f=r(ot),a=r(F),u=r(et),c=Object.getOwnPropertyDescriptor;e.f=r(N)?c:function(t,e){if(t=i(t),e=f(e,!0),u)try{return c(t,e)}catch(t){}if(a(t,e))return o(!n.f.call(t,e),t[e])}}),xn=r(mn),On=mn.f,jn=Object.freeze({default:xn,f:On}),Sn=o(function(t){var e=r(A),n=r(F),o=r(N),i=r(Ct),f=r(mt),a=r(It).KEY,u=r(K),c=r(Mt),l=r(Gt),s=r(gt),d=r(Dt),h=r(Vt),y=r(ne),p=r(Ue),b=r(Ze),g=r(en),v=r(Q),w=r(ye),m=r(ot),x=r(st),O=r(sn),j=r(wn),S=r(jn),z=r(ut),P=r(He),W=S.f,E=z.f,C=j.f,T=e.Symbol,k=e.JSON,_=k&&k.stringify,R="prototype",I=d("_hidden"),H=d("toPrimitive"),M={}.propertyIsEnumerable,U=c("symbol-registry"),Y=c("symbols"),D=c("op-symbols"),B=Object[R],J="function"==typeof T,G=e.QObject,q=!G||!G[R]||!G[R].findChild,L=o&&u(function(){return 7!=O(E({},"a",{get:function(){return E(this,"a",{value:7}).a}})).a})?function(t,e,n){var r=W(B,e);r&&delete B[e],E(t,e,n),r&&t!==B&&E(B,e,r)}:E,V=function(t){var e=Y[t]=O(T[R]);return e._k=t,e},X=J&&"symbol"==typeof T.iterator?function(t){return"symbol"==typeof t}:function(t){return t instanceof T},Z=function(t,e,r){return t===B&&Z(D,e,r),v(t),e=m(e,!0),v(r),n(Y,e)?(r.enumerable?(n(t,I)&&t[I][e]&&(t[I][e]=!1),r=O(r,{enumerable:x(0,!1)})):(n(t,I)||E(t,I,x(1,{})),t[I][e]=!0),L(t,e,r)):E(t,e,r)},$=function(t,e){v(t);for(var n,r=b(e=w(e)),o=0,i=r.length;i>o;)Z(t,n=r[o++],e[n]);return t},tt=function(t,e){return void 0===e?O(t):$(O(t),e)},et=function(t){var e=M.call(this,t=m(t,!0));return!(this===B&&n(Y,t)&&!n(D,t))&&(!(e||!n(this,t)||!n(Y,t)||n(this,I)&&this[I][t])||e)},nt=function(t,e){if(t=w(t),e=m(e,!0),t!==B||!n(Y,e)||n(D,e)){var r=W(t,e);return!r||!n(Y,e)||n(t,I)&&t[I][e]||(r.enumerable=!0),r}},rt=function(t){for(var e,r=C(w(t)),o=[],i=0;r.length>i;)n(Y,e=r[i++])||e==I||e==a||o.push(e);return o},it=function(t){for(var e,r=t===B,o=C(r?D:w(t)),i=[],f=0;o.length>f;)!n(Y,e=o[f++])||r&&!n(B,e)||i.push(Y[e]);return i};J||(T=function(){if(this instanceof T)throw TypeError("Symbol is not a constructor!");var t=s(arguments.length>0?arguments[0]:void 0),e=function(r){this===B&&e.call(D,r),n(this,I)&&n(this[I],t)&&(this[I][t]=!1),L(this,t,x(1,r))};return o&&q&&L(B,t,{configurable:!0,set:e}),V(t)},f(T[R],"toString",function(){return this._k}),S.f=nt,z.f=Z,r(pn).f=j.f=rt,r(Qe).f=et,r(Je).f=it,o&&!r($t)&&f(B,"propertyIsEnumerable",et,!0),h.f=function(t){return V(d(t))}),i(i.G+i.W+i.F*!J,{Symbol:T});for(var ft="hasInstance,isConcatSpreadable,iterator,match,replace,search,species,split,toPrimitive,toStringTag,unscopables".split(","),at=0;ft.length>at;)d(ft[at++]);for(var ft=P(d.store),at=0;ft.length>at;)y(ft[at++]);i(i.S+i.F*!J,"Symbol",{for:function(t){return n(U,t+="")?U[t]:U[t]=T(t)},keyFor:function(t){if(X(t))return p(U,t);throw TypeError(t+" is not a symbol!")},useSetter:function(){q=!0},useSimple:function(){q=!1}}),i(i.S+i.F*!J,"Object",{create:tt,defineProperty:Z,defineProperties:$,getOwnPropertyDescriptor:nt,getOwnPropertyNames:rt,getOwnPropertySymbols:it}),k&&i(i.S+i.F*(!J||u(function(){var t=T();return"[null]"!=_([t])||"{}"!=_({a:t})||"{}"!=_(Object(t))})),"JSON",{stringify:function(t){if(void 0!==t&&!X(t)){for(var e,n,r=[t],o=1;arguments.length>o;)r.push(arguments[o++]);return e=r[1],"function"==typeof e&&(n=e),!n&&g(e)||(e=function(t,e){if(n&&(e=n.call(this,t,e)),!X(e))return e}),r[1]=e,_.apply(k,r)}}}),T[R][H]||r(yt)(T[R],H,T[R].valueOf),l(T,"Symbol"),l(Math,"Math",!0),l(e.JSON,"JSON",!0)});r(Sn);var zn=o(function(t){var e=r(ie),n=r(Dt)("toStringTag"),o="Arguments"==e(function(){return arguments}()),i=function(t,e){try{return t[e]}catch(t){}};t.exports=function(t){var r,f,a;return void 0===t?"Undefined":null===t?"Null":"string"==typeof(f=i(r=Object(t),n))?f:o?e(r):"Object"==(a=e(r))&&"function"==typeof r.callee?"Arguments":a}}),Pn=r(zn),Wn=Object.freeze({default:Pn}),En=o(function(t){var e=r(Wn),n={};n[r(Dt)("toStringTag")]="z",n+""!="[object z]"&&r(mt)(Object.prototype,"toString",function(){return"[object "+e(this)+"]"},!0)});r(En);var Cn=o(function(t){t.exports=r(D).Symbol});r(Cn);var An=o(function(t){var e=r(Dt)("unscopables"),n=Array.prototype;void 0==n[e]&&r(yt)(n,e,{}),t.exports=function(t){n[e][t]=!0}}),Tn=r(An),kn=Object.freeze({default:Tn}),Fn=o(function(t){t.exports=function(t,e){return{value:e,done:!!t}}}),_n=r(Fn),Rn=Object.freeze({default:_n}),Kn=o(function(t){t.exports={}}),In=r(Kn),Hn=Object.freeze({default:In}),Nn=o(function(t){var e=r(sn),n=r(st),o=r(Gt),i={};r(yt)(i,r(Dt)("iterator"),function(){return this}),t.exports=function(t,r,f){t.prototype=e(i,{next:n(1,f)}),o(t,r+" Iterator")}}),Mn=r(Nn),Un=Object.freeze({default:Mn}),Yn=o(function(t){var e=r(se);t.exports=function(t){return Object(e(t))}}),Dn=r(Yn),Bn=Object.freeze({default:Dn}),Jn=o(function(t){var e=r(F),n=r(Bn),o=r(Ce)("IE_PROTO"),i=Object.prototype;t.exports=Object.getPrototypeOf||function(t){return t=n(t),e(t,o)?t[o]:"function"==typeof t.constructor&&t instanceof t.constructor?t.constructor.prototype:t instanceof Object?i:null}}),Gn=r(Jn),qn=Object.freeze({default:Gn}),Ln=o(function(t){var e=r($t),n=r(Ct),o=r(mt),i=r(yt),f=r(F),a=r(Hn),u=r(Un),c=r(Gt),l=r(qn),s=r(Dt)("iterator"),d=!([].keys&&"next"in[].keys()),h="@@iterator",y="keys",p="values",b=function(){return this};t.exports=function(t,r,g,v,w,m,x){u(g,r,v);var O,j,S,z=function(t){if(!d&&t in C)return C[t];switch(t){case y:return function(){return new g(this,t)};case p:return function(){return new g(this,t)}}return function(){return new g(this,t)}},P=r+" Iterator",W=w==p,E=!1,C=t.prototype,A=C[s]||C[h]||w&&C[w],T=A||z(w),k=w?W?z("entries"):T:void 0,F="Array"==r?C.entries||A:A;if(F&&(S=l(F.call(new t)),S!==Object.prototype&&(c(S,P,!0),e||f(S,s)||i(S,s,b))),W&&A&&A.name!==p&&(E=!0,T=function(){return A.call(this)}),e&&!x||!d&&!E&&C[s]||i(C,s,T),a[r]=T,a[P]=b,w)if(O={values:W?T:z(p),keys:m?T:z(y),entries:k},x)for(j in O)j in C||o(C,j,O[j]);else n(n.P+n.F*(d||E),r,O);return O}}),Qn=r(Ln),Vn=Object.freeze({default:Qn}),Xn=o(function(t){var e=r(kn),n=r(Rn),o=r(Hn),i=r(ye);t.exports=r(Vn)(Array,"Array",function(t,e){this._t=i(t),this._i=0,this._k=e},function(){var t=this._t,e=this._k,r=this._i++;return!t||r>=t.length?(this._t=void 0,n(1)):"keys"==e?n(0,r):"values"==e?n(0,t[r]):n(0,[r,t[r]])},"values"),o.Arguments=o.Array,e("keys"),e("values"),e("entries")});r(Xn);var Zn=o(function(t){t.exports=r(D).Array.values});r(Zn);var $n=o(function(t){var e=r(He),n=r(Je),o=r(Qe),i=r(Bn),f=r(ue),a=Object.assign;t.exports=!a||r(K)(function(){var t={},e={},n=Symbol(),r="abcdefghijklmnopqrst";return t[n]=7,r.split("").forEach(function(t){e[t]=t}),7!=a({},t)[n]||Object.keys(a({},e)).join("")!=r})?function(t,r){for(var a=i(t),u=arguments.length,c=1,l=n.f,s=o.f;u>c;)for(var d,h=f(arguments[c++]),y=l?e(h).concat(l(h)):e(h),p=y.length,b=0;p>b;)s.call(h,d=y[b++])&&(a[d]=h[d]);return a}:a}),tr=r($n),er=Object.freeze({default:tr}),nr=o(function(t){var e=r(Ct);e(e.S+e.F,"Object",{assign:r(er)})});r(nr);var rr=o(function(t){t.exports=r(D).Object.assign});r(rr);var or=o(function(t){var e=r(Ct);e(e.S,"Array",{isArray:r(en)})});r(or);var ir=o(function(t){t.exports=r(D).Array.isArray});r(ir);var fr=o(function(t){var e=r(He),n=r(ye),o=r(Qe).f;t.exports=function(t){return function(r){for(var i,f=n(r),a=e(f),u=a.length,c=0,l=[];u>c;)o.call(f,i=a[c++])&&l.push(t?[i,f[i]]:f[i]);return l}}}),ar=r(fr),ur=Object.freeze({default:ar}),cr=o(function(t){var e=r(Ct),n=r(ur)(!1);e(e.S,"Object",{values:function(t){return n(t)}})});r(cr);var lr=o(function(t){t.exports=r(D).Object.values});r(lr);var sr,dr,hr,yr,pr,br;t.API.autoTable=function(t,e,n){i(t,e,n),sr=this,yr=sr.internal.pageSize,hr={fillColor:sr.setFillColor,textColor:sr.setTextColor,fontStyle:sr.setFontStyle,lineColor:sr.setDrawColor,lineWidth:sr.setLineWidth,font:sr.setFont,fontSize:sr.setFontSize},pr=W.initSettings(n||{}),dr={x:pr.margin.left,y:pr.startY===!1?pr.margin.top:pr.startY};var r={textColor:30,fontSize:sr.internal.getFontSize(),fontStyle:sr.internal.getFont().fontStyle};f(t,e),a(this,yr.width);var o=br.rows[0]&&"auto"===pr.pageBreak?br.rows[0].height:0,u=pr.startY+pr.margin.bottom+br.headerRow.height+o;return"avoid"===pr.pageBreak&&(u+=br.height),("always"===pr.pageBreak&&pr.startY!==!1||pr.startY!==!1&&u>yr.height)&&(this.addPage(this.addPage),dr.y=pr.margin.top),y(r),pr.beforePageContent(p()),pr.drawHeaderRow(br.headerRow,p({row:br.headerRow}))!==!1&&d(br.headerRow,pr.drawHeaderCell),y(r),s(this.addPage),pr.afterPageContent(p()),y(r),this},t.API.autoTableEndPosY=function(){return"undefined"==typeof dr||"undefined"==typeof dr.y?0:dr.y},t.API.autoTableHtmlToJson=function(t,e){e=e||!1;for(var n={},r=[],o=t.rows[0],i=0;i<o.cells.length;i++){var f=o.cells[i],a=window.getComputedStyle(f);(e||"none"!==a.display)&&(n[i]=f?f.textContent.trim():"")}for(var u=1;u<t.rows.length;u++){var c=t.rows[u],a=window.getComputedStyle(c);if(e||"none"!==a.display){var l=[],s=!0,d=!1,h=void 0;try{for(var y,p=Object.keys(n)[Symbol.iterator]();!(s=(y=p.next()).done);s=!0){var b=y.value,f=c.cells[b],g=f?f.textContent.trim():"";l.push(g)}}catch(t){d=!0,h=t}finally{try{!s&&p.return&&p.return()}finally{if(d)throw h}}r.push(l)}}return{columns:Object.values(n),rows:r,data:r}},t.API.autoTableAddPage=function(){c(sr.addPage)},t.API.autoTableText=function(t,e,n,r){"number"==typeof e&&"number"==typeof n||console.error("The x and y parameters are required. Missing for the text: ",t);var o=this.internal.getFontSize()/this.internal.scaleFactor,i=z,f=/\r\n|\r|\n/g,a=null,u=1;if("middle"!==r.valign&&"bottom"!==r.valign&&"center"!==r.halign&&"right"!==r.halign||(a="string"==typeof t?t.split(f):t,u=a.length||1),n+=o*(2-i),"middle"===r.valign?n-=u/2*o*i:"bottom"===r.valign&&(n-=u*o*i),"center"===r.halign||"right"===r.halign){var c=o;if("center"===r.halign&&(c*=.5),u>=1){for(var l=0;l<a.length;l++)this.text(a[l],e-this.getStringUnitWidth(a[l])*c,n),n+=o;return sr}e-=this.getStringUnitWidth(t)*c}return this.text(t,e,n),this}}(jsPDF);
+(function webpackUniversalModuleDefinition(root, factory) {
+	if(typeof exports === 'object' && typeof module === 'object')
+		module.exports = factory(require("jspdf"));
+	else if(typeof define === 'function' && define.amd)
+		define(["jspdf"], factory);
+	else {
+		var a = typeof exports === 'object' ? factory(require("jspdf")) : factory(root["jsPDF"]);
+		for(var i in a) (typeof exports === 'object' ? exports : root)[i] = a[i];
+	}
+})(this, function(__WEBPACK_EXTERNAL_MODULE_18__) {
+return /******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId])
+/******/ 			return installedModules[moduleId].exports;
+
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			i: moduleId,
+/******/ 			l: false,
+/******/ 			exports: {}
+/******/ 		};
+
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+
+/******/ 		// Flag the module as loaded
+/******/ 		module.l = true;
+
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+
+
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+
+/******/ 	// identity function for calling harmony imports with the correct context
+/******/ 	__webpack_require__.i = function(value) { return value; };
+
+/******/ 	// define getter function for harmony exports
+/******/ 	__webpack_require__.d = function(exports, name, getter) {
+/******/ 		if(!__webpack_require__.o(exports, name)) {
+/******/ 			Object.defineProperty(exports, name, {
+/******/ 				configurable: false,
+/******/ 				enumerable: true,
+/******/ 				get: getter
+/******/ 			});
+/******/ 		}
+/******/ 	};
+
+/******/ 	// getDefaultExport function for compatibility with non-harmony modules
+/******/ 	__webpack_require__.n = function(module) {
+/******/ 		var getter = module && module.__esModule ?
+/******/ 			function getDefault() { return module['default']; } :
+/******/ 			function getModuleExports() { return module; };
+/******/ 		__webpack_require__.d(getter, 'a', getter);
+/******/ 		return getter;
+/******/ 	};
+
+/******/ 	// Object.prototype.hasOwnProperty.call
+/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
+
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "";
+
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(__webpack_require__.s = 35);
+/******/ })
+/************************************************************************/
+/******/ ([
+/* 0 */
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+
+/**
+ * Ratio between font size and font height. The number comes from jspdf's source code
+ */
+exports.FONT_ROW_RATIO = 1.15;
+var models_1 = __webpack_require__(15);
+var table = null;
+var assign = __webpack_require__(12);
+var entries = __webpack_require__(33);
+/**
+ * Styles for the themes (overriding the default styles)
+ */
+exports.getTheme = function (name) {
+    var themes = {
+        'striped': {
+            table: { fillColor: 255, textColor: 80, fontStyle: 'normal' },
+            header: { textColor: 255, fillColor: [41, 128, 185], fontStyle: 'bold' },
+            body: {},
+            alternateRow: { fillColor: 245 }
+        },
+        'grid': {
+            table: { fillColor: 255, textColor: 80, fontStyle: 'normal', lineWidth: 0.1 },
+            header: { textColor: 255, fillColor: [26, 188, 156], fontStyle: 'bold', lineWidth: 0 },
+            body: {},
+            alternateRow: {}
+        },
+        'plain': {
+            header: { fontStyle: 'bold' }
+        }
+    };
+    return themes[name];
+};
+function getDefaults() {
+    var scaleFactor = Config.scaleFactor();
+    return {
+        // Styling
+        theme: 'striped',
+        styles: {},
+        headerStyles: {},
+        bodyStyles: {},
+        alternateRowStyles: {},
+        columnStyles: {},
+        // Properties
+        startY: false,
+        margin: 40 / scaleFactor,
+        pageBreak: 'auto',
+        tableWidth: 'auto',
+        showHeader: 'everyPage',
+        tableLineWidth: 0,
+        tableLineColor: 200,
+        // Hooks
+        createdHeaderCell: function (cell, data) { },
+        createdCell: function (cell, data) { },
+        drawHeaderRow: function (row, data) { },
+        drawRow: function (row, data) { },
+        drawHeaderCell: function (cell, data) { },
+        drawCell: function (cell, data) { },
+        addPageContent: function (data) { }
+    };
+}
+exports.getDefaults = getDefaults;
+// Base style for all themes
+function defaultStyles() {
+    var scaleFactor = Config.scaleFactor();
+    return {
+        font: "helvetica",
+        fontStyle: 'normal',
+        overflow: 'ellipsize',
+        fillColor: false,
+        textColor: 20,
+        halign: 'left',
+        valign: 'top',
+        fontSize: 10,
+        cellPadding: 5 / scaleFactor,
+        lineColor: 200,
+        lineWidth: 0 / scaleFactor,
+        columnWidth: 'auto'
+    };
+}
+var Config = (function () {
+    function Config() {
+    }
+    Config.pageSize = function () {
+        return table.doc.internal.pageSize;
+    };
+    Config.applyUserStyles = function () {
+        Config.applyStyles(table.userStyles);
+    };
+    Config.createTable = function (doc) {
+        table = new models_1.Table(doc);
+        return table;
+    };
+    Config.tableInstance = function () {
+        return table;
+    };
+    Config.scaleFactor = function () {
+        return table.doc.internal.scaleFactor;
+    };
+    Config.hooksData = function (additionalData) {
+        if (additionalData === void 0) { additionalData = {}; }
+        return assign({
+            pageCount: table.pageCount,
+            settings: table.settings,
+            table: table,
+            doc: table.doc,
+            cursor: table.cursor
+        }, additionalData || {});
+    };
+    Config.initSettings = function (table, allOptions) {
+        var _loop_1 = function (styleProp) {
+            var styles = allOptions.map(function (opts) { return opts[styleProp] || {}; });
+            table.styles[styleProp] = assign.apply(void 0, [{}].concat(styles));
+        };
+        // Merge styles one level deeper
+        for (var _i = 0, _a = Object.keys(table.styles); _i < _a.length; _i++) {
+            var styleProp = _a[_i];
+            _loop_1(styleProp);
+        }
+        // Append event handlers instead of replacing them
+        for (var _b = 0, _c = entries(table.hooks); _b < _c.length; _b++) {
+            var _d = _c[_b], hookName = _d[0], list = _d[1];
+            for (var _e = 0, allOptions_1 = allOptions; _e < allOptions_1.length; _e++) {
+                var opts = allOptions_1[_e];
+                if (opts && opts[hookName]) {
+                    list.push(opts[hookName]);
+                }
+            }
+        }
+        // Merge all other options one level
+        table.settings = assign.apply(void 0, [getDefaults()].concat(allOptions));
+    };
+    // This is messy, only keep array and number format the next major version
+    Config.marginOrPadding = function (value, defaultValue) {
+        var newValue = {};
+        if (Array.isArray(value)) {
+            if (value.length >= 4) {
+                newValue = { 'top': value[0], 'right': value[1], 'bottom': value[2], 'left': value[3] };
+            }
+            else if (value.length === 3) {
+                newValue = { 'top': value[0], 'right': value[1], 'bottom': value[2], 'left': value[1] };
+            }
+            else if (value.length === 2) {
+                newValue = { 'top': value[0], 'right': value[1], 'bottom': value[0], 'left': value[1] };
+            }
+            else if (value.length === 1) {
+                value = value[0];
+            }
+            else {
+                value = defaultValue;
+            }
+        }
+        else if (typeof value === 'object') {
+            if (value['vertical']) {
+                value['top'] = value['vertical'];
+                value['bottom'] = value['vertical'];
+            }
+            else if (value['horizontal']) {
+                value['right'] = value['horizontal'];
+                value['left'] = value['horizontal'];
+            }
+            for (var _i = 0, _a = ['top', 'right', 'bottom', 'left']; _i < _a.length; _i++) {
+                var side = _a[_i];
+                newValue[side] = value[side] || value[side] === 0 ? value[side] : defaultValue;
+            }
+        }
+        if (typeof value === 'number') {
+            newValue = { 'top': value, 'right': value, 'bottom': value, 'left': value };
+        }
+        return newValue;
+    };
+    Config.styles = function (styles) {
+        styles = Array.isArray(styles) ? styles : [styles];
+        return assign.apply(void 0, [defaultStyles()].concat(styles));
+    };
+    Config.applyStyles = function (styles) {
+        var doc = table.doc;
+        var styleModifiers = {
+            fillColor: doc.setFillColor,
+            textColor: doc.setTextColor,
+            fontStyle: doc.setFontStyle,
+            lineColor: doc.setDrawColor,
+            lineWidth: doc.setLineWidth,
+            font: doc.setFont,
+            fontSize: doc.setFontSize
+        };
+        Object.keys(styleModifiers).forEach(function (name) {
+            var style = styles[name];
+            var modifier = styleModifiers[name];
+            if (typeof style !== 'undefined') {
+                if (Array.isArray(style)) {
+                    modifier.apply(this, style);
+                }
+                else {
+                    modifier(style);
+                }
+            }
+        });
+    };
+    return Config;
+}());
+exports.Config = Config;
+
+
+/***/ },
+/* 1 */
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var config_1 = __webpack_require__(0);
+var painter_1 = __webpack_require__(4);
+function getStringWidth(text, styles) {
+    var k = config_1.Config.scaleFactor();
+    var fontSize = styles.fontSize / k;
+    config_1.Config.applyStyles(styles);
+    text = Array.isArray(text) ? text : [text];
+    var maxWidth = 0;
+    text.forEach(function (line) {
+        var width = config_1.Config.tableInstance().doc.getStringUnitWidth(line);
+        if (width > maxWidth) {
+            maxWidth = width;
+        }
+    });
+    var precision = 10000 * k;
+    maxWidth = Math.floor(maxWidth * precision) / precision;
+    return maxWidth * fontSize;
+}
+exports.getStringWidth = getStringWidth;
+/**
+ * Ellipsize the text to fit in the width
+ */
+function ellipsize(text, width, styles, ellipsizeStr) {
+    if (ellipsizeStr === void 0) { ellipsizeStr = '...'; }
+    if (Array.isArray(text)) {
+        var value_1 = [];
+        text.forEach(function (str, i) {
+            value_1[i] = ellipsize(str, width, styles, ellipsizeStr);
+        });
+        return value_1;
+    }
+    var precision = 10000 * config_1.Config.scaleFactor();
+    width = Math.ceil(width * precision) / precision;
+    if (width >= getStringWidth(text, styles)) {
+        return text;
+    }
+    while (width < getStringWidth(text + ellipsizeStr, styles)) {
+        if (text.length <= 1) {
+            break;
+        }
+        text = text.substring(0, text.length - 1);
+    }
+    return text.trim() + ellipsizeStr;
+}
+exports.ellipsize = ellipsize;
+function addTableBorder() {
+    var table = config_1.Config.tableInstance();
+    var styles = { lineWidth: table.settings.tableLineWidth, lineColor: table.settings.tableLineColor };
+    config_1.Config.applyStyles(styles);
+    var fs = getFillStyle(styles);
+    if (fs) {
+        table.doc.rect(table.pageStartX, table.pageStartY, table.width, table.cursor.y - table.pageStartY, fs);
+    }
+}
+exports.addTableBorder = addTableBorder;
+function addPage() {
+    var table = config_1.Config.tableInstance();
+    table.finalY = table.cursor.y;
+    // Add user content just before adding new page ensure it will 
+    // be drawn above other things on the page
+    addContentHooks();
+    addTableBorder();
+    table.doc.addPage();
+    table.pageCount++;
+    table.cursor = { x: table.margin('left'), y: table.margin('top') };
+    table.pageStartX = table.cursor.x;
+    table.pageStartY = table.cursor.y;
+    if (table.settings.showHeader === true || table.settings.showHeader === 'everyPage') {
+        painter_1.printRow(table.headerRow, table.hooks.drawHeaderRow, table.hooks.drawHeaderCell);
+    }
+}
+exports.addPage = addPage;
+function addContentHooks() {
+    for (var _i = 0, _a = config_1.Config.tableInstance().hooks.addPageContent; _i < _a.length; _i++) {
+        var hook = _a[_i];
+        config_1.Config.applyUserStyles();
+        hook(config_1.Config.hooksData());
+    }
+    config_1.Config.applyUserStyles();
+}
+exports.addContentHooks = addContentHooks;
+function getFillStyle(styles) {
+    var drawLine = styles.lineWidth > 0;
+    var drawBackground = styles.fillColor || styles.fillColor === 0;
+    if (drawLine && drawBackground) {
+        return 'DF'; // Fill then stroke
+    }
+    else if (drawLine) {
+        return 'S'; // Only stroke (transparent background)
+    }
+    else if (drawBackground) {
+        return 'F'; // Only fill, no stroke
+    }
+    else {
+        return false;
+    }
+}
+exports.getFillStyle = getFillStyle;
+
+
+/***/ },
+/* 2 */
+/***/ function(module, exports, __webpack_require__) {
+
+var implementation = __webpack_require__(26);
+
+module.exports = Function.prototype.bind || implementation;
+
+
+/***/ },
+/* 3 */
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var fnToStr = Function.prototype.toString;
+
+var constructorRegex = /^\s*class /;
+var isES6ClassFn = function isES6ClassFn(value) {
+	try {
+		var fnStr = fnToStr.call(value);
+		var singleStripped = fnStr.replace(/\/\/.*\n/g, '');
+		var multiStripped = singleStripped.replace(/\/\*[.\s\S]*\*\//g, '');
+		var spaceStripped = multiStripped.replace(/\n/mg, ' ').replace(/ {2}/g, ' ');
+		return constructorRegex.test(spaceStripped);
+	} catch (e) {
+		return false; // not a function
+	}
+};
+
+var tryFunctionObject = function tryFunctionObject(value) {
+	try {
+		if (isES6ClassFn(value)) { return false; }
+		fnToStr.call(value);
+		return true;
+	} catch (e) {
+		return false;
+	}
+};
+var toStr = Object.prototype.toString;
+var fnClass = '[object Function]';
+var genClass = '[object GeneratorFunction]';
+var hasToStringTag = typeof Symbol === 'function' && typeof Symbol.toStringTag === 'symbol';
+
+module.exports = function isCallable(value) {
+	if (!value) { return false; }
+	if (typeof value !== 'function' && typeof value !== 'object') { return false; }
+	if (hasToStringTag) { return tryFunctionObject(value); }
+	if (isES6ClassFn(value)) { return false; }
+	var strClass = toStr.call(value);
+	return strClass === fnClass || strClass === genClass;
+};
+
+
+/***/ },
+/* 4 */
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var config_1 = __webpack_require__(0);
+var common_1 = __webpack_require__(1);
+function printFullRow(row, drawRowHooks, drawCellHooks) {
+    var remainingRowHeight = 0;
+    var remainingTexts = {};
+    var table = config_1.Config.tableInstance();
+    if (!canFitOnPage(row.height)) {
+        if (row.maxLineCount <= 1) {
+            common_1.addPage();
+        }
+        else {
+            // Modify the row to fit the current page and calculate text and height of partial row
+            row.spansMultiplePages = true;
+            var pageHeight = table.doc.internal.pageSize.height;
+            var maxCellHeight = 0;
+            for (var j = 0; j < table.columns.length; j++) {
+                var col = table.columns[j];
+                var cell = row.cells[col.dataKey];
+                var fontHeight = cell.styles.fontSize / config_1.Config.scaleFactor() * config_1.FONT_ROW_RATIO;
+                var vPadding = cell.padding('vertical');
+                var remainingPageSpace = pageHeight - table.cursor.y - table.margin('bottom');
+                var remainingLineCount = Math.floor((remainingPageSpace - vPadding) / fontHeight);
+                if (Array.isArray(cell.text) && cell.text.length > remainingLineCount) {
+                    var remainingLines = cell.text.splice(remainingLineCount, cell.text.length);
+                    remainingTexts[col.dataKey] = remainingLines;
+                    var cellHeight = cell.text.length * fontHeight + vPadding;
+                    if (cellHeight > maxCellHeight) {
+                        maxCellHeight = cellHeight;
+                    }
+                    var rCellHeight = remainingLines.length * fontHeight + vPadding;
+                    if (rCellHeight > remainingRowHeight) {
+                        remainingRowHeight = rCellHeight;
+                    }
+                }
+            }
+            // Reset row height since text are now removed
+            row.height = maxCellHeight;
+        }
+    }
+    printRow(row, drawRowHooks, drawCellHooks);
+    // Parts of the row is now printed. Time for adding a new page, prune 
+    // the text and start over
+    if (Object.keys(remainingTexts).length > 0) {
+        for (var j = 0; j < table.columns.length; j++) {
+            var col = table.columns[j];
+            var cell = row.cells[col.dataKey];
+            cell.text = remainingTexts[col.dataKey] || '';
+        }
+        common_1.addPage();
+        row.pageCount++;
+        row.height = remainingRowHeight;
+        printFullRow(row, drawRowHooks, drawCellHooks);
+    }
+}
+exports.printFullRow = printFullRow;
+function printRow(row, drawRowHooks, drawCellHooks) {
+    var table = config_1.Config.tableInstance();
+    row.y = table.cursor.y;
+    for (var _i = 0, drawRowHooks_1 = drawRowHooks; _i < drawRowHooks_1.length; _i++) {
+        var hook = drawRowHooks_1[_i];
+        if (hook(row, config_1.Config.hooksData({ row: row, addPage: common_1.addPage })) === false) {
+            return;
+        }
+    }
+    table.cursor.x = table.margin('left');
+    for (var i = 0; i < table.columns.length; i++) {
+        var column = table.columns[i];
+        var cell = row.cells[column.dataKey];
+        if (!cell) {
+            continue;
+        }
+        config_1.Config.applyStyles(cell.styles);
+        cell.x = table.cursor.x;
+        cell.y = table.cursor.y;
+        cell.height = row.height;
+        cell.width = column.width;
+        if (cell.styles.valign === 'top') {
+            cell.textPos.y = table.cursor.y + cell.padding('top');
+        }
+        else if (cell.styles.valign === 'bottom') {
+            cell.textPos.y = table.cursor.y + row.height - cell.padding('bottom');
+        }
+        else {
+            cell.textPos.y = table.cursor.y + row.height / 2;
+        }
+        if (cell.styles.halign === 'right') {
+            cell.textPos.x = cell.x + cell.width - cell.padding('right');
+        }
+        else if (cell.styles.halign === 'center') {
+            cell.textPos.x = cell.x + cell.width / 2;
+        }
+        else {
+            cell.textPos.x = cell.x + cell.padding('left');
+        }
+        var shouldDrawCell = true;
+        var data = config_1.Config.hooksData({ column: column, row: row, addPage: common_1.addPage });
+        for (var _a = 0, drawCellHooks_1 = drawCellHooks; _a < drawCellHooks_1.length; _a++) {
+            var hook = drawCellHooks_1[_a];
+            if (hook(cell, data) === false) {
+                shouldDrawCell = false;
+            }
+        }
+        if (shouldDrawCell) {
+            var fillStyle = common_1.getFillStyle(cell.styles);
+            if (fillStyle) {
+                table.doc.rect(cell.x, cell.y, cell.width, cell.height, fillStyle);
+            }
+            table.doc.autoTableText(cell.text, cell.textPos.x, cell.textPos.y, {
+                halign: cell.styles.halign,
+                valign: cell.styles.valign
+            });
+        }
+        table.cursor.x += cell.width;
+    }
+    table.cursor.y += row.height;
+}
+exports.printRow = printRow;
+function canFitOnPage(rowHeight) {
+    var table = config_1.Config.tableInstance();
+    var pos = rowHeight + table.cursor.y + table.margin('bottom');
+    return pos < config_1.Config.pageSize().height;
+}
+
+
+/***/ },
+/* 5 */
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var keys = __webpack_require__(31);
+var foreach = __webpack_require__(25);
+var hasSymbols = typeof Symbol === 'function' && typeof Symbol() === 'symbol';
+
+var toStr = Object.prototype.toString;
+
+var isFunction = function (fn) {
+	return typeof fn === 'function' && toStr.call(fn) === '[object Function]';
+};
+
+var arePropertyDescriptorsSupported = function () {
+	var obj = {};
+	try {
+		Object.defineProperty(obj, 'x', { enumerable: false, value: obj });
+        /* eslint-disable no-unused-vars, no-restricted-syntax */
+        for (var _ in obj) { return false; }
+        /* eslint-enable no-unused-vars, no-restricted-syntax */
+		return obj.x === obj;
+	} catch (e) { /* this is IE 8. */
+		return false;
+	}
+};
+var supportsDescriptors = Object.defineProperty && arePropertyDescriptorsSupported();
+
+var defineProperty = function (object, name, value, predicate) {
+	if (name in object && (!isFunction(predicate) || !predicate())) {
+		return;
+	}
+	if (supportsDescriptors) {
+		Object.defineProperty(object, name, {
+			configurable: true,
+			enumerable: false,
+			value: value,
+			writable: true
+		});
+	} else {
+		object[name] = value;
+	}
+};
+
+var defineProperties = function (object, map) {
+	var predicates = arguments.length > 2 ? arguments[2] : {};
+	var props = keys(map);
+	if (hasSymbols) {
+		props = props.concat(Object.getOwnPropertySymbols(map));
+	}
+	foreach(props, function (name) {
+		defineProperty(object, name, map[name], predicates[name]);
+	});
+};
+
+defineProperties.supportsDescriptors = !!supportsDescriptors;
+
+module.exports = defineProperties;
+
+
+/***/ },
+/* 6 */
+/***/ function(module, exports) {
+
+var has = Object.prototype.hasOwnProperty;
+module.exports = Object.assign || function assign(target, source) {
+	for (var key in source) {
+		if (has.call(source, key)) {
+			target[key] = source[key];
+		}
+	}
+	return target;
+};
+
+
+/***/ },
+/* 7 */
+/***/ function(module, exports) {
+
+var $isNaN = Number.isNaN || function (a) { return a !== a; };
+
+module.exports = Number.isFinite || function (x) { return typeof x === 'number' && !$isNaN(x) && x !== Infinity && x !== -Infinity; };
+
+
+/***/ },
+/* 8 */
+/***/ function(module, exports) {
+
+module.exports = Number.isNaN || function isNaN(a) {
+	return a !== a;
+};
+
+
+/***/ },
+/* 9 */
+/***/ function(module, exports) {
+
+module.exports = function mod(number, modulo) {
+	var remain = number % modulo;
+	return Math.floor(remain >= 0 ? remain : remain + modulo);
+};
+
+
+/***/ },
+/* 10 */
+/***/ function(module, exports) {
+
+module.exports = function sign(number) {
+	return number >= 0 ? 1 : -1;
+};
+
+
+/***/ },
+/* 11 */
+/***/ function(module, exports) {
+
+module.exports = function isPrimitive(value) {
+	return value === null || (typeof value !== 'function' && typeof value !== 'object');
+};
+
+
+/***/ },
+/* 12 */
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+
+/* eslint-disable no-unused-vars */
+var hasOwnProperty = Object.prototype.hasOwnProperty;
+var propIsEnumerable = Object.prototype.propertyIsEnumerable;
+
+function toObject(val) {
+	if (val === null || val === undefined) {
+		throw new TypeError('Object.assign cannot be called with null or undefined');
+	}
+
+	return Object(val);
+}
+
+function shouldUseNative() {
+	try {
+		if (!Object.assign) {
+			return false;
+		}
+
+		// Detect buggy property enumeration order in older V8 versions.
+
+		// https://bugs.chromium.org/p/v8/issues/detail?id=4118
+		var test1 = new String('abc');  // eslint-disable-line
+		test1[5] = 'de';
+		if (Object.getOwnPropertyNames(test1)[0] === '5') {
+			return false;
+		}
+
+		// https://bugs.chromium.org/p/v8/issues/detail?id=3056
+		var test2 = {};
+		for (var i = 0; i < 10; i++) {
+			test2['_' + String.fromCharCode(i)] = i;
+		}
+		var order2 = Object.getOwnPropertyNames(test2).map(function (n) {
+			return test2[n];
+		});
+		if (order2.join('') !== '0123456789') {
+			return false;
+		}
+
+		// https://bugs.chromium.org/p/v8/issues/detail?id=3056
+		var test3 = {};
+		'abcdefghijklmnopqrst'.split('').forEach(function (letter) {
+			test3[letter] = letter;
+		});
+		if (Object.keys(Object.assign({}, test3)).join('') !==
+				'abcdefghijklmnopqrst') {
+			return false;
+		}
+
+		return true;
+	} catch (e) {
+		// We don't expect any of the above to throw, but better to be safe.
+		return false;
+	}
+}
+
+module.exports = shouldUseNative() ? Object.assign : function (target, source) {
+	var from;
+	var to = toObject(target);
+	var symbols;
+
+	for (var s = 1; s < arguments.length; s++) {
+		from = Object(arguments[s]);
+
+		for (var key in from) {
+			if (hasOwnProperty.call(from, key)) {
+				to[key] = from[key];
+			}
+		}
+
+		if (Object.getOwnPropertySymbols) {
+			symbols = Object.getOwnPropertySymbols(from);
+			for (var i = 0; i < symbols.length; i++) {
+				if (propIsEnumerable.call(from, symbols[i])) {
+					to[symbols[i]] = from[symbols[i]];
+				}
+			}
+		}
+	}
+
+	return to;
+};
+
+
+/***/ },
+/* 13 */
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var ES = __webpack_require__(21);
+var has = __webpack_require__(27);
+var bind = __webpack_require__(2);
+var isEnumerable = bind.call(Function.call, Object.prototype.propertyIsEnumerable);
+
+module.exports = function entries(O) {
+	var obj = ES.RequireObjectCoercible(O);
+	var entrys = [];
+	for (var key in obj) {
+		if (has(obj, key) && isEnumerable(obj, key)) {
+			entrys.push([key, obj[key]]);
+		}
+	}
+	return entrys;
+};
+
+
+/***/ },
+/* 14 */
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var implementation = __webpack_require__(13);
+
+module.exports = function getPolyfill() {
+	return typeof Object.entries === 'function' ? Object.entries : implementation;
+};
+
+
+/***/ },
+/* 15 */
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var config_1 = __webpack_require__(0);
+exports.table = {};
+var Table = (function () {
+    function Table(doc) {
+        this.height = 0;
+        this.width = 0;
+        this.contentWidth = 0;
+        this.preferredWidth = 0;
+        this.rows = [];
+        this.columns = [];
+        this.headerRow = null;
+        this.pageCount = 1;
+        this.hooks = {
+            createdHeaderCell: [],
+            createdCell: [],
+            drawHeaderRow: [],
+            drawRow: [],
+            drawHeaderCell: [],
+            drawCell: [],
+            addPageContent: []
+        };
+        this.styles = {
+            styles: {},
+            headerStyles: {},
+            bodyStyles: {},
+            alternateRowStyles: {},
+            columnStyles: {}
+        };
+        this.doc = doc;
+        this.userStyles = {
+            textColor: 30,
+            fontSize: doc.internal.getFontSize(),
+            fontStyle: doc.internal.getFont().fontStyle
+        };
+    }
+    Table.prototype.margin = function (side) {
+        return config_1.Config.marginOrPadding(this.settings.margin, config_1.getDefaults().margin)[side];
+    };
+    return Table;
+}());
+exports.Table = Table;
+var Row = (function () {
+    function Row(raw, index) {
+        this.cells = {};
+        this.spansMultiplePages = false;
+        this.pageCount = 1;
+        this.height = 0;
+        this.y = 0;
+        this.maxLineCount = 1;
+        this.raw = raw;
+        this.index = index;
+    }
+    return Row;
+}());
+exports.Row = Row;
+var Cell = (function () {
+    function Cell(raw) {
+        this.styles = {};
+        this.text = '';
+        this.contentWidth = 0;
+        this.textPos = {};
+        this.height = 0;
+        this.width = 0;
+        this.x = 0;
+        this.y = 0;
+        this.raw = raw;
+    }
+    Cell.prototype.padding = function (name) {
+        var padding = config_1.Config.marginOrPadding(this.styles.cellPadding, config_1.Config.styles([]).cellPadding);
+        if (name === 'vertical') {
+            return padding.top + padding.bottom;
+        }
+        else if (name === 'horizontal') {
+            return padding.left + padding.right;
+        }
+        else {
+            return padding[name];
+        }
+    };
+    return Cell;
+}());
+exports.Cell = Cell;
+var Column = (function () {
+    function Column(dataKey, index) {
+        this.options = {};
+        this.contentWidth = 0;
+        this.preferredWidth = 0;
+        this.widthStyle = 'auto';
+        this.width = 0;
+        this.x = 0;
+        this.dataKey = dataKey;
+        this.index = index;
+    }
+    return Column;
+}());
+exports.Column = Column;
+
+
+/***/ },
+/* 16 */
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var config_1 = __webpack_require__(0);
+var common_1 = __webpack_require__(1);
+/**
+ * Calculate the column widths
+ */
+function calculateWidths(doc, pageWidth) {
+    var table = config_1.Config.tableInstance();
+    // Column and table content width
+    var fixedWidth = 0;
+    var autoWidth = 0;
+    var dynamicColumns = [];
+    table.columns.forEach(function (column) {
+        column.contentWidth = 0;
+        table.rows.concat(table.headerRow).forEach(function (row) {
+            var cell = row.cells[column.dataKey];
+            cell.contentWidth = cell.padding('horizontal') + common_1.getStringWidth(cell.text, cell.styles);
+            if (cell.contentWidth > column.contentWidth) {
+                column.contentWidth = cell.contentWidth;
+            }
+        });
+        table.contentWidth += column.contentWidth;
+        if (typeof column.widthStyle === 'number') {
+            column.preferredWidth = column.widthStyle;
+            fixedWidth += column.preferredWidth;
+            column.width = column.preferredWidth;
+        }
+        else if (column.widthStyle === 'wrap') {
+            column.preferredWidth = column.contentWidth;
+            fixedWidth += column.preferredWidth;
+            column.width = column.preferredWidth;
+        }
+        else {
+            column.preferredWidth = column.contentWidth;
+            autoWidth += column.contentWidth;
+            dynamicColumns.push(column);
+        }
+        table.preferredWidth += column.preferredWidth;
+    });
+    if (typeof table.settings.tableWidth === 'number') {
+        table.width = table.settings.tableWidth;
+    }
+    else if (table.settings.tableWidth === 'wrap') {
+        table.width = table.preferredWidth;
+    }
+    else {
+        table.width = pageWidth - table.margin('left') - table.margin('right');
+    }
+    distributeWidth(dynamicColumns, fixedWidth, autoWidth, 0);
+    // Row height, table height and text overflow
+    var all = table.rows.concat(table.headerRow);
+    all.forEach(function (row) {
+        table.columns.forEach(function (col) {
+            var cell = row.cells[col.dataKey];
+            config_1.Config.applyStyles(cell.styles);
+            var textSpace = col.width - cell.padding('horizontal');
+            if (cell.styles.overflow === 'linebreak') {
+                // Add one pt to textSpace to fix rounding error
+                try {
+                    cell.text = doc.splitTextToSize(cell.text, textSpace + 1, { fontSize: cell.styles.fontSize });
+                }
+                catch (e) {
+                    if (e instanceof TypeError && Array.isArray(cell.text)) {
+                        cell.text = doc.splitTextToSize(cell.text.join(' '), textSpace + 1, { fontSize: cell.styles.fontSize });
+                    }
+                    else {
+                        throw e;
+                    }
+                }
+            }
+            else if (cell.styles.overflow === 'ellipsize') {
+                cell.text = common_1.ellipsize(cell.text, textSpace, cell.styles);
+            }
+            else if (cell.styles.overflow === 'visible') {
+            }
+            else if (cell.styles.overflow === 'hidden') {
+                cell.text = common_1.ellipsize(cell.text, textSpace, cell.styles, '');
+            }
+            else if (typeof cell.styles.overflow === 'function') {
+                cell.text = cell.styles.overflow(cell.text, textSpace);
+            }
+            else {
+                console.error("Unrecognized overflow type: " + cell.styles.overflow);
+            }
+            var k = config_1.Config.scaleFactor();
+            var lineCount = Array.isArray(cell.text) ? cell.text.length : 1;
+            var fontHeight = cell.styles.fontSize / k * config_1.FONT_ROW_RATIO;
+            cell.contentHeight = lineCount * fontHeight + cell.padding('vertical');
+            if (cell.contentHeight > row.height) {
+                row.height = cell.contentHeight;
+                row.maxLineCount = lineCount;
+            }
+        });
+        table.height += row.height;
+    });
+}
+exports.calculateWidths = calculateWidths;
+function distributeWidth(dynamicColumns, staticWidth, dynamicColumnsContentWidth, fairWidth) {
+    var table = config_1.Config.tableInstance();
+    var extraWidth = table.width - staticWidth - dynamicColumnsContentWidth;
+    for (var i = 0; i < dynamicColumns.length; i++) {
+        var col = dynamicColumns[i];
+        var ratio = col.contentWidth / dynamicColumnsContentWidth;
+        // A column turned out to be none dynamic, start over recursively
+        var isNoneDynamic = col.contentWidth + extraWidth * ratio < fairWidth;
+        if (extraWidth < 0 && isNoneDynamic) {
+            dynamicColumns.splice(i, 1);
+            dynamicColumnsContentWidth -= col.contentWidth;
+            col.width = fairWidth;
+            staticWidth += col.width;
+            distributeWidth(dynamicColumns, staticWidth, dynamicColumnsContentWidth, fairWidth);
+            break;
+        }
+        else {
+            col.width = col.contentWidth + extraWidth * ratio;
+        }
+    }
+}
+
+
+/***/ },
+/* 17 */
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var models_1 = __webpack_require__(15);
+var config_1 = __webpack_require__(0);
+var assign = __webpack_require__(12);
+function validateInput(headers, data, allOptions) {
+    if (!headers || typeof headers !== 'object') {
+        console.error("The headers should be an object or array, is: " + typeof headers);
+    }
+    if (!data || typeof data !== 'object') {
+        console.error("The data should be an object or array, is: " + typeof data);
+    }
+    var _loop_1 = function (settings) {
+        if (settings && typeof settings !== 'object') {
+            console.error("The options parameter should be of type object, is: " + typeof settings);
+        }
+        if (typeof settings.extendWidth !== 'undefined') {
+            settings.tableWidth = settings.extendWidth ? 'auto' : 'wrap';
+            console.error("Use of deprecated option: extendWidth, use tableWidth instead.");
+        }
+        if (typeof settings.margins !== 'undefined') {
+            if (typeof settings.margin === 'undefined')
+                settings.margin = settings.margins;
+            console.error("Use of deprecated option: margins, use margin instead.");
+        }
+        if (typeof settings.afterPageContent !== 'undefined' || typeof settings.beforePageContent !== 'undefined' || typeof settings.afterPageAdd !== 'undefined') {
+            console.error("The afterPageContent, beforePageContent and afterPageAdd hooks are deprecated. Use addPageContent instead");
+            if (typeof settings.addPageContent === 'undefined') {
+                settings.addPageContent = function (data) {
+                    config_1.Config.applyUserStyles();
+                    if (settings.beforePageContent)
+                        settings.beforePageContent(data);
+                    config_1.Config.applyUserStyles();
+                    if (settings.afterPageContent)
+                        settings.afterPageContent(data);
+                    config_1.Config.applyUserStyles();
+                    if (settings.afterPageAdd && data.pageCount > 1) {
+                        data.afterPageAdd(data);
+                    }
+                    config_1.Config.applyUserStyles();
+                };
+            }
+        }
+        [['padding', 'cellPadding'], ['lineHeight', 'rowHeight'], 'fontSize', 'overflow'].forEach(function (o) {
+            var deprecatedOption = typeof o === 'string' ? o : o[0];
+            var style = typeof o === 'string' ? o : o[1];
+            if (typeof settings[deprecatedOption] !== 'undefined') {
+                if (typeof settings.styles[style] === 'undefined') {
+                    settings.styles[style] = settings[deprecatedOption];
+                }
+                console.error("Use of deprecated option: " + deprecatedOption + ", use the style " + style + " instead.");
+            }
+        });
+        for (var _i = 0, _a = ['styles', 'bodyStyles', 'headerStyles', 'columnStyles']; _i < _a.length; _i++) {
+            var styleProp = _a[_i];
+            if (settings[styleProp] && typeof settings[styleProp] !== 'object') {
+                console.error("The " + styleProp + " style should be of type object, is: " + typeof settings[styleProp]);
+            }
+            else if (settings[styleProp] && settings[styleProp].rowHeight) {
+                console.error("Use of deprecated style: rowHeight, use vertical cell padding instead");
+            }
+        }
+    };
+    for (var _i = 0, allOptions_1 = allOptions; _i < allOptions_1.length; _i++) {
+        var settings = allOptions_1[_i];
+        _loop_1(settings);
+    }
+}
+exports.validateInput = validateInput;
+/**
+ * Create models from the user input
+ *
+ * @param inputHeaders
+ * @param inputData
+ */
+function createModels(inputHeaders, inputData) {
+    var splitRegex = /\r\n|\r|\n/g;
+    var table = config_1.Config.tableInstance();
+    var settings = table.settings;
+    var theme = config_1.getTheme(settings.theme);
+    // Header row and columns
+    var headerRow = new models_1.Row(inputHeaders, -1);
+    headerRow.index = -1;
+    // Columns and header row
+    inputHeaders.forEach(function (rawColumn, index) {
+        var dataKey = index;
+        if (typeof rawColumn.dataKey !== 'undefined') {
+            dataKey = rawColumn.dataKey;
+        }
+        else if (typeof rawColumn.key !== 'undefined') {
+            console.error("Deprecation warning: Use dataKey instead of key");
+            dataKey = rawColumn.key; // deprecated since 2.x
+        }
+        var col = new models_1.Column(dataKey, index);
+        col.widthStyle = config_1.Config.styles([theme.table, theme.header, table.styles.styles, table.styles.columnStyles[col.dataKey] || {}]).columnWidth;
+        table.columns.push(col);
+        var cell = new models_1.Cell(rawColumn);
+        cell.styles = config_1.Config.styles([theme.table, theme.header, table.styles.styles, table.styles.headerStyles]);
+        if (cell.raw instanceof HTMLElement) {
+            cell.text = (cell.raw.innerText || '').trim();
+        }
+        else {
+            var text = typeof cell.raw === 'object' ? cell.raw.title : cell.raw;
+            // Stringify 0 and false, but not undefined
+            cell.text = typeof cell.raw !== 'undefined' ? '' + text : '';
+        }
+        cell.text = cell.text.split(splitRegex);
+        headerRow.cells[dataKey] = cell;
+        for (var _i = 0, _a = table.hooks.createdHeaderCell; _i < _a.length; _i++) {
+            var hook = _a[_i];
+            hook(cell, { cell: cell, column: col, row: headerRow, settings: settings });
+        }
+    });
+    table.headerRow = headerRow;
+    // Rows och cells
+    inputData.forEach(function (rawRow, i) {
+        var row = new models_1.Row(rawRow, i);
+        var rowStyles = i % 2 === 0 ? assign({}, theme.alternateRow, table.styles.alternateRowStyles) : {};
+        table.columns.forEach(function (column) {
+            var cell = new models_1.Cell(rawRow[column.dataKey]);
+            var colStyles = table.styles.columnStyles[column.dataKey] || {};
+            cell.styles = config_1.Config.styles([theme.table, theme.body, table.styles.styles, table.styles.bodyStyles, rowStyles, colStyles]);
+            if (cell.raw && cell.raw instanceof HTMLElement) {
+                cell.text = (cell.raw.innerText || '').trim();
+            }
+            else {
+                // Stringify 0 and false, but not undefined
+                cell.text = typeof cell.raw !== 'undefined' ? '' + cell.raw : '';
+            }
+            cell.text = cell.text.split(splitRegex);
+            row.cells[column.dataKey] = cell;
+            for (var _i = 0, _a = table.hooks.createdCell; _i < _a.length; _i++) {
+                var hook = _a[_i];
+                hook(cell, config_1.Config.hooksData({ cell: cell, column: column, row: row }));
+            }
+        });
+        table.rows.push(row);
+    });
+}
+exports.createModels = createModels;
+
+
+/***/ },
+/* 18 */
+/***/ function(module, exports) {
+
+module.exports = __WEBPACK_EXTERNAL_MODULE_18__;
+
+/***/ },
+/* 19 */
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var $isNaN = __webpack_require__(8);
+var $isFinite = __webpack_require__(7);
+
+var sign = __webpack_require__(10);
+var mod = __webpack_require__(9);
+
+var IsCallable = __webpack_require__(3);
+var toPrimitive = __webpack_require__(23);
+
+// https://es5.github.io/#x9
+var ES5 = {
+	ToPrimitive: toPrimitive,
+
+	ToBoolean: function ToBoolean(value) {
+		return Boolean(value);
+	},
+	ToNumber: function ToNumber(value) {
+		return Number(value);
+	},
+	ToInteger: function ToInteger(value) {
+		var number = this.ToNumber(value);
+		if ($isNaN(number)) { return 0; }
+		if (number === 0 || !$isFinite(number)) { return number; }
+		return sign(number) * Math.floor(Math.abs(number));
+	},
+	ToInt32: function ToInt32(x) {
+		return this.ToNumber(x) >> 0;
+	},
+	ToUint32: function ToUint32(x) {
+		return this.ToNumber(x) >>> 0;
+	},
+	ToUint16: function ToUint16(value) {
+		var number = this.ToNumber(value);
+		if ($isNaN(number) || number === 0 || !$isFinite(number)) { return 0; }
+		var posInt = sign(number) * Math.floor(Math.abs(number));
+		return mod(posInt, 0x10000);
+	},
+	ToString: function ToString(value) {
+		return String(value);
+	},
+	ToObject: function ToObject(value) {
+		this.CheckObjectCoercible(value);
+		return Object(value);
+	},
+	CheckObjectCoercible: function CheckObjectCoercible(value, optMessage) {
+		/* jshint eqnull:true */
+		if (value == null) {
+			throw new TypeError(optMessage || 'Cannot call method on ' + value);
+		}
+		return value;
+	},
+	IsCallable: IsCallable,
+	SameValue: function SameValue(x, y) {
+		if (x === y) { // 0 === -0, but they are not identical.
+			if (x === 0) { return 1 / x === 1 / y; }
+			return true;
+		}
+		return $isNaN(x) && $isNaN(y);
+	},
+
+	// http://www.ecma-international.org/ecma-262/5.1/#sec-8
+	Type: function Type(x) {
+		if (x === null) {
+			return 'Null';
+		}
+		if (typeof x === 'undefined') {
+			return 'Undefined';
+		}
+		if (typeof x === 'function' || typeof x === 'object') {
+			return 'Object';
+		}
+		if (typeof x === 'number') {
+			return 'Number';
+		}
+		if (typeof x === 'boolean') {
+			return 'Boolean';
+		}
+		if (typeof x === 'string') {
+			return 'String';
+		}
+	}
+};
+
+module.exports = ES5;
+
+
+/***/ },
+/* 20 */
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var toStr = Object.prototype.toString;
+var hasSymbols = typeof Symbol === 'function' && typeof Symbol.iterator === 'symbol';
+var symbolToStr = hasSymbols ? Symbol.prototype.toString : toStr;
+
+var $isNaN = __webpack_require__(8);
+var $isFinite = __webpack_require__(7);
+var MAX_SAFE_INTEGER = Number.MAX_SAFE_INTEGER || Math.pow(2, 53) - 1;
+
+var assign = __webpack_require__(6);
+var sign = __webpack_require__(10);
+var mod = __webpack_require__(9);
+var isPrimitive = __webpack_require__(22);
+var toPrimitive = __webpack_require__(24);
+var parseInteger = parseInt;
+var bind = __webpack_require__(2);
+var strSlice = bind.call(Function.call, String.prototype.slice);
+var isBinary = bind.call(Function.call, RegExp.prototype.test, /^0b[01]+$/i);
+var isOctal = bind.call(Function.call, RegExp.prototype.test, /^0o[0-7]+$/i);
+var nonWS = ['\u0085', '\u200b', '\ufffe'].join('');
+var nonWSregex = new RegExp('[' + nonWS + ']', 'g');
+var hasNonWS = bind.call(Function.call, RegExp.prototype.test, nonWSregex);
+var invalidHexLiteral = /^[\-\+]0x[0-9a-f]+$/i;
+var isInvalidHexLiteral = bind.call(Function.call, RegExp.prototype.test, invalidHexLiteral);
+
+// whitespace from: http://es5.github.io/#x15.5.4.20
+// implementation from https://github.com/es-shims/es5-shim/blob/v3.4.0/es5-shim.js#L1304-L1324
+var ws = [
+	'\x09\x0A\x0B\x0C\x0D\x20\xA0\u1680\u180E\u2000\u2001\u2002\u2003',
+	'\u2004\u2005\u2006\u2007\u2008\u2009\u200A\u202F\u205F\u3000\u2028',
+	'\u2029\uFEFF'
+].join('');
+var trimRegex = new RegExp('(^[' + ws + ']+)|([' + ws + ']+$)', 'g');
+var replace = bind.call(Function.call, String.prototype.replace);
+var trim = function (value) {
+	return replace(value, trimRegex, '');
+};
+
+var ES5 = __webpack_require__(19);
+
+var hasRegExpMatcher = __webpack_require__(29);
+
+// https://people.mozilla.org/~jorendorff/es6-draft.html#sec-abstract-operations
+var ES6 = assign(assign({}, ES5), {
+
+	// https://people.mozilla.org/~jorendorff/es6-draft.html#sec-call-f-v-args
+	Call: function Call(F, V) {
+		var args = arguments.length > 2 ? arguments[2] : [];
+		if (!this.IsCallable(F)) {
+			throw new TypeError(F + ' is not a function');
+		}
+		return F.apply(V, args);
+	},
+
+	// https://people.mozilla.org/~jorendorff/es6-draft.html#sec-toprimitive
+	ToPrimitive: toPrimitive,
+
+	// https://people.mozilla.org/~jorendorff/es6-draft.html#sec-toboolean
+	// ToBoolean: ES5.ToBoolean,
+
+	// http://www.ecma-international.org/ecma-262/6.0/#sec-tonumber
+	ToNumber: function ToNumber(argument) {
+		var value = isPrimitive(argument) ? argument : toPrimitive(argument, 'number');
+		if (typeof value === 'symbol') {
+			throw new TypeError('Cannot convert a Symbol value to a number');
+		}
+		if (typeof value === 'string') {
+			if (isBinary(value)) {
+				return this.ToNumber(parseInteger(strSlice(value, 2), 2));
+			} else if (isOctal(value)) {
+				return this.ToNumber(parseInteger(strSlice(value, 2), 8));
+			} else if (hasNonWS(value) || isInvalidHexLiteral(value)) {
+				return NaN;
+			} else {
+				var trimmed = trim(value);
+				if (trimmed !== value) {
+					return this.ToNumber(trimmed);
+				}
+			}
+		}
+		return Number(value);
+	},
+
+	// https://people.mozilla.org/~jorendorff/es6-draft.html#sec-tointeger
+	// ToInteger: ES5.ToNumber,
+
+	// https://people.mozilla.org/~jorendorff/es6-draft.html#sec-toint32
+	// ToInt32: ES5.ToInt32,
+
+	// https://people.mozilla.org/~jorendorff/es6-draft.html#sec-touint32
+	// ToUint32: ES5.ToUint32,
+
+	// https://people.mozilla.org/~jorendorff/es6-draft.html#sec-toint16
+	ToInt16: function ToInt16(argument) {
+		var int16bit = this.ToUint16(argument);
+		return int16bit >= 0x8000 ? int16bit - 0x10000 : int16bit;
+	},
+
+	// https://people.mozilla.org/~jorendorff/es6-draft.html#sec-touint16
+	// ToUint16: ES5.ToUint16,
+
+	// https://people.mozilla.org/~jorendorff/es6-draft.html#sec-toint8
+	ToInt8: function ToInt8(argument) {
+		var int8bit = this.ToUint8(argument);
+		return int8bit >= 0x80 ? int8bit - 0x100 : int8bit;
+	},
+
+	// https://people.mozilla.org/~jorendorff/es6-draft.html#sec-touint8
+	ToUint8: function ToUint8(argument) {
+		var number = this.ToNumber(argument);
+		if ($isNaN(number) || number === 0 || !$isFinite(number)) { return 0; }
+		var posInt = sign(number) * Math.floor(Math.abs(number));
+		return mod(posInt, 0x100);
+	},
+
+	// https://people.mozilla.org/~jorendorff/es6-draft.html#sec-touint8clamp
+	ToUint8Clamp: function ToUint8Clamp(argument) {
+		var number = this.ToNumber(argument);
+		if ($isNaN(number) || number <= 0) { return 0; }
+		if (number >= 0xFF) { return 0xFF; }
+		var f = Math.floor(argument);
+		if (f + 0.5 < number) { return f + 1; }
+		if (number < f + 0.5) { return f; }
+		if (f % 2 !== 0) { return f + 1; }
+		return f;
+	},
+
+	// https://people.mozilla.org/~jorendorff/es6-draft.html#sec-tostring
+	ToString: function ToString(argument) {
+		if (typeof argument === 'symbol') {
+			throw new TypeError('Cannot convert a Symbol value to a string');
+		}
+		return String(argument);
+	},
+
+	// https://people.mozilla.org/~jorendorff/es6-draft.html#sec-toobject
+	ToObject: function ToObject(value) {
+		this.RequireObjectCoercible(value);
+		return Object(value);
+	},
+
+	// https://people.mozilla.org/~jorendorff/es6-draft.html#sec-topropertykey
+	ToPropertyKey: function ToPropertyKey(argument) {
+		var key = this.ToPrimitive(argument, String);
+		return typeof key === 'symbol' ? symbolToStr.call(key) : this.ToString(key);
+	},
+
+	// https://people.mozilla.org/~jorendorff/es6-draft.html#sec-tolength
+	ToLength: function ToLength(argument) {
+		var len = this.ToInteger(argument);
+		if (len <= 0) { return 0; } // includes converting -0 to +0
+		if (len > MAX_SAFE_INTEGER) { return MAX_SAFE_INTEGER; }
+		return len;
+	},
+
+	// http://www.ecma-international.org/ecma-262/6.0/#sec-canonicalnumericindexstring
+	CanonicalNumericIndexString: function CanonicalNumericIndexString(argument) {
+		if (toStr.call(argument) !== '[object String]') {
+			throw new TypeError('must be a string');
+		}
+		if (argument === '-0') { return -0; }
+		var n = this.ToNumber(argument);
+		if (this.SameValue(this.ToString(n), argument)) { return n; }
+		return void 0;
+	},
+
+	// https://people.mozilla.org/~jorendorff/es6-draft.html#sec-requireobjectcoercible
+	RequireObjectCoercible: ES5.CheckObjectCoercible,
+
+	// https://people.mozilla.org/~jorendorff/es6-draft.html#sec-isarray
+	IsArray: Array.isArray || function IsArray(argument) {
+		return toStr.call(argument) === '[object Array]';
+	},
+
+	// https://people.mozilla.org/~jorendorff/es6-draft.html#sec-iscallable
+	// IsCallable: ES5.IsCallable,
+
+	// https://people.mozilla.org/~jorendorff/es6-draft.html#sec-isconstructor
+	IsConstructor: function IsConstructor(argument) {
+		return typeof argument === 'function' && !!argument.prototype; // unfortunately there's no way to truly check this without try/catch `new argument`
+	},
+
+	// https://people.mozilla.org/~jorendorff/es6-draft.html#sec-isextensible-o
+	IsExtensible: function IsExtensible(obj) {
+		if (!Object.preventExtensions) { return true; }
+		if (isPrimitive(obj)) {
+			return false;
+		}
+		return Object.isExtensible(obj);
+	},
+
+	// https://people.mozilla.org/~jorendorff/es6-draft.html#sec-isinteger
+	IsInteger: function IsInteger(argument) {
+		if (typeof argument !== 'number' || $isNaN(argument) || !$isFinite(argument)) {
+			return false;
+		}
+		var abs = Math.abs(argument);
+		return Math.floor(abs) === abs;
+	},
+
+	// https://people.mozilla.org/~jorendorff/es6-draft.html#sec-ispropertykey
+	IsPropertyKey: function IsPropertyKey(argument) {
+		return typeof argument === 'string' || typeof argument === 'symbol';
+	},
+
+	// http://www.ecma-international.org/ecma-262/6.0/#sec-isregexp
+	IsRegExp: function IsRegExp(argument) {
+		if (!argument || typeof argument !== 'object') {
+			return false;
+		}
+		if (hasSymbols) {
+			var isRegExp = argument[Symbol.match];
+			if (typeof isRegExp !== 'undefined') {
+				return ES5.ToBoolean(isRegExp);
+			}
+		}
+		return hasRegExpMatcher(argument);
+	},
+
+	// https://people.mozilla.org/~jorendorff/es6-draft.html#sec-samevalue
+	// SameValue: ES5.SameValue,
+
+	// https://people.mozilla.org/~jorendorff/es6-draft.html#sec-samevaluezero
+	SameValueZero: function SameValueZero(x, y) {
+		return (x === y) || ($isNaN(x) && $isNaN(y));
+	},
+
+	Type: function Type(x) {
+		if (typeof x === 'symbol') {
+			return 'Symbol';
+		}
+		return ES5.Type(x);
+	},
+
+	// http://www.ecma-international.org/ecma-262/6.0/#sec-speciesconstructor
+	SpeciesConstructor: function SpeciesConstructor(O, defaultConstructor) {
+		if (this.Type(O) !== 'Object') {
+			throw new TypeError('Assertion failed: Type(O) is not Object');
+		}
+		var C = O.constructor;
+		if (typeof C === 'undefined') {
+			return defaultConstructor;
+		}
+		if (this.Type(C) !== 'Object') {
+			throw new TypeError('O.constructor is not an Object');
+		}
+		var S = hasSymbols && Symbol.species ? C[Symbol.species] : undefined;
+		if (S == null) {
+			return defaultConstructor;
+		}
+		if (this.IsConstructor(S)) {
+			return S;
+		}
+		throw new TypeError('no constructor found');
+	}
+});
+
+delete ES6.CheckObjectCoercible; // renamed in ES6 to RequireObjectCoercible
+
+module.exports = ES6;
+
+
+/***/ },
+/* 21 */
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var ES6 = __webpack_require__(20);
+var assign = __webpack_require__(6);
+
+var ES7 = assign(ES6, {
+	// https://github.com/tc39/ecma262/pull/60
+	SameValueNonNumber: function SameValueNonNumber(x, y) {
+		if (typeof x === 'number' || typeof x !== typeof y) {
+			throw new TypeError('SameValueNonNumber requires two non-number values of the same type.');
+		}
+		return this.SameValue(x, y);
+	}
+});
+
+module.exports = ES7;
+
+
+/***/ },
+/* 22 */
+/***/ function(module, exports) {
+
+module.exports = function isPrimitive(value) {
+	return value === null || (typeof value !== 'function' && typeof value !== 'object');
+};
+
+
+/***/ },
+/* 23 */
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var toStr = Object.prototype.toString;
+
+var isPrimitive = __webpack_require__(11);
+
+var isCallable = __webpack_require__(3);
+
+// https://es5.github.io/#x8.12
+var ES5internalSlots = {
+	'[[DefaultValue]]': function (O, hint) {
+		var actualHint = hint || (toStr.call(O) === '[object Date]' ? String : Number);
+
+		if (actualHint === String || actualHint === Number) {
+			var methods = actualHint === String ? ['toString', 'valueOf'] : ['valueOf', 'toString'];
+			var value, i;
+			for (i = 0; i < methods.length; ++i) {
+				if (isCallable(O[methods[i]])) {
+					value = O[methods[i]]();
+					if (isPrimitive(value)) {
+						return value;
+					}
+				}
+			}
+			throw new TypeError('No default value');
+		}
+		throw new TypeError('invalid [[DefaultValue]] hint supplied');
+	}
+};
+
+// https://es5.github.io/#x9
+module.exports = function ToPrimitive(input, PreferredType) {
+	if (isPrimitive(input)) {
+		return input;
+	}
+	return ES5internalSlots['[[DefaultValue]]'](input, PreferredType);
+};
+
+
+/***/ },
+/* 24 */
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var hasSymbols = typeof Symbol === 'function' && typeof Symbol.iterator === 'symbol';
+
+var isPrimitive = __webpack_require__(11);
+var isCallable = __webpack_require__(3);
+var isDate = __webpack_require__(28);
+var isSymbol = __webpack_require__(30);
+
+var ordinaryToPrimitive = function OrdinaryToPrimitive(O, hint) {
+	if (typeof O === 'undefined' || O === null) {
+		throw new TypeError('Cannot call method on ' + O);
+	}
+	if (typeof hint !== 'string' || (hint !== 'number' && hint !== 'string')) {
+		throw new TypeError('hint must be "string" or "number"');
+	}
+	var methodNames = hint === 'string' ? ['toString', 'valueOf'] : ['valueOf', 'toString'];
+	var method, result, i;
+	for (i = 0; i < methodNames.length; ++i) {
+		method = O[methodNames[i]];
+		if (isCallable(method)) {
+			result = method.call(O);
+			if (isPrimitive(result)) {
+				return result;
+			}
+		}
+	}
+	throw new TypeError('No default value');
+};
+
+var GetMethod = function GetMethod(O, P) {
+	var func = O[P];
+	if (func !== null && typeof func !== 'undefined') {
+		if (!isCallable(func)) {
+			throw new TypeError(func + ' returned for property ' + P + ' of object ' + O + ' is not a function');
+		}
+		return func;
+	}
+};
+
+// http://www.ecma-international.org/ecma-262/6.0/#sec-toprimitive
+module.exports = function ToPrimitive(input, PreferredType) {
+	if (isPrimitive(input)) {
+		return input;
+	}
+	var hint = 'default';
+	if (arguments.length > 1) {
+		if (PreferredType === String) {
+			hint = 'string';
+		} else if (PreferredType === Number) {
+			hint = 'number';
+		}
+	}
+
+	var exoticToPrim;
+	if (hasSymbols) {
+		if (Symbol.toPrimitive) {
+			exoticToPrim = GetMethod(input, Symbol.toPrimitive);
+		} else if (isSymbol(input)) {
+			exoticToPrim = Symbol.prototype.valueOf;
+		}
+	}
+	if (typeof exoticToPrim !== 'undefined') {
+		var result = exoticToPrim.call(input, hint);
+		if (isPrimitive(result)) {
+			return result;
+		}
+		throw new TypeError('unable to convert exotic object to primitive');
+	}
+	if (hint === 'default' && (isDate(input) || isSymbol(input))) {
+		hint = 'string';
+	}
+	return ordinaryToPrimitive(input, hint === 'default' ? 'number' : hint);
+};
+
+
+/***/ },
+/* 25 */
+/***/ function(module, exports) {
+
+
+var hasOwn = Object.prototype.hasOwnProperty;
+var toString = Object.prototype.toString;
+
+module.exports = function forEach (obj, fn, ctx) {
+    if (toString.call(fn) !== '[object Function]') {
+        throw new TypeError('iterator must be a function');
+    }
+    var l = obj.length;
+    if (l === +l) {
+        for (var i = 0; i < l; i++) {
+            fn.call(ctx, obj[i], i, obj);
+        }
+    } else {
+        for (var k in obj) {
+            if (hasOwn.call(obj, k)) {
+                fn.call(ctx, obj[k], k, obj);
+            }
+        }
+    }
+};
+
+
+
+/***/ },
+/* 26 */
+/***/ function(module, exports) {
+
+var ERROR_MESSAGE = 'Function.prototype.bind called on incompatible ';
+var slice = Array.prototype.slice;
+var toStr = Object.prototype.toString;
+var funcType = '[object Function]';
+
+module.exports = function bind(that) {
+    var target = this;
+    if (typeof target !== 'function' || toStr.call(target) !== funcType) {
+        throw new TypeError(ERROR_MESSAGE + target);
+    }
+    var args = slice.call(arguments, 1);
+
+    var bound;
+    var binder = function () {
+        if (this instanceof bound) {
+            var result = target.apply(
+                this,
+                args.concat(slice.call(arguments))
+            );
+            if (Object(result) === result) {
+                return result;
+            }
+            return this;
+        } else {
+            return target.apply(
+                that,
+                args.concat(slice.call(arguments))
+            );
+        }
+    };
+
+    var boundLength = Math.max(0, target.length - args.length);
+    var boundArgs = [];
+    for (var i = 0; i < boundLength; i++) {
+        boundArgs.push('$' + i);
+    }
+
+    bound = Function('binder', 'return function (' + boundArgs.join(',') + '){ return binder.apply(this,arguments); }')(binder);
+
+    if (target.prototype) {
+        var Empty = function Empty() {};
+        Empty.prototype = target.prototype;
+        bound.prototype = new Empty();
+        Empty.prototype = null;
+    }
+
+    return bound;
+};
+
+
+/***/ },
+/* 27 */
+/***/ function(module, exports, __webpack_require__) {
+
+var bind = __webpack_require__(2);
+
+module.exports = bind.call(Function.call, Object.prototype.hasOwnProperty);
+
+
+/***/ },
+/* 28 */
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var getDay = Date.prototype.getDay;
+var tryDateObject = function tryDateObject(value) {
+	try {
+		getDay.call(value);
+		return true;
+	} catch (e) {
+		return false;
+	}
+};
+
+var toStr = Object.prototype.toString;
+var dateClass = '[object Date]';
+var hasToStringTag = typeof Symbol === 'function' && typeof Symbol.toStringTag === 'symbol';
+
+module.exports = function isDateObject(value) {
+	if (typeof value !== 'object' || value === null) { return false; }
+	return hasToStringTag ? tryDateObject(value) : toStr.call(value) === dateClass;
+};
+
+
+/***/ },
+/* 29 */
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var regexExec = RegExp.prototype.exec;
+var tryRegexExec = function tryRegexExec(value) {
+	try {
+		regexExec.call(value);
+		return true;
+	} catch (e) {
+		return false;
+	}
+};
+var toStr = Object.prototype.toString;
+var regexClass = '[object RegExp]';
+var hasToStringTag = typeof Symbol === 'function' && typeof Symbol.toStringTag === 'symbol';
+
+module.exports = function isRegex(value) {
+	if (typeof value !== 'object') { return false; }
+	return hasToStringTag ? tryRegexExec(value) : toStr.call(value) === regexClass;
+};
+
+
+/***/ },
+/* 30 */
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var toStr = Object.prototype.toString;
+var hasSymbols = typeof Symbol === 'function' && typeof Symbol() === 'symbol';
+
+if (hasSymbols) {
+	var symToStr = Symbol.prototype.toString;
+	var symStringRegex = /^Symbol\(.*\)$/;
+	var isSymbolObject = function isSymbolObject(value) {
+		if (typeof value.valueOf() !== 'symbol') { return false; }
+		return symStringRegex.test(symToStr.call(value));
+	};
+	module.exports = function isSymbol(value) {
+		if (typeof value === 'symbol') { return true; }
+		if (toStr.call(value) !== '[object Symbol]') { return false; }
+		try {
+			return isSymbolObject(value);
+		} catch (e) {
+			return false;
+		}
+	};
+} else {
+	module.exports = function isSymbol(value) {
+		// this environment does not support Symbols.
+		return false;
+	};
+}
+
+
+/***/ },
+/* 31 */
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+// modified from https://github.com/es-shims/es5-shim
+var has = Object.prototype.hasOwnProperty;
+var toStr = Object.prototype.toString;
+var slice = Array.prototype.slice;
+var isArgs = __webpack_require__(32);
+var isEnumerable = Object.prototype.propertyIsEnumerable;
+var hasDontEnumBug = !isEnumerable.call({ toString: null }, 'toString');
+var hasProtoEnumBug = isEnumerable.call(function () {}, 'prototype');
+var dontEnums = [
+	'toString',
+	'toLocaleString',
+	'valueOf',
+	'hasOwnProperty',
+	'isPrototypeOf',
+	'propertyIsEnumerable',
+	'constructor'
+];
+var equalsConstructorPrototype = function (o) {
+	var ctor = o.constructor;
+	return ctor && ctor.prototype === o;
+};
+var excludedKeys = {
+	$console: true,
+	$external: true,
+	$frame: true,
+	$frameElement: true,
+	$frames: true,
+	$innerHeight: true,
+	$innerWidth: true,
+	$outerHeight: true,
+	$outerWidth: true,
+	$pageXOffset: true,
+	$pageYOffset: true,
+	$parent: true,
+	$scrollLeft: true,
+	$scrollTop: true,
+	$scrollX: true,
+	$scrollY: true,
+	$self: true,
+	$webkitIndexedDB: true,
+	$webkitStorageInfo: true,
+	$window: true
+};
+var hasAutomationEqualityBug = (function () {
+	/* global window */
+	if (typeof window === 'undefined') { return false; }
+	for (var k in window) {
+		try {
+			if (!excludedKeys['$' + k] && has.call(window, k) && window[k] !== null && typeof window[k] === 'object') {
+				try {
+					equalsConstructorPrototype(window[k]);
+				} catch (e) {
+					return true;
+				}
+			}
+		} catch (e) {
+			return true;
+		}
+	}
+	return false;
+}());
+var equalsConstructorPrototypeIfNotBuggy = function (o) {
+	/* global window */
+	if (typeof window === 'undefined' || !hasAutomationEqualityBug) {
+		return equalsConstructorPrototype(o);
+	}
+	try {
+		return equalsConstructorPrototype(o);
+	} catch (e) {
+		return false;
+	}
+};
+
+var keysShim = function keys(object) {
+	var isObject = object !== null && typeof object === 'object';
+	var isFunction = toStr.call(object) === '[object Function]';
+	var isArguments = isArgs(object);
+	var isString = isObject && toStr.call(object) === '[object String]';
+	var theKeys = [];
+
+	if (!isObject && !isFunction && !isArguments) {
+		throw new TypeError('Object.keys called on a non-object');
+	}
+
+	var skipProto = hasProtoEnumBug && isFunction;
+	if (isString && object.length > 0 && !has.call(object, 0)) {
+		for (var i = 0; i < object.length; ++i) {
+			theKeys.push(String(i));
+		}
+	}
+
+	if (isArguments && object.length > 0) {
+		for (var j = 0; j < object.length; ++j) {
+			theKeys.push(String(j));
+		}
+	} else {
+		for (var name in object) {
+			if (!(skipProto && name === 'prototype') && has.call(object, name)) {
+				theKeys.push(String(name));
+			}
+		}
+	}
+
+	if (hasDontEnumBug) {
+		var skipConstructor = equalsConstructorPrototypeIfNotBuggy(object);
+
+		for (var k = 0; k < dontEnums.length; ++k) {
+			if (!(skipConstructor && dontEnums[k] === 'constructor') && has.call(object, dontEnums[k])) {
+				theKeys.push(dontEnums[k]);
+			}
+		}
+	}
+	return theKeys;
+};
+
+keysShim.shim = function shimObjectKeys() {
+	if (Object.keys) {
+		var keysWorksWithArguments = (function () {
+			// Safari 5.0 bug
+			return (Object.keys(arguments) || '').length === 2;
+		}(1, 2));
+		if (!keysWorksWithArguments) {
+			var originalKeys = Object.keys;
+			Object.keys = function keys(object) {
+				if (isArgs(object)) {
+					return originalKeys(slice.call(object));
+				} else {
+					return originalKeys(object);
+				}
+			};
+		}
+	} else {
+		Object.keys = keysShim;
+	}
+	return Object.keys || keysShim;
+};
+
+module.exports = keysShim;
+
+
+/***/ },
+/* 32 */
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var toStr = Object.prototype.toString;
+
+module.exports = function isArguments(value) {
+	var str = toStr.call(value);
+	var isArgs = str === '[object Arguments]';
+	if (!isArgs) {
+		isArgs = str !== '[object Array]' &&
+			value !== null &&
+			typeof value === 'object' &&
+			typeof value.length === 'number' &&
+			value.length >= 0 &&
+			toStr.call(value.callee) === '[object Function]';
+	}
+	return isArgs;
+};
+
+
+/***/ },
+/* 33 */
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var define = __webpack_require__(5);
+
+var implementation = __webpack_require__(13);
+var getPolyfill = __webpack_require__(14);
+var shim = __webpack_require__(34);
+
+var polyfill = getPolyfill();
+
+define(polyfill, {
+	getPolyfill: getPolyfill,
+	implementation: implementation,
+	shim: shim
+});
+
+module.exports = polyfill;
+
+
+/***/ },
+/* 34 */
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var getPolyfill = __webpack_require__(14);
+var define = __webpack_require__(5);
+
+module.exports = function shimEntries() {
+	var polyfill = getPolyfill();
+	define(Object, { entries: polyfill }, {
+		entries: function testEntries() {
+			return Object.entries !== polyfill;
+		}
+	});
+	return polyfill;
+};
+
+
+/***/ },
+/* 35 */
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var jsPDF = __webpack_require__(18);
+var config_1 = __webpack_require__(0);
+var common_1 = __webpack_require__(1);
+var painter_1 = __webpack_require__(4);
+var calculator_1 = __webpack_require__(16);
+var creator_1 = __webpack_require__(17);
+/**
+ * Create a table from a set of rows and columns.
+ *
+ * @param {Object[]|String[]} headers Either as an array of objects or array of strings
+ * @param {Object[][]|String[][]} data Either as an array of objects or array of strings
+ * @param {Object} [userOptions={}] Options that will override the default ones
+ */
+jsPDF.API.autoTable = function (headers, data, tableOptions) {
+    if (tableOptions === void 0) { tableOptions = {}; }
+    this.autoTableState = this.autoTableState || {};
+    jsPDF.autoTableState = jsPDF.autoTableState || {};
+    var allOptions = [jsPDF.autoTableState.defaults || {}, this.autoTableState.defaults || {}, tableOptions || {}];
+    creator_1.validateInput(headers, data, allOptions);
+    var table = config_1.Config.createTable(this);
+    config_1.Config.initSettings(table, allOptions);
+    var settings = table.settings;
+    // Create the table model with its columns, rows and cells
+    creator_1.createModels(headers, data);
+    settings.margin = config_1.Config.marginOrPadding(settings.margin, config_1.getDefaults().margin);
+    calculator_1.calculateWidths(this, config_1.Config.pageSize().width);
+    table.cursor = {
+        x: table.margin('left'),
+        y: settings.startY === false ? table.margin('top') : settings.startY
+    };
+    var minTableBottomPos = settings.startY + table.margin('bottom') + table.headerRow.height;
+    if (settings.pageBreak === 'avoid') {
+        minTableBottomPos += table.height;
+    }
+    var pageHeight = config_1.Config.pageSize().height;
+    if ((settings.pageBreak === 'always' && settings.startY !== false) ||
+        (settings.startY !== false && minTableBottomPos > pageHeight)) {
+        table.doc.addPage();
+        table.cursor.y = table.margin('top');
+    }
+    table.pageStartX = table.cursor.x;
+    table.pageStartY = table.cursor.y;
+    config_1.Config.applyUserStyles();
+    if (settings.showHeader === true || settings.showHeader === 'firstPage' || settings.showHeader === 'everyPage') {
+        painter_1.printRow(table.headerRow, table.hooks.drawHeaderRow, table.hooks.drawHeaderCell);
+    }
+    config_1.Config.applyUserStyles();
+    table.rows.forEach(function (row) {
+        painter_1.printFullRow(row, table.hooks.drawRow, table.hooks.drawCell);
+    });
+    common_1.addTableBorder();
+    // Don't call global and document addPageContent more than once for each page
+    var pageNumber = this.internal.getCurrentPageInfo().pageNumber;
+    if (this.autoTableState.addPageHookPages && this.autoTableState.addPageHookPages[pageNumber]) {
+        if (typeof tableOptions['addPageContent'] === 'function') {
+            tableOptions['addPageContent'](config_1.Config.hooksData());
+        }
+    }
+    else {
+        if (!this.autoTableState.addPageHookPages)
+            this.autoTableState.addPageHookPages = {};
+        this.autoTableState.addPageHookPages[pageNumber] = true;
+        common_1.addContentHooks();
+    }
+    table.finalY = table.cursor.y;
+    this.autoTable.previous = table;
+    config_1.Config.applyUserStyles();
+    return this;
+};
+// Enables doc.autoTable.previous.finalY || 40;
+jsPDF.API.autoTable.previous = false;
+jsPDF.API.autoTableSetDefaults = function (defaults) {
+    if (!this.autoTableState)
+        this.autoTableState = {};
+    if (defaults && typeof defaults === 'object') {
+        this.autoTableState.defaults = defaults;
+    }
+    else {
+        delete this.autoTableState.defaults;
+    }
+    return this;
+};
+jsPDF.autoTableSetDefaults = function (defaults) {
+    if (!jsPDF.autoTableState)
+        jsPDF.autoTableState = {};
+    if (defaults && typeof defaults === 'object') {
+        this.autoTableState.defaults = defaults;
+    }
+    else {
+        delete this.autoTableState.defaults;
+    }
+    jsPDF.autoTableState.defaults = defaults;
+};
+/**
+ * Parses an html table
+ *
+ * @param tableElem Html table element
+ * @param includeHiddenElements If to include hidden rows and columns (defaults to false)
+ * @returns Object Object with two properties, columns and rows
+ */
+jsPDF.API.autoTableHtmlToJson = function (tableElem, includeHiddenElements) {
+    includeHiddenElements = includeHiddenElements || false;
+    if (!tableElem || !(tableElem instanceof HTMLTableElement)) {
+        console.error("A HTMLTableElement has to be sent to autoTableHtmlToJson");
+        return null;
+    }
+    var columns = {}, rows = [];
+    var header = tableElem.rows[0];
+    for (var i = 0; i < header.cells.length; i++) {
+        var cell = header.cells[i];
+        var style = window.getComputedStyle(cell);
+        if (includeHiddenElements || style.display !== 'none') {
+            columns[i] = cell;
+        }
+    }
+    var _loop_1 = function (i) {
+        var tableRow = tableElem.rows[i];
+        var style = window.getComputedStyle(tableRow);
+        if (includeHiddenElements || style.display !== 'none') {
+            var rowData_1 = [];
+            Object.keys(columns).forEach(function (key) {
+                var cell = tableRow.cells[key];
+                rowData_1.push(cell);
+            });
+            rows.push(rowData_1);
+        }
+    };
+    for (var i = 1; i < tableElem.rows.length; i++) {
+        _loop_1(i);
+    }
+    var values = Object.keys(columns).map(function (key) { return columns[key]; });
+    return { columns: values, rows: rows, data: rows };
+};
+/**
+ * Improved text function with halign and valign support
+ * Inspiration from: http://stackoverflow.com/questions/28327510/align-text-right-using-jspdf/28433113#28433113
+ */
+jsPDF.API.autoTableText = function (text, x, y, styles) {
+    if (typeof x !== 'number' || typeof y !== 'number') {
+        console.error('The x and y parameters are required. Missing for the text: ', text);
+    }
+    var k = this.internal.scaleFactor;
+    var fontSize = this.internal.getFontSize() / k;
+    var splitRegex = /\r\n|\r|\n/g;
+    var splitText = null;
+    var lineCount = 1;
+    if (styles.valign === 'middle' || styles.valign === 'bottom' || styles.halign === 'center' || styles.halign === 'right') {
+        splitText = typeof text === 'string' ? text.split(splitRegex) : text;
+        lineCount = splitText.length || 1;
+    }
+    // Align the top
+    y += fontSize * (2 - config_1.FONT_ROW_RATIO);
+    if (styles.valign === 'middle')
+        y -= (lineCount / 2) * fontSize * config_1.FONT_ROW_RATIO;
+    else if (styles.valign === 'bottom')
+        y -= lineCount * fontSize * config_1.FONT_ROW_RATIO;
+    if (styles.halign === 'center' || styles.halign === 'right') {
+        var alignSize = fontSize;
+        if (styles.halign === 'center')
+            alignSize *= 0.5;
+        if (lineCount >= 1) {
+            for (var iLine = 0; iLine < splitText.length; iLine++) {
+                this.text(splitText[iLine], x - this.getStringUnitWidth(splitText[iLine]) * alignSize, y);
+                y += fontSize;
+            }
+            return this;
+        }
+        x -= this.getStringUnitWidth(text) * alignSize;
+    }
+    this.text(text, x, y);
+    return this;
+};
+/**
+ * @deprecated Use doc.autoTable.previous.finalY instead
+ */
+jsPDF.API.autoTableEndPosY = function () {
+    var prev = this.autoTable.previous;
+    if (prev.cursor && typeof prev.cursor.y === 'number') {
+        return prev.cursor.y;
+    }
+    else {
+        return 0;
+    }
+};
+/**
+ * @deprecated Use jsPDF.autoTableSetDefaults({addPageContent: function() {}}) instead
+ */
+jsPDF.API.autoTableAddPageContent = function (hook) {
+    if (!jsPDF.API.autoTable.globalDefaults) {
+        jsPDF.API.autoTable.globalDefaults = {};
+    }
+    jsPDF.API.autoTable.globalDefaults.addPageContent = hook;
+    return this;
+};
+/**
+ * @deprecated Use data.addPage in hooks instead
+ */
+jsPDF.API.autoTableAddPage = function () {
+    common_1.addPage();
+    return this;
+};
+
+
+/***/ }
+/******/ ]);
+});
