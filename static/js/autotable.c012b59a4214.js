@@ -173,7 +173,7 @@ var Config = (function () {
     function Config() {
     }
     Config.pageSize = function () {
-        return table.doc.internal.pageSize ;
+        return table.doc.internal.pageSize - 60;
     };
     Config.applyUserStyles = function () {
         Config.applyStyles(table.userStyles);
@@ -580,7 +580,7 @@ exports.printRow = printRow;
 function canFitOnPage(rowHeight) {
     var table = config_1.Config.tableInstance();
     var pos = rowHeight + table.cursor.y + table.margin('bottom');
-    return pos < config_1.Config.pageSize().height - 60;
+    return pos < config_1.Config.pageSize().height;
 }
 
 

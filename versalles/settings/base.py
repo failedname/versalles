@@ -5,7 +5,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 SECRET_KEY = '7*j9m*mok(+66l*1=%@yq#^jv=x)qq4a46%tj65bqydj(e@%)@'
-STATIC_ROOT= os.sep.join(os.path.abspath(__file__).split(os.sep)[:-3] + ['static'])
+STATIC_ROOT = os.sep.join(os.path.abspath(__file__).split(os.sep)[:-3] + ['static'])
 STATICFILES_DIRS = (BASE_DIR, 'statics')
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 # SESSION_SAVE_EVERY_REQUEST = True
@@ -31,7 +31,9 @@ LOCAL_APPS = (
 
 EXTERNAL_APPS = (
     'whitenoise',
+    'wkhtmltopdf'
 )
+
 
 INSTALLED_APPS = DJANGO_APPS + LOCAL_APPS + EXTERNAL_APPS
 

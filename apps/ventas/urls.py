@@ -1,9 +1,8 @@
-
 from django.conf.urls import url
 from .views import (
                     nueva_factura, search_productos,
                     vivero_factura, save_facturaReal,
-                    SelFacturas, AllFacturas, SearchFac)
+                    SelFacturas, AllFacturas, SearchFac, pdfFactura)
 
 urlpatterns = [
     url(r'^seleccionar/$', vivero_factura, name='viverofactura'),
@@ -20,6 +19,7 @@ urlpatterns = [
         SearchFac, name='detallefactura'),
     url(r'^facturas/(?P<pro>\w+)/detallefac/(?P<fac>\w+)/generar/$',
         SearchFac, name='generarcopiafactura'),
-
+    url(r'^facturas/(?P<pro>\w+)/detallefac/(?P<fac>\w+)/pdf$',
+        pdfFactura.as_view(), name='pdfFactura'),
 
 ]

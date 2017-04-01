@@ -33,7 +33,7 @@ EXTERNAL_APPS = (
     'whitenoise',
     'wkhtmltopdf'
 )
-
+WKHTMLTOPDF_CMD = STATIC_ROOT + '/wkhtmltopdf'
 
 INSTALLED_APPS = DJANGO_APPS + LOCAL_APPS + EXTERNAL_APPS
 

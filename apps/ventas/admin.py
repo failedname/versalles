@@ -6,13 +6,14 @@ from .models import (
                         Detalle_FacturaReal,
                         Numeracion, FacturaReal)
 
+
 class ExampleAdmin(admin.ModelAdmin):
     change_list_template = 'smuggler/change_list.html'
 
 
 @admin.register(Cliente)
 class ClienteAdmin(admin.ModelAdmin):
-    list_display = ('id','nit_cc', 'nombre', 'telefono')
+    list_display = ('id', 'nit_cc', 'nombre', 'telefono')
 
 
 @admin.register(Producto)

@@ -1,15 +1,13 @@
 from django.shortcuts import render
-from django.http import JsonResponse
-from .models import (
-                        Cliente, Producto,
-                        Vivero,
-                        FacturaReal, Detalle_FacturaReal,
-                        Numeracion, EstadoFactura)
-from django.views.generic import TemplateView
+from django.http import JsonResponse, HttpResponse
+from .models import (Cliente, Producto, Vivero,
+                     FacturaReal, Detalle_FacturaReal,
+                     Numeracion, EstadoFactura)
+from wkhtmltopdf.views import PDFTemplateView
 import json
 
 
-class prueba(TemplateView):
+class pdfFactura(PDFTemplateView):
     template_name = 'ventas/prueba.html'
 
 
@@ -43,7 +41,8 @@ def SearchFac(request, pro, fac):
         'cantidad': res.cantidad,
         'valor': res.val_unitario,
         'iva': res.iva,
-        'total': res.val_neto
+        'total': res.val_neto,
+        'vivero': res.factura.vivero_id
 
 
     }for res in detfac]
