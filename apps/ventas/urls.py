@@ -19,7 +19,7 @@ urlpatterns = [
         SearchFac, name='detallefactura'),
     url(r'^facturas/(?P<pro>\w+)/detallefac/(?P<fac>\w+)/generar/$',
         SearchFac, name='generarcopiafactura'),
-    url(r'^facturas/(?P<pro>\w+)/detallefac/(?P<fac>\w+)/pdf$',
-        pdfFactura.as_view(), name='pdfFactura'),
+    # url(r'^facturas/(?P<pro>\w+)/detallefac/(?P<fac>\w+)/pdf$',
+    #     pdfFactura.as_view(), name='pdfFactura'),
 
 ]

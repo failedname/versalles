@@ -3,12 +3,11 @@ from django.http import JsonResponse, HttpResponse
 from .models import (Cliente, Producto, Vivero,
                      FacturaReal, Detalle_FacturaReal,
                      Numeracion, EstadoFactura)
-from wkhtmltopdf.views import PDFTemplateView
 import json
 
 
-class pdfFactura(PDFTemplateView):
-    template_name = 'ventas/prueba.html'
+def pdfFactura(request):
+    pass
 
 
 def vivero_factura(request):
