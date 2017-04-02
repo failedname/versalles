@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import JsonResponse, HttpResponse
+from django.http import JsonResponse
 from .models import (Cliente, Producto, Vivero,
                      FacturaReal, Detalle_FacturaReal,
                      Numeracion, EstadoFactura)
@@ -219,3 +219,23 @@ def save_facturaReal(request, pro):
 
             }for res in informe]
         return JsonResponse({'data': data, 'nume': nume}, safe=True)
+
+
+def selViveroPro(request):
+    template_name = 'ventas/seleccion_productos.html'
+    data = Vivero.objects.all()
+    return render(request, template_name, {'data': data})
+
+
+def getProductos(request, pro):
+    template_name = 'ventas/productos.html'
+    data = Producto.objects.select_related('id_categoria', 'id_presentacion').filter(vivero=pro)
+    res = [{
+        'nombre': response.nombre,
+        'precioventa': response.precio_venta,
+        'preciocompra': response.precio_compra,
+        'categoria': response.id_categoria.nomb_cate,
+        'presentacion': response.id_presentacion.tipo,
+        'precioxmayor': response.precioxmayor
+    }for response in data]
+    return render(request, template_name, {'data': json.dumps(res)})

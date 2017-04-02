@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Productos{% endblock title %}
+{% load static from staticfiles %}
+{% block content %}
+  <div class="ui grid container">
+    <div class="four wide column">
+      <button id="pdfProductos" class="ui primary button">
+        Reporte Productos
+      </button>
+    </div>
+  </div>
+{% endblock content %}
+{% block js %}
+  <script type="text/javascript">
+    var data = JSON.parse('{{data|safe}}')
+  </script>
+  <script type="text/javascript" src="{% static 'js/jspdf.min.js' %}"></script>
+  <script type="text/javascript" src="{% static 'js/ventas/plugin.autotable.js' %}"></script>
+  <script type="text/javascript" src="{% static 'js/moneda.js' %}"></script>
+  <script type="text/javascript" src="{% static 'js/ventas/productos.js' %}"></script>
+{% endblock js %}

@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Viveros{% endblock title %}
+{% block content %}
+<div class="ui grid container">
+  <div class="sexteen wide column">
+    <h4 class="ui horizontal divider header">Seleccione Vivero</h4>
+  </div>
+</div>
+<div class="ui grid container">
+
+  <div class="ui sexteen wide column vertical menu">
+    {% for res in data  %}
+    <a href="{% url 'ventas:getproductos' res.pk %}" class="item">{{res.nombre|upper}}</a>
+    {% endfor %}
+
+
+
+
+
+  </div>
+</div>
+{% endblock content %}
