@@ -17,10 +17,8 @@ function generarPdf () {
   let len = data.length
   for(let i = 0; i< len; i++){
     array.push([data[i].nombre,
-                data[i].categoria,
                 data[i].presentacion,
                 moneda(data[i].precioventa),
-                moneda(data[i].preciocompra),
                 moneda(data[i].precioxmayor)]
 
               )
@@ -32,7 +30,7 @@ function generarPdf () {
 
 function pdfProductos (rows) {
   var doc = new jsPDF('A4')
-  let columns = ['Nombre', 'Categoria', 'Presentacion', 'Precio Venta', 'Precio Compra', 'Precio x Mayor']
+  let columns = ['Nombre', 'Presentacion', 'Precio Venta', 'Precio x Mayor']
   doc.autoTable(columns, rows,{theme: 'grid', headerStyles:{
     fontSize: 7
   },
