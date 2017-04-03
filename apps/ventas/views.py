@@ -229,7 +229,7 @@ def selViveroPro(request):
 
 def getProductos(request, pro):
     template_name = 'ventas/productos.html'
-    data = Producto.objects.select_related('id_categoria', 'id_presentacion').filter(vivero=pro)
+    data = Producto.objects.select_related('id_categoria', 'id_presentacion').filter(vivero=pro).order_by('nombre')
     res = [{
         'nombre': response.nombre,
         'precioventa': response.precio_venta,
