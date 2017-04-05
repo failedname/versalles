@@ -1,2 +1,9 @@
 {% extends "base.html" %}
 {% block title %}Remisiones{% endblock title %}
+{% block content %}
+  <div class="ui container grid">
+    <div class="ui wide four column">
+      <a class="ui primary button" href="{% url 'ventas:crearremision' %}">Generar Remision</a>
+    </div>
+  </div>
+{% endblock content %}

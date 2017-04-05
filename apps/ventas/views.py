@@ -1,8 +1,9 @@
 from django.shortcuts import render
 from django.http import JsonResponse
+from django.views.generic import TemplateView
 from .models import (Cliente, Producto, Vivero,
                      FacturaReal, Detalle_FacturaReal,
-                     Numeracion, EstadoFactura)
+                     Numeracion, EstadoFactura, Remision)
 import json
 
 
@@ -229,7 +230,11 @@ def selViveroPro(request):
 
 def getProductos(request, pro):
     template_name = 'ventas/productos.html'
-    data = Producto.objects.select_related('id_categoria', 'id_presentacion').filter(vivero=pro).order_by('nombre')
+    data = Producto.objects.select_related('id_categoria',
+                                           'id_presentacion'
+                                           ).filter(
+                                                    vivero=pro
+                                                    ).order_by('nombre')
     res = [{
         'nombre': response.nombre,
         'precioventa': response.precio_venta,
@@ -239,3 +244,19 @@ def getProductos(request, pro):
         'precioxmayor': response.precioxmayor
     }for response in data]
     return render(request, template_name, {'data': json.dumps(res)})
+
+
+def ViveroRem(request):
+    template_name = 'ventas/seleccion_remisiones.html'
+    data = Vivero.objects.all()
+    return render(request, template_name, {'data': data})
+
+
+def remionesAll(request, vivero_id):
+    data = Remision.objects.all().filter(vivero=vivero_id)
+    template_name = 'ventas/allremisiones.html'
+    return render(request, template_name, {'data': data})
+
+
+class nuevaRemision(TemplateView):
+    template_name = 'ventas/nuevaremision.html'

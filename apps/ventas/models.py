@@ -147,3 +147,16 @@ class Numeracion(models.Model):
     class Meta:
         verbose_name = 'Numeracion'
         verbose_name_plural = 'Numeraciones'
+
+
+class Remision(models.Model):
+    fecha = models.DateField(auto_now_add=True)
+    vivero = models.ForeignKey(Vivero)
+    cliente = models.ForeignKey(Cliente)
+    estado = models.IntegerField()
+
+
+class detalleRemison(models.Model):
+    remision = models.ForeignKey(Remision)
+    producto = models.ForeignKey(Producto)
+    cantidad = models.IntegerField()
