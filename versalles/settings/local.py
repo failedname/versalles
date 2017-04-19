@@ -9,8 +9,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'vive',
         'USER': 'postgres',
-        'PASSWORD': 'viejojavi',
-        'PORT': '5433',
+        'PASSWORD': 'salomeluna',
+        'PORT': '5432',
 
     }
 }

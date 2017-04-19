@@ -46,7 +46,7 @@ def SearchFac(request, pro, fac):
 
 
     }for res in detfac]
-    print(data)
+    
     return render(request, template_name, {'data': json.dumps(data)})
 
 
