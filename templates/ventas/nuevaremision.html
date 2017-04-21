@@ -1,1 +1,168 @@
 {% extends "base.html" %}
+{% block title %}.:Nueva Remision:.{% endblock %}
+{% load static from staticfiles %}
+{% block content %}
+{% csrf_token %}
+<div class="ui container">
+  <h2 class="ui dividing header">Nueva Remisión</h2>
+</div>
+<div  class="ui  grid container" >
+  <div class="sexteen wide column">
+    <div id="messageSucces" class="ui success message transition hidden" >
+      <i class="close icon"></i>
+      <div class="header">
+        Registro Guardado Correctamente
+      </div>
+
+    </div>
+  </div>
+</div><br>
+<form  class="ui form container error">
+  <h4 class="ui dividing header">Información de Cliente</h4>
+  <div class="fields">
+    <div class="six wide field">
+      <div id="search-cliente" class="ui search">
+        <div class="ui icon input">
+          <input id="cliente_search" class="prompt" type="text" placeholder="Buscar...">
+          <i class="search icon"></i>
+        </div>
+        <div id="result" class="results"></div>
+      </div>
+    </div>
+  </div>
+  <div class="fields ">
+    <div class="four wide field">
+      <label for="">NIT/CC</label>
+      <input id="iden" type="text" name="ident" value="" readonly required>
+    </div>
+    <div class="six wide field">
+      <label for="">Nombre</label>
+      <input id="nombre" type="text" name="name" value="" readonly>
+    </div>
+
+
+  </div>
+  <h4 class="ui dividing header">Infomacion de Productos</h4>
+  <div class="fields">
+    <div class="six wide field">
+      <label for="">Precios</label>
+      <select class="ui fluid dropdown" id="selectprecios">
+        <option value=""></option>
+        <option value="generales">precios generales</option>
+        <option value="compra">precios de compra</option>
+        <option value="mayor">precios al x mayor</option>
+      </select>
+    </div>
+  </div>
+  <div class="fields">
+    <div class="six wide field">
+      <div id="producto_search" class="ui fluid search">
+        <div class="ui icon input">
+          <input id="pro_search" class="prompt" type="text" placeholder="Buscar...">
+          <i class="search icon"></i>
+        </div>
+        <div id="result" class="results"></div>
+      </div>
+    </div>
+  </div>
+  <div class="fields">
+    <div class="two wide field">
+      <label for="">Codigo</label>
+      <input id="id_codigo" type="text" name="name" value="" readonly>
+    </div>
+    <div class="six wide field">
+      <label for="">Producto</label>
+      <input id="id_producto" type="text" name="name" value="" readonly>
+    </div>
+    <div class="two wide field">
+      <label for="">IVA</label>
+      <input id="id_iva" type="text" name="name" value="" readonly>
+    </div>
+    <div class="three wide field">
+      <label for="">Precio</label>
+      <input id="id_precio" type="text" name="name" value="" >
+    </div>
+    <div class="three wide field">
+      <label for="">Cantidad</label>
+      <input id="id_cantidad" type="number" name="name" value="" >
+    </div>
+  </div>
+  <div class="fields aligning right">
+    <div class="two field ">
+      <button id="btnAgregar" class="ui primary button">
+          Agregar
+      </button>
+    </div>
+  </div>
+</form>
+
+
+<div class="ui container">
+
+
+    <table class="ui celled unstackable table">
+      <thead>
+        <tr>
+          <th>CODIGO</th>
+          <th>PRODUCTO</th>
+          <th>VALOR</th>
+          <th>IVA</th>
+          <th>CANTIDAD</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody id="bodyTable">
+
+      </tbody>
+
+    </table>
+</div><br>
+<div class="ui right aligned grid container">
+  <div class="right floated  sixteen wide column">
+    <div class="ui right labeled input">
+      <div class="ui label">$</div>
+      <input id="id_sub" type="number" readonly>
+      <div class="ui basic label">SubTotal</div>
+    </div>
+  </div>
+
+  <div class="right floated  sixteen wide column">
+    <div class="ui right labeled input">
+      <div class="ui label">$</div>
+      <input id="id_iv" type="number" readonly>
+      <div class="ui basic label">Iva</div>
+    </div>
+  </div>
+
+  <div class="right floated  sixteen wide column">
+    <div class="ui right labeled input">
+      <div class="ui label">$</div>
+      <input id="id_tot" type="text" readonly>
+      <div class="ui basic label">Total</div>
+    </div>
+  </div>
+
+</div>
+
+<div class="ui right aligned grid container">
+
+  <div class="right floated sixteen wide column">
+    <h4 class="ui dividing header"></h4>
+    <button id="id_saveReal" class="ui secondary button">
+      Generar Remision
+    </button>
+
+  </div>
+
+
+</div>
+
+
+
+{% endblock content %}
+{% block js %}
+  <script type="text/javascript" src="{% static 'js/ventas/remisiones.js'%}"></script>
+  <script type="text/javascript" src="{% static 'js/ventas/validaciones.js'%}"></script>
+  <script src="{% static 'js/jspdf.min.js'%}"></script>
+  <script src="{% static 'js/autotable.js'%}"></script>
+{% endblock %}

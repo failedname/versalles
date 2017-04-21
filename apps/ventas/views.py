@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.views.generic import TemplateView
+from django.contrib.auth.decorators import login_required
 from .models import (Cliente, Producto, Vivero,
                      FacturaReal, Detalle_FacturaReal,
                      Numeracion, EstadoFactura, Remision)
@@ -11,18 +12,21 @@ def pdfFactura(request):
     pass
 
 
+@login_required
 def vivero_factura(request):
     template_name = 'ventas/vivero_factura.html'
     data = Vivero.objects.all()
     return render(request, template_name, {'data': data})
 
 
+@login_required
 def SelFacturas(request):
     template_name = 'ventas/seleccion_facturas.html'
     data = Vivero.objects.all()
     return render(request, template_name, {'data': data})
 
 
+@login_required
 def SearchFac(request, pro, fac):
     template_name = 'ventas/detailInvoice.html'
     detfac = Detalle_FacturaReal.objects.select_related(
@@ -46,10 +50,11 @@ def SearchFac(request, pro, fac):
 
 
     }for res in detfac]
-    
+
     return render(request, template_name, {'data': json.dumps(data)})
 
 
+@login_required
 def AllFacturas(request, pro):
     template_name = 'ventas/allfacturas.html'
     data = Detalle_FacturaReal.objects.extra(
@@ -91,7 +96,7 @@ def search_productos(request, pro):
     if (len(request.POST['valinput']) > 0):
         prods = Producto.objects.select_related(
             'id_presentacion').filter(
-                nombre__contains=request.POST['valinput'], vivero_id=pro)[:9]
+                nombre__icontains=request.POST['valinput'], vivero_id=pro)[:9]
         if (request.POST['precio'] == 'generales'):
 
             data = [{
@@ -255,8 +260,22 @@ def ViveroRem(request):
 def remionesAll(request, vivero_id):
     data = Remision.objects.all().filter(vivero=vivero_id)
     template_name = 'ventas/allremisiones.html'
-    return render(request, template_name, {'data': data})
+    return render(request, template_name, {'data': data, 'vivero': vivero_id})
 
 
 class nuevaRemision(TemplateView):
     template_name = 'ventas/nuevaremision.html'
+
+
+def remisionCliente(request, vivero_id):
+    if(len(request.POST['data']) > 0):
+        data = Cliente.objects.all().filter(
+            nombre__icontains=request.POST['data'])[:9]
+        result = [{
+                'id': res.pk,
+                'nombre': res.nombre,
+                'cc': res.nit_cc
+        }for res in data]
+        return JsonResponse({'data': result}, safe=True)
+    else:
+        return JsonResponse({'error': 'no hay registros'}, safe=True)

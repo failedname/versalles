@@ -4,15 +4,20 @@ from .views import (
                     vivero_factura, save_facturaReal,
                     SelFacturas, AllFacturas, SearchFac, pdfFactura,
                     selViveroPro, getProductos, ViveroRem, remionesAll,
-                    nuevaRemision)
+                    nuevaRemision, remisionCliente)
 
 urlpatterns = [
     url(r'^seleccionar/$', vivero_factura, name='viverofactura'),
     url(r'^viveroproductos/$', selViveroPro, name='viveroproductos'),
     url(r'^remisiones/$', ViveroRem, name='remisiones'),
-    url(r'^remisiones/vivero/(?P<vivero_id>\w+)/todos/$', remionesAll, name='todosremisiones'),
-    url(r'^remisiones/vivero/(?P<vivero_id>\w+)/crear/$', nuevaRemision.as_view(), name='crearremision'),
-    url(r'^viveroproductos/(?P<pro>\w+)/productos/$', getProductos, name='getproductos'),
+    url(r'^remisiones/vivero/(?P<vivero_id>\w+)/todos/$',
+        remionesAll, name='todosremisiones'),
+    url(r'^remisiones/vivero/(?P<vivero_id>\w+)/crear/$',
+        nuevaRemision.as_view(), name='crearremision'),
+    url(r'^remisiones/vivero/(?P<vivero_id>\w+)/crear/cliente/$',
+        remisionCliente, name='remisioncliente'),
+    url(r'^viveroproductos/(?P<pro>\w+)/productos/$',
+        getProductos, name='getproductos'),
     url(r'^selvivero/$', SelFacturas, name='selfacturas'),
     url(r'^facturas/(?P<pro>\w+)/$',
         AllFacturas, name='allfacturas'),
