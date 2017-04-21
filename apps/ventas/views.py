@@ -4,7 +4,7 @@ from django.views.generic import TemplateView
 from django.contrib.auth.decorators import login_required
 from .models import (Cliente, Producto, Vivero,
                      FacturaReal, Detalle_FacturaReal,
-                     Numeracion, EstadoFactura, Remision)
+                     Numeracion, EstadoFactura, Remision, detalleRemison)
 import json
 
 
@@ -279,3 +279,90 @@ def remisionCliente(request, vivero_id):
         return JsonResponse({'data': result}, safe=True)
     else:
         return JsonResponse({'error': 'no hay registros'}, safe=True)
+
+
+def remisionProductos(request, vivero_id):
+    if (len(request.POST['data']) > 0):
+        prods = Producto.objects.select_related(
+            'id_presentacion').filter(
+                nombre__icontains=request.POST['data'],
+                vivero_id=vivero_id)[:9]
+        if (request.POST['precio'] == 'generales'):
+
+            data = [{
+                'id': res.pk,
+                'nombre': res.nombre,
+                'iva': res.iva_porce,
+                'precio': res.precio_venta,
+                'presentacion': res.id_presentacion.tipo
+
+            }for res in prods]
+            return JsonResponse({'data': data}, safe=False)
+        elif (request.POST['precio'] == 'compra'):
+            data = [{
+                'id': res.pk,
+                'nombre': res.nombre,
+                'iva': res.iva_porce,
+                'precio': res.valor_real_compra,
+                'presentacion': res.id_presentacion.tipo
+
+            }for res in prods]
+            return JsonResponse({'data': data}, safe=False)
+        elif (request.POST['precio'] == 'mayor'):
+            data = [{
+                'id': res.pk,
+                'nombre': res.nombre,
+                'iva': res.iva_porce,
+                'precio': res.precioxmayor,
+                'presentacion': res.id_presentacion.tipo
+
+            }for res in prods]
+            return JsonResponse({'data': data}, safe=False)
+    else:
+        return JsonResponse({'sin': 'hola'}, safe=False)
+
+
+def saveRemision(request, vivero_id):
+    data = request.body.decode('utf-8')
+    datos = json.loads(data)
+    estado = EstadoFactura.objects.all().filter(estado='cerrada')
+    c = Cliente.objects.all().filter(nit_cc=datos['cliente']['id'])
+    print(c[0])
+    f = Remision(vivero_id=vivero_id,
+                 estado_id=estado[0].pk,
+                 cliente_id=c[0].pk)
+
+    f.save()
+    id_fac = f.pk
+
+    for res in datos['res']:
+        detalleRemison.objects.create(remision_id=id_fac,
+                                      cantidad=res['cantidad'],
+                                      producto_id=res['codigo'],
+                                      val_unitario=res['valorU'],
+                                      iva=res['iva'],
+                                      val_neto=res['valorN'])
+        informe = detalleRemison.objects.select_related(
+                'remision', 'producto',
+                'remision__cliente',
+                'remision__vivero').filter(
+                    remision_id=id_fac)
+        data = [{
+                'remision': res.remision.pk,
+                'cliente': res.remision.cliente.nombre,
+                'direccion': res.remision.cliente.direccion,
+                'nit': res.remision.cliente.nit_cc,
+                'telefono': res.remision.cliente.telefono,
+                'codigo': res.producto_id,
+                'nombre': res.producto.nombre,
+                'cantidad': res.cantidad,
+                'iva': res.iva,
+                'valor': res.val_unitario,
+                'valneto': res.val_neto,
+                'fecha': res.remision.fecha,
+                'vivero': res.remision.vivero.nombre,
+                'nit_vivero': res.remision.vivero.identificacion
+
+
+                }for res in informe]
+        return JsonResponse({'data': data}, safe=True)

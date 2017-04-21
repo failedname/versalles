@@ -153,10 +153,13 @@ class Remision(models.Model):
     fecha = models.DateField(auto_now_add=True)
     vivero = models.ForeignKey(Vivero)
     cliente = models.ForeignKey(Cliente)
-    estado = models.IntegerField()
+    estado = models.ForeignKey(EstadoFactura, null=True)
 
 
 class detalleRemison(models.Model):
     remision = models.ForeignKey(Remision)
     producto = models.ForeignKey(Producto)
     cantidad = models.IntegerField()
+    val_unitario = models.IntegerField(null=True)
+    iva = models.IntegerField(null=True)
+    val_neto = models.IntegerField(null=True)
