@@ -75,7 +75,8 @@ def AllFacturas(request, pro):
         'total': res.total
     }for res in data]
 
-    return render(request, template_name, {'data': json.dumps(fact)})
+    return render(request, template_name, {'data': json.dumps(fact),
+                                           'vivero': pro})
 
 
 def nueva_factura(request, pro):
