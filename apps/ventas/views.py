@@ -258,9 +258,26 @@ def ViveroRem(request):
 
 
 def remionesAll(request, vivero_id):
-    data = Remision.objects.all().filter(vivero=vivero_id)
     template_name = 'ventas/allremisiones.html'
-    return render(request, template_name, {'data': data, 'vivero': vivero_id})
+    data = detalleRemison.objects.extra(
+                                            select={'total':
+                                                    'SELECT sum(ventas_detalleremison.val_neto)  FROM ventas_detalleremison WHERE ventas_detalleremison.remision_id = ventas_remision.id'}).select_related(
+                                            'remision',
+                                            'remision__estado',
+                                            'remision__vivero',
+                                            'remision__cliente').filter(
+                                            remision__vivero_id=vivero_id
+                                            ).distinct(
+                                            'remision_id')
+    rem = [{
+        'id': res.remision.pk,
+        'fecha': str(res.remision.fecha),
+        'identificacion': res.remision.cliente.nit_cc,
+        'nombre': res.remision.cliente.nombre,
+        'estado': res.remision.estado.estado,
+        'total': res.total
+    }for res in data]
+    return render(request, template_name, {'data': json.dumps(rem), 'vivero': vivero_id})
 
 
 class nuevaRemision(TemplateView):
