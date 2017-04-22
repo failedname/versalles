@@ -4,7 +4,7 @@ from .models import (
                         Cliente, Producto, Categoria,
                         Presentacion, Vivero, EstadoFactura,
                         Detalle_FacturaReal,
-                        Numeracion, FacturaReal)
+                        Numeracion, FacturaReal, Remision, detalleRemison)
 
 
 class ExampleAdmin(admin.ModelAdmin):
@@ -58,4 +58,14 @@ class FacturaRealAdmin(admin.ModelAdmin):
 
 @admin.register(Detalle_FacturaReal)
 class DetalleFacturaRealAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(Remision)
+class remisionAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(detalleRemison)
+class detalleRemision(admin.ModelAdmin):
     pass
