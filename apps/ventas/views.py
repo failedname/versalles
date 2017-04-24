@@ -240,7 +240,7 @@ def copiaFactura(request, fac, pro):
                 'factura', 'producto',
                 'factura__cliente',
                 'factura__vivero').filter(
-                    factura_id=fac, factura__codigo=pro)
+                    factura_id=fac, factura__vivero_id=pro)
 
     data = [{
                 'factura': res.factura.codigo,
