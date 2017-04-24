@@ -2,7 +2,7 @@
 {% block title %}.:Detalle Factura:.{% endblock title %}
 {% load static from staticfiles %}
 {% block content %}
-  
+{% csrf_token %}
   <div class="ui grid container">
     <div class="ui wide sixteen column">
       <div class="ui segments">
@@ -43,9 +43,11 @@
     var detalle = JSON.parse('{{data|safe}}')
     console.log(detalle)
   </script>
-  <script type="text/javascript" src="{% static 'js/ventas/pdfcopia.js' %}" ></script>
+
   <script type="text/javascript" src="{% static 'js/moneda.js' %}" ></script>
   <script type="text/javascript" src="{% static 'js/ventas/detallefac.js' %}" ></script>
+  <script src="{% static 'js/jspdf.min.js'%}"></script>
+  <script src="{% static 'js/autotable.js'%}"></script>
 
 
 

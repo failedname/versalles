@@ -228,6 +228,41 @@ def save_facturaReal(request, pro):
         return JsonResponse({'data': data, 'nume': nume}, safe=True)
 
 
+def copiaFactura(request, fac, pro):
+    num = Numeracion.objects.all().filter(vivero_id=pro)
+    nume = [{
+        'resu': res.resolucion,
+        'fecha': res.fecha,
+        'ini': res.num_ini,
+        'fin': res.num_fin
+    }for res in num]
+    informe = Detalle_FacturaReal.objects.select_related(
+                'factura', 'producto',
+                'factura__cliente',
+                'factura__vivero').filter(
+                    factura_id=fac, factura__codigo=pro)
+
+    data = [{
+                'factura': res.factura.codigo,
+                'cliente': res.factura.cliente.nombre,
+                'direccion': res.factura.cliente.direccion,
+                'nit': res.factura.cliente.nit_cc,
+                'telefono': res.factura.cliente.telefono,
+                'codigo': res.producto_id,
+                'nombre': res.producto.nombre,
+                'cantidad': res.cantidad,
+                'iva': res.iva,
+                'valor': res.val_unitario,
+                'valneto': res.val_neto,
+                'fecha': res.factura.fecha,
+                'vivero': res.factura.vivero.nombre,
+                'nit_vivero': res.factura.vivero.identificacion
+
+
+            }for res in informe]
+    return JsonResponse({'data': data, 'nume': nume}, safe=True)
+
+
 def selViveroPro(request):
     template_name = 'ventas/seleccion_productos.html'
     data = Vivero.objects.all()
