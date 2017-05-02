@@ -65,7 +65,7 @@ TEMPLATES = [
 ]
 
 LOGIN_URL = reverse_lazy('dashboard:login')
-LOGIN_REDIRECT_URL = reverse_lazy('dashboard:panel')
+LOGIN_REDIRECT_URL = reverse_lazy('ventas:pos')
 LOGOUT_URL = reverse_lazy('dashboard:logout')
 
 WSGI_APPLICATION = 'versalles.wsgi.application'

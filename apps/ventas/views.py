@@ -387,7 +387,6 @@ def saveRemision(request, vivero_id):
 
     f.save()
     id_fac = f.pk
-
     for res in datos['res']:
         detalleRemison.objects.create(remision_id=id_fac,
                                       cantidad=res['cantidad'],
@@ -395,27 +394,32 @@ def saveRemision(request, vivero_id):
                                       val_unitario=res['valorU'],
                                       iva=res['iva'],
                                       val_neto=res['valorN'])
-        informe = detalleRemison.objects.select_related(
-                'remision', 'producto',
-                'remision__cliente',
-                'remision__vivero').filter(
-                    remision_id=id_fac)
-        data = [{
-                'remision': res.remision.pk,
-                'cliente': res.remision.cliente.nombre,
-                'direccion': res.remision.cliente.direccion,
-                'nit': res.remision.cliente.nit_cc,
-                'telefono': res.remision.cliente.telefono,
-                'codigo': res.producto_id,
-                'nombre': res.producto.nombre,
-                'cantidad': res.cantidad,
-                'iva': res.iva,
-                'valor': res.val_unitario,
-                'valneto': res.val_neto,
-                'fecha': res.remision.fecha,
-                'vivero': res.remision.vivero.nombre,
-                'nit_vivero': res.remision.vivero.identificacion
+    informe = detalleRemison.objects.select_related(
+            'remision', 'producto',
+            'remision__cliente',
+            'remision__vivero').filter(
+                remision_id=id_fac)
+    data = [{
+            'remision': res.remision.pk,
+            'cliente': res.remision.cliente.nombre,
+            'direccion': res.remision.cliente.direccion,
+            'nit': res.remision.cliente.nit_cc,
+            'telefono': res.remision.cliente.telefono,
+            'codigo': res.producto_id,
+            'nombre': res.producto.nombre,
+            'cantidad': res.cantidad,
+            'iva': res.iva,
+            'valor': res.val_unitario,
+            'valneto': res.val_neto,
+            'fecha': res.remision.fecha,
+            'vivero': res.remision.vivero.nombre,
+            'nit_vivero': res.remision.vivero.identificacion
 
 
-                }for res in informe]
-        return JsonResponse({'data': data}, safe=True)
+            }for res in informe]
+    return JsonResponse({'data': data}, safe=True)
+
+
+def ventasPOS(request):
+    template_name = 'ventas/pos.html'
+    return render(request, template_name)
