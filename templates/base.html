@@ -6,26 +6,32 @@
     <meta charset="utf-8">
     <title>{% block title %}{% endblock title %}</title>
     <link rel="stylesheet" href="{% static 'semantic-ui/semantic.min.css'%}" >
+    <link rel="stylesheet" href="{% static 'css/style.css'%}" >
     <link rel="shortcut icon" type="image/x-icon" href="{% static 'img/vivero.ico' %}" />
     {% block css %}{% endblock css %}
     {% block js1 %}{% endblock js1 %}
 
   </head>
-  <body >
+  <body  >
 
 
 
     {% block nav %}
-    <div id=menu  class="ui  top attached stackable  menu " >
+    <div id=menu  class="ui  teal inverted top attached stackable huge  menu  " >
         <a id="menuSidebar" class="item">
           <i class="sidebar icon"></i>
           Menu
         </a>
+        <div class="right menu">
+          <a href="{% url 'dashboard:logout' %}" class="ui item">
+            Salir
+          </a>
+        </div>
     </div>
     {% endblock nav %}
     <div class="ui bottom attached segment pushable">
       <div class="ui Green left inline vertical sidebar menu">
-        <a href="{% url 'dashboard:panel' %}" class="item header">
+        <a href="{% url 'ventas:pos' %}" class="item header">
           <i class="home icon"></i>
           Inicio
         </a>
@@ -94,7 +100,7 @@
         </div>
 
       </div>
-      <div class="pusher " style="padding-top:30px">
+      <div class="fondo pusher " style="padding-top:30px">
       {% block content %}
       {% endblock content %}
       </div>
