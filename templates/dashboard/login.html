@@ -5,14 +5,14 @@
     {% load static from staticfiles %}
     <meta charset="utf-8">
     <meta name="viewport"  content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>.:Vivero Versalles:.</title>
+    <title>Iniciar Sesion</title>
     <link rel="stylesheet" href="{% static 'semantic-ui/semantic.min.css'%}" >
-    <link rel="stylesheet" href="{% static 'css/login.css'%}" >
+    <link rel="stylesheet" href="{% static 'css/style.css'%}" >
 
   </head>
-  <body>
-    <div class="ui middle aligned center aligned grid">
-      <div class="column">
+  <body class="back-login">
+    <div class="ui middle aligned center aligned grid grid_login">
+      <div class="column column_login">
         <h2 class="ui teal header">
           <div class="content">
           </div>
@@ -33,13 +33,13 @@
               </div>
             </div>
             <div class="field">
-              <input type="submit" value="Ingresar" class="ui button large fluid teal">
+              <input type="submit" value="Ingresar" class="space-letter button_color font-thead ui button large fluid teal">
             </div>
           </div>
         </form>
         <div class="ui message">
 
-          <a href="#">Recuperar Contraseña</a>
+          <a class="font-tbody" href="#">Recuperar Contraseña</a>
         </div>
       </div>
     </div>

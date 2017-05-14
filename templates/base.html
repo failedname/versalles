@@ -12,100 +12,82 @@
     {% block js1 %}{% endblock js1 %}
 
   </head>
-  <body  >
+  <body  class="fondo">
 
 
 
     {% block nav %}
-    <div id=menu  class="ui  teal inverted top attached stackable huge  menu  " >
-        <a id="menuSidebar" class="item">
-          <i class="sidebar icon"></i>
-          Menu
-        </a>
+    <div id=menu  class="ui teal inverted  top attached stackable  pointing  menu fondo_menu " >
+        <a href="/panel" class=" header item letter_color">Inicio</a>
+        <div id="idVentas" class="ui dropdown item letter_color" >
+            Ventas
+          <i class="dropdown icon"></i>
+          <div class="menu font-drop" >
+
+            <a href="{% url 'ventas:selfacturas' %}" class="item ">
+              <i class="add to cart icon "></i>
+              Facturas
+            </a>
+            <div class="divider"></div>
+            <a href="{% url 'ventas:remisiones' %}" class="item ">
+              <i class="shopping bag icon"></i>
+              Remisiones
+            </a>
+            <div class="divider"></div>
+            <a href="{% url 'ventas:pos' %}" class="item">
+              <i class="shopping basket icon"></i>
+              POS
+            </a>
+          </div>
+        </div>
+        <div id="idGastos"  class="ui dropdown item letter_color" >
+            Gastos
+          <i class="dropdown icon"></i>
+          <div class="menu font-drop" >
+            <div class="item">
+              <i class="add to cart icon "></i>
+              Facturas Proveedores
+
+            </div>
+            <div class="divider"></div>
+            <div class="item">
+              <i class="shopping bag icon"></i>
+              Remisiones
+            </div>
+            <div class="divider"></div>
+            <div class="item">
+              <i class="shopping basket icon"></i>
+              POS
+            </div>
+          </div>
+        </div>
+        <div class="ui dropdown item letter_color">
+          Contactos
+          <i class="dropdown icon"></i>
+          <div></div>
+        </div>
+        <div class="ui dropdown item letter_color">
+          Inventario
+          <i class="dropdown icon"></i>
+          <div></div>
+        </div>
+        <a href="" class="item letter_color">Reportes</a>
         <div class="right menu">
-          <a href="{% url 'dashboard:logout' %}" class="ui item">
+          <a href="{% url 'dashboard:logout' %}" class="ui item letter_color">
             Salir
           </a>
         </div>
     </div>
     {% endblock nav %}
-    <div class="ui bottom attached segment pushable">
-      <div class="ui Green left inline vertical sidebar menu">
-        <a href="{% url 'ventas:pos' %}" class="item header">
-          <i class="home icon"></i>
-          Inicio
-        </a>
-        <div class="item">
-          <div class="menu">
-            <a href="/admin" class="item" target="_blank">Admin</a>
 
-          </div>
 
-        </div>
-        <div class="item">
-          <div class="header">
-            Ventas
-          </div>
-          <div class="menu">
-            <a href="{% url 'ventas:selfacturas' %}" class="item">
-              <i class="shop icon"></i>
-              Facturas
-            </a>
-            <a href="{% url 'ventas:remisiones' %}" class="item">
-              <i class="shop icon"></i>
-              Remisiones
-            </a>
-          </div>
-        </div>
-        <div class="item">
-          <div class="header">
-            Compras
-          </div>
-          <div class="menu">
-            <a  class="item" href="{% url 'compras:seleccion' %}">
-              <i class="shop icon"></i>
-              Nueva Compra
-            </a>
-          </div>
 
-        </div>
-        <div class="item">
-          <div class="header">
-            Productos
-          </div>
-          <div class="menu">
-            <a href="{% url 'ventas:viveroproductos' %}" class="item">
-              <i class="shop icon"></i>
-              Productos
-            </a>
-
-          </div>
-
-        </div>
-        <div class="item">
-          <div class="header">
-            Pedidos
-          </div>
-          <div class="menu">
-            <a  class="item" href="">
-              <i class="shop icon"></i>
-              Nueva Pedido
-            </a>
-          </div>
-
-        </div>
-        <div class="item">
-          <div class="header">Reportes</div>
-
-        </div>
-
-      </div>
-      <div class="fondo pusher " style="padding-top:30px">
+      <div class="fondo pusher " style="padding-top:14px">
       {% block content %}
       {% endblock content %}
       </div>
 
-   </div>
+
 
 
 
