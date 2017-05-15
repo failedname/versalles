@@ -52,4 +52,8 @@ body {
 .space-letter {
   letter-spacing: 0.13em; }
 
+.tab-font {
+  color: #6b8571 !important;
+  font-family: "Roboto Slab" !important; }
+
 /*# sourceMappingURL=style.css.map */
