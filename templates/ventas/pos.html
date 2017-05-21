@@ -1,11 +1,54 @@
 {% extends "base.html" %}
 {% block title %}Ventas | POS{% endblock %}
+{% load static from staticfiles %}
 {% block content %}
+  {% csrf_token %}
   <div class="ui stackable  grid ">
-      <div class="nine wide column">
+      <div class="nine wide column" >
+        <div class="ui segment " style="min-height:470px">
+          <div class="ui icon fluid input">
+            <input id="buscarProductos" type="text" placeholder="Buscar Productos...">
+            <i class="search icon"></i>
+          </div>
+          <div id="items" class="ui stackable grid" style="margin-top: 10px">
+
+          </div>
+        </div>
       </div>
       <div class="seven wide column" >
+        <div class="ui segment " style="min-height:470px">
+          <div class="ui top attached label">VENTA</div>
+          <div class="ui icon fluid input">
+            <i class="search icon"></i>
+            <input type="text" placeholder="Buscar Cliente...">
+          </div>
+          <div id="itemVenta" class="ui divided link items">
 
+          </div>
+          <div id="invoice__summary">
+            <div id="invoice__totals">
+              <div class="invoice__total">
+                <div>SubTotal:</div>
+                <div id="subTotal"></div>
+              </div>
+              <div class="invoice__total">
+                <div>Iva:</div>
+                <div id="subIva"></div>
+              </div>
+            </div>
+            <div id="invoice__pay">
+              <button id="btnSave" class="fluid ui teal button btnPay" disabled>
+                <p >VENDER</p>
+                <p id="total"></p>
+
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
   </div>
+{% endblock %}
+{% block js %}
+  <script type="text/javascript" src="{% static 'js/moneda.js' %}"></script>
+  <script type="text/javascript" src="{% static 'js/ventas/pos.js' %}"></script>
 {% endblock %}

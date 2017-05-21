@@ -5,7 +5,7 @@ from .views import (
                     SelFacturas, AllFacturas, SearchFac, pdfFactura,
                     selViveroPro, getProductos, ViveroRem, remionesAll,
                     nuevaRemision, remisionCliente, remisionProductos,
-                    saveRemision, copiaFactura, ventasPOS)
+                    saveRemision, copiaFactura, ventasPOS, productosPos, viveroPos)
 
 urlpatterns = [
     url(r'^seleccionar/$', vivero_factura, name='viverofactura'),
@@ -38,7 +38,9 @@ urlpatterns = [
         SearchFac, name='detallefactura'),
     url(r'^facturas/(?P<pro>\w+)/detallefac/(?P<fac>\w+)/generar/$',
         SearchFac, name='generarcopiafactura'),
-    url(r'^pos/$', ventasPOS, name='pos'),
+    url(r'^pos/vivero/(?P<id>\w+)/pos/$', ventasPOS, name='pos'),
+    url(r'^pos/vivero/$', viveroPos, name='vivero'),
+    url(r'^pos/vivero/(?P<id>\w+)/pos/productopos/$', productosPos, name='productopos'),
     # url(r'^facturas/(?P<pro>\w+)/detallefac/(?P<fac>\w+)/pdf$',
     #     pdfFactura.as_view(), name='pdfFactura'),
 

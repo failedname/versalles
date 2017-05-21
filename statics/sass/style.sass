@@ -11,11 +11,11 @@
   font-family: "Roboto Slab R", monospace !important
   font-weight: bold
 
-.ui.menu
-  font-family: 'Roboto Slab',  sans-serif !important
-  font-size: 15px
-  font-weight: 500
-  -webkit-font-smoothing: antialiased
+// .ui.menu
+//   font-family: 'Roboto Slab',  sans-serif !important
+//   font-size: 15px
+//   font-weight: 500
+//   -webkit-font-smoothing: antialiased
 
 .fondo_menu
   background-color: #00a98f !important
@@ -55,4 +55,125 @@ body
 
 .tab-font
   color: #6b8571 !important
-  font-family: 'Roboto Slab' !important 
+  font-family: 'Roboto Slab' !important
+
+
+.invoice-item
+  border-bottom: 1px solid rgba(232,235,240,.6)
+  cursor: pointer
+  animation-duration: .5s
+  padding: 1rem 0 1rem 1rem
+
+.invoice-item__container
+  display: -webkit-box
+  display: -ms-flexbox
+  display: flex
+  -webkit-box-align: center
+  -ms-flex-align: center
+  align-items: center
+  padding-right: 3em
+.invoice-item__data
+  -webkit-box-flex: 0
+  -ms-flex: 0 0 50%
+  flex: 0 0 50%
+  max-width: 50%
+
+.invoice-item__name
+  white-space: nowrap
+  overflow: hidden
+  -o-text-overflow: ellipsis
+  text-overflow: ellipsis
+  font-size: .9rem
+  font-weight: 500
+
+.invoice-item__quantity
+  -webkit-box-flex: 0
+  -ms-flex: 0 0 15%
+  flex: 0 0 15%
+  max-width: 15%
+  color: #00b19d
+
+
+.size-segment
+  min-width: 470
+
+.invoice-item__total
+  -webkit-box-flex: 0
+  -ms-flex: 0 0 30%
+  flex: 0 0 30%
+  max-width: 30%
+  -webkit-box-pack: end
+  -ms-flex-pack: end
+  justify-content: flex-end
+  padding-right: 1rem
+
+.invoice-item__trash
+  -webkit-box-flex: 0
+  -ms-flex: 0 0 5%
+  flex: 0 0 5%
+  max-width: 5%
+  display: -webkit-box
+  display: -ms-flexbox
+  display: flex
+  -webkit-box-pack: center
+  -ms-flex-pack: center
+  justify-content: center
+  -webkit-box-align: center
+  -ms-flex-align: center
+  align-items: center
+  margin: 0
+  padding: 0 0 0 .2rem
+  background-color: #fff
+  border-right: none
+
+#invoice__summary
+  width: 100%
+  bottom: 0
+  background-color: rgba(232,235,240,.6)
+#invoice__totals
+  padding: 1rem 2rem
+.invoice__total
+  display: -webkit-box
+  display: -ms-flexbox
+  display: flex
+  -webkit-box-pack: justify
+  -ms-flex-pack: justify
+  justify-content: space-between
+
+#invoice__pay
+  width: 100%
+  padding: 0 1rem 1.5rem
+.rAlign
+  text-align: right
+
+.lAlign
+  text-align: left
+
+.animated
+  -webkit-animation-duration: 1s
+  animation-duration: 1s
+  -webkit-animation-fill-mode: both
+  animation-fill-mode: both
+
+.fadeInLeft
+  -webkit-animation-name: fadeInLeft
+  animation-name: fadeInLeft
+
+.btnPay
+  display: flex !important
+  justify-content: space-between
+  padding: .8em !important
+  vertical-align: middle !important
+  font-size: 1.5em !important
+  height: auto
+
+.btnPay p
+  margin: 0
+
+.header-card
+  font-size: 1em !important
+.color-price
+  color: teal !important
+
+.color-desc
+  color: red !important

@@ -23,7 +23,7 @@ function generarPdf () {
 
               )
   }
-  console.log(array)
+  
   pdfProductos(array)
 
 }

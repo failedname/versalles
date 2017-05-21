@@ -1,10 +1,11 @@
 
 
   document.addEventListener('DOMContentLoaded', () => {
-    $('#idVentas')
-      .dropdown()
-      ;
-    $('#idGastos')
-      .dropdown()
-      ;
+    $('.menu .browse')
+    .popup({
+      inline     : true,
+      hoverable  : true,
+      position   : 'bottom left',
+      
+    })
   });

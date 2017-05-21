@@ -17,73 +17,59 @@
 
 
     {% block nav %}
-    <div id=menu  class="ui teal inverted  top attached stackable  pointing  menu fondo_menu " >
-        <a href="/panel" class=" header item letter_color">Inicio</a>
-        <div id="idVentas" class="ui dropdown item letter_color" >
-            Ventas
-          <i class="dropdown icon"></i>
-          <div class="menu font-drop" >
-
-            <a href="{% url 'ventas:selfacturas' %}" class="item ">
-              <i class="add to cart icon "></i>
-              Facturas
-            </a>
-            <div class="divider"></div>
-            <a href="{% url 'ventas:remisiones' %}" class="item ">
-              <i class="shopping bag icon"></i>
-              Remisiones
-            </a>
-            <div class="divider"></div>
-            <a href="{% url 'ventas:pos' %}" class="item">
-              <i class="shopping basket icon"></i>
-              POS
-            </a>
-          </div>
-        </div>
-        <div id="idGastos"  class="ui dropdown item letter_color" >
-            Gastos
-          <i class="dropdown icon"></i>
-          <div class="menu font-drop" >
-            <div class="item">
-              <i class="add to cart icon "></i>
-              Facturas Proveedores
-
-            </div>
-            <div class="divider"></div>
-            <div class="item">
-              <i class="shopping bag icon"></i>
-              Remisiones
-            </div>
-            <div class="divider"></div>
-            <div class="item">
-              <i class="shopping basket icon"></i>
-              POS
+    <div class="ui  top attached large menu">
+      <a class="browse item ">
+        Menu
+        <i class="dropdown icon"></i>
+      </a>
+      <div class="ui fluid popup top left transition hidden" >
+        <div class="ui four column relaxed equal height divided grid">
+          <div class="column">
+            <h4 class="ui header font-thead">Ventas</h4>
+            <div class="ui link list ">
+              <a href="{% url 'ventas:selfacturas' %}" class="item">Facturas</a>
+              <a href="{% url 'ventas:remisiones' %}" class="item">Remisiones</a>
+              <a href="{% url 'ventas:vivero' %}" class="item">POS</a>
             </div>
           </div>
+          <div class="column">
+            <h4 class="ui header">Compras</h4>
+            <div class="ui link list">
+              <a class="item">Small</a>
+              <a class="item">Medium</a>
+              <a class="item">Large</a>
+              <a class="item">Plus Sizes</a>
+            </div>
+          </div>
+          <div class="column">
+            <h4 class="ui header">Colors</h4>
+            <div class="ui link list">
+              <a class="item">Neutrals</a>
+              <a class="item">Brights</a>
+              <a class="item">Pastels</a>
+            </div>
+          </div>
+          <div class="column">
+            <h4 class="ui header">Types</h4>
+            <div class="ui link list">
+              <a class="item">Knitwear</a>
+              <a class="item">Outerwear</a>
+              <a class="item">Pants</a>
+              <a class="item">Shoes</a>
+            </div>
+          </div>
         </div>
-        <div class="ui dropdown item letter_color">
-          Contactos
-          <i class="dropdown icon"></i>
-          <div></div>
-        </div>
-        <div class="ui dropdown item letter_color">
-          Inventario
-          <i class="dropdown icon"></i>
-          <div></div>
-        </div>
-        <a href="" class="item letter_color">Reportes</a>
-        <a href="/admin" class="item letter_color" target="_blank">Admin</a>
+      </div>
         <div class="right menu">
-          <a href="{% url 'dashboard:logout' %}" class="ui item letter_color">
-            Salir
-          </a>
-        </div>
-    </div>
+         <a href="{% url 'dashboard:logout'%}" class="item">Salir</a>
+       </div>
+
+      </div>
     {% endblock nav %}
 
 
 
-      <div class="fondo pusher " style="padding-top:60px">
+      <div class=" pusher " style="padding-top:40px">
       {% block content %}
       {% endblock content %}
       </div>
@@ -99,6 +85,7 @@
     <script type="text/javascript" src="{% static 'js/jquery.js'%}"></script>
     <script type="text/javascript" src="{% static 'semantic-ui/semantic.min.js'%}"></script>
     <script type="text/javascript" src="{% static 'js/menu.js'%}"></script>
+    <script type="text/javascript" src="{% static 'js/js.cookie.js'%}"></script>
 
 
     {% block js %}{% endblock js %}

@@ -9,7 +9,7 @@
 
   <div class="ui sexteen wide column vertical menu">
     {% for res in data  %}
-    <a href="{% url 'ventas:allfacturas' res.pk %}" class="item font-tbody">{{res.nombre|upper}}</a>
+    <a href="{% url 'ventas:pos' res.pk %}" class="item font-tbody">{{res.nombre|upper}}</a>
     {% endfor %}
 
 

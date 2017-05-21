@@ -30,8 +30,8 @@ def SelFacturas(request):
 def SearchFac(request, pro, fac):
     template_name = 'ventas/detailInvoice.html'
     detfac = Detalle_FacturaReal.objects.select_related(
-                                                        'factura', 'factura__cliente', 'factura__estado', 'producto').filter(
-                                                        factura__vivero_id=pro, factura__codigo= fac)
+        'factura', 'factura__cliente', 'factura__estado', 'producto').filter(
+        factura__vivero_id=pro, factura__codigo=fac)
     data = [{
         'factura': res.factura.codigo,
         'estado': res.factura.estado.estado,
@@ -58,13 +58,13 @@ def SearchFac(request, pro, fac):
 def AllFacturas(request, pro):
     template_name = 'ventas/allfacturas.html'
     data = Detalle_FacturaReal.objects.extra(
-                                            select={'total': 'SELECT sum(ventas_detalle_facturareal.val_neto)  FROM ventas_detalle_facturareal WHERE ventas_detalle_facturareal.factura_id = ventas_facturareal.codigo'}).select_related(
-                                            'factura',
-                                            'factura__estado',
-                                            'factura__vivero',
-                                            'factura__cliente').filter(
-                                            factura__vivero_id=pro).distinct(
-                                            'factura_id')
+        select={'total': 'SELECT sum(ventas_detalle_facturareal.val_neto)  FROM ventas_detalle_facturareal WHERE ventas_detalle_facturareal.factura_id = ventas_facturareal.codigo'}).select_related(
+        'factura',
+        'factura__estado',
+        'factura__vivero',
+        'factura__cliente').filter(
+        factura__vivero_id=pro).distinct(
+        'factura_id')
     fact = [{
         'id': res.factura.pk,
         'codigo': res.factura.codigo,
@@ -237,29 +237,29 @@ def copiaFactura(request, fac, pro):
         'fin': res.num_fin
     }for res in num]
     informe = Detalle_FacturaReal.objects.select_related(
-                'factura', 'producto',
-                'factura__cliente',
-                'factura__vivero').filter(
-                    factura_id=fac, factura__vivero_id=pro)
+        'factura', 'producto',
+        'factura__cliente',
+        'factura__vivero').filter(
+        factura_id=fac, factura__vivero_id=pro)
 
     data = [{
-                'factura': res.factura.codigo,
-                'cliente': res.factura.cliente.nombre,
-                'direccion': res.factura.cliente.direccion,
-                'nit': res.factura.cliente.nit_cc,
-                'telefono': res.factura.cliente.telefono,
-                'codigo': res.producto_id,
-                'nombre': res.producto.nombre,
-                'cantidad': res.cantidad,
-                'iva': res.iva,
-                'valor': res.val_unitario,
-                'valneto': res.val_neto,
-                'fecha': res.factura.fecha,
-                'vivero': res.factura.vivero.nombre,
-                'nit_vivero': res.factura.vivero.identificacion
+        'factura': res.factura.codigo,
+        'cliente': res.factura.cliente.nombre,
+        'direccion': res.factura.cliente.direccion,
+        'nit': res.factura.cliente.nit_cc,
+        'telefono': res.factura.cliente.telefono,
+        'codigo': res.producto_id,
+        'nombre': res.producto.nombre,
+        'cantidad': res.cantidad,
+        'iva': res.iva,
+        'valor': res.val_unitario,
+        'valneto': res.val_neto,
+        'fecha': res.factura.fecha,
+        'vivero': res.factura.vivero.nombre,
+        'nit_vivero': res.factura.vivero.identificacion
 
 
-            }for res in informe]
+    }for res in informe]
     return JsonResponse({'data': data, 'nume': nume}, safe=True)
 
 
@@ -274,8 +274,8 @@ def getProductos(request, pro):
     data = Producto.objects.select_related('id_categoria',
                                            'id_presentacion'
                                            ).filter(
-                                                    vivero=pro
-                                                    ).order_by('nombre')
+        vivero=pro
+    ).order_by('nombre')
     res = [{
         'nombre': response.nombre,
         'precioventa': response.precio_venta,
@@ -296,15 +296,15 @@ def ViveroRem(request):
 def remionesAll(request, vivero_id):
     template_name = 'ventas/allremisiones.html'
     data = detalleRemison.objects.extra(
-                                            select={'total':
-                                                    'SELECT sum(ventas_detalleremison.val_neto)  FROM ventas_detalleremison WHERE ventas_detalleremison.remision_id = ventas_remision.id'}).select_related(
-                                            'remision',
-                                            'remision__estado',
-                                            'remision__vivero',
-                                            'remision__cliente').filter(
-                                            remision__vivero_id=vivero_id
-                                            ).distinct(
-                                            'remision_id')
+        select={'total':
+                'SELECT sum(ventas_detalleremison.val_neto)  FROM ventas_detalleremison WHERE ventas_detalleremison.remision_id = ventas_remision.id'}).select_related(
+        'remision',
+        'remision__estado',
+        'remision__vivero',
+        'remision__cliente').filter(
+        remision__vivero_id=vivero_id
+    ).distinct(
+        'remision_id')
     rem = [{
         'id': res.remision.pk,
         'fecha': str(res.remision.fecha),
@@ -325,9 +325,9 @@ def remisionCliente(request, vivero_id):
         data = Cliente.objects.all().filter(
             nombre__icontains=request.POST['data'])[:9]
         result = [{
-                'id': res.pk,
-                'nombre': res.nombre,
-                'cc': res.nit_cc
+            'id': res.pk,
+            'nombre': res.nombre,
+            'cc': res.nit_cc
         }for res in data]
         return JsonResponse({'data': result}, safe=True)
     else:
@@ -395,10 +395,10 @@ def saveRemision(request, vivero_id):
                                       iva=res['iva'],
                                       val_neto=res['valorN'])
     informe = detalleRemison.objects.select_related(
-            'remision', 'producto',
-            'remision__cliente',
-            'remision__vivero').filter(
-                remision_id=id_fac)
+        'remision', 'producto',
+        'remision__cliente',
+        'remision__vivero').filter(
+        remision_id=id_fac)
     data = [{
             'remision': res.remision.pk,
             'cliente': res.remision.cliente.nombre,
@@ -420,6 +420,27 @@ def saveRemision(request, vivero_id):
     return JsonResponse({'data': data}, safe=True)
 
 
-def ventasPOS(request):
+def ventasPOS(request, id):
     template_name = 'ventas/pos.html'
     return render(request, template_name)
+
+
+def viveroPos(request):
+    template_name = 'ventas/posvivero.html'
+    data = Vivero.objects.all()
+    return render(request, template_name, {'data': data})
+
+
+def productosPos(request, id):
+    data = Producto.objects.select_related(
+        'id_presentacion').filter(
+        nombre__icontains=request.body.decode('utf-8'),
+        vivero_id=id)[:4]
+    items = [{
+        'id': res.pk,
+        'nombre': res.nombre,
+        'iva': res.iva_porce,
+        'precio': res.precio_venta,
+        'presentacion': res.id_presentacion.tipo
+    }for res in data]
+    return JsonResponse({'data': items}, safe=True)
