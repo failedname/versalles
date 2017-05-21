@@ -193,4 +193,10 @@ body {
   padding-right: 1.5em;
   margin-left: 1em; }
 
+.invoice__cliente {
+  display: flex; }
+
+.invoice__cliente .input {
+  width: 100%; }
+
 /*# sourceMappingURL=style.css.map */

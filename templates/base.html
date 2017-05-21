@@ -22,11 +22,13 @@
         Menu
         <i class="dropdown icon"></i>
       </a>
+
       <div class="ui fluid popup top left transition hidden" >
         <div class="ui four column relaxed equal height divided grid">
           <div class="column">
             <h4 class="ui header font-thead">Ventas</h4>
             <div class="ui link list ">
+              <a href="{% url 'dashboard:panel' %}" class="item">Inicio</a>
               <a href="{% url 'ventas:selfacturas' %}" class="item">Facturas</a>
               <a href="{% url 'ventas:remisiones' %}" class="item">Remisiones</a>
               <a href="{% url 'ventas:vivero' %}" class="item">POS</a>
@@ -34,7 +36,38 @@
           </div>
           <div class="column">
             <h4 class="ui header">Compras</h4>
+            <div class="ui link list">
+              <a href="" class="item">Facturas de Proveedores</a>
+            </div>
           </div>
+          <div class="column">
+            <h4 class="ui header">Contactos</h4>
+            <div class="ui link list">
+              <a href=""  class="item">Clientes</a>
+              <a href="" class="item">Proveedores</a>
+            </div>
+          </div>
+          <div class="column">
+            <h4 class="ui header">Inventario</h4>
+            <div class="ui link list">
+              <a href=""  class="item">Productos</a>
+
+            </div>
+          </div>
+          <div class="column">
+            <h4 class="ui header">Reportes</h4>
+            <div class="ui link list">
+              <a href="" class="item">Ventas</a>
+            </div>
+          </div>
+          <div class="column">
+            <h4 class="ui header">Administracion</h4>
+            <div class="ui link list">
+              <a href="/admin"  class="item">Admin</a>
+
+            </div>
+          </div>
+
 
         </div>
       </div>
@@ -43,6 +76,7 @@
        </div>
 
       </div>
+
     {% endblock nav %}
 
 
