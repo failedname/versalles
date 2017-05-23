@@ -22,10 +22,12 @@
             <button class="ui button">
               Follow
             </button>
-            <div class="ui icon fluid input">
+            <div class="ui search icon fluid input">
               <i class="search icon"></i>
-              <input type="text" placeholder="Buscar Cliente...">
+              <input id="buscarCliente" type="text" placeholder="Buscar Cliente...">
+              <div id="clienteResult" class="results "></div>
             </div>
+
           </div>
           <div id="itemVenta" class="ui divided link items">
 
@@ -55,6 +57,34 @@
           </div>
         </div>
       </div>
+      <div class="ui modal otro">
+        <i class="close icon"></i>
+        <div id="modalHeader" class="header">
+          Modal Title
+        </div>
+        <div class="content">
+
+          <div class="description">
+            <div class="ui labeled input">
+              <div class="ui label">
+                Precio
+              </div>
+              <input id="precioModal" type="text" placeholder="" >
+            </div>
+            <div class="ui  labeled input">
+              <div class="ui label">
+                Cantidad
+              </div>
+              <input id="cantidadModal" type="text" placeholder="" >
+            </div>
+
+          </div>
+        </div>
+        <div class="actions">
+          <div id="cancelModal" class="ui button">Cancelar</div>
+          <div id="saveModal" class="ui button">Guardar</div>
+        </div>
+    </div>
   </div>
 {% endblock %}
 {% block js %}

@@ -1,11 +1,12 @@
 from django.conf.urls import url
 from .views import (
-                    nueva_factura, search_productos,
-                    vivero_factura, save_facturaReal,
-                    SelFacturas, AllFacturas, SearchFac, pdfFactura,
-                    selViveroPro, getProductos, ViveroRem, remionesAll,
-                    nuevaRemision, remisionCliente, remisionProductos,
-                    saveRemision, copiaFactura, ventasPOS, productosPos, viveroPos)
+    nueva_factura, search_productos,
+    vivero_factura, save_facturaReal,
+    SelFacturas, AllFacturas, SearchFac, pdfFactura,
+    selViveroPro, getProductos, ViveroRem, remionesAll,
+    nuevaRemision, remisionCliente, remisionProductos,
+    saveRemision, copiaFactura, ventasPOS, productosPos,
+    viveroPos, savePos, clientePos)
 
 urlpatterns = [
     url(r'^seleccionar/$', vivero_factura, name='viverofactura'),
@@ -39,8 +40,12 @@ urlpatterns = [
     url(r'^facturas/(?P<pro>\w+)/detallefac/(?P<fac>\w+)/generar/$',
         SearchFac, name='generarcopiafactura'),
     url(r'^pos/vivero/(?P<id>\w+)/pos/$', ventasPOS, name='pos'),
+    url(r'^pos/vivero/(?P<id>\w+)/pos/save/$', savePos, name='savepos'),
     url(r'^pos/vivero/$', viveroPos, name='vivero'),
-    url(r'^pos/vivero/(?P<id>\w+)/pos/productopos/$', productosPos, name='productopos'),
+    url(r'^pos/vivero/(?P<id>\w+)/pos/productopos/$',
+        productosPos, name='productopos'),
+    url(r'^pos/vivero/(?P<id>\w+)/pos/clientepos/$',
+        clientePos, name='clientepos'),
     # url(r'^facturas/(?P<pro>\w+)/detallefac/(?P<fac>\w+)/pdf$',
     #     pdfFactura.as_view(), name='pdfFactura'),
 

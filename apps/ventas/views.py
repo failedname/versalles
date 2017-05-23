@@ -444,3 +444,98 @@ def productosPos(request, id):
         'presentacion': res.id_presentacion.tipo
     }for res in data]
     return JsonResponse({'data': items}, safe=True)
+
+
+def clientePos(request, id):
+    data = request.body.decode('utf-8')
+    cliente = Cliente.objects.all().filter(nombre__icontains=data)[:5]
+    items = [{
+        'id': res.pk,
+        'nombre': res.nombre,
+        'iden': res.nit_cc
+
+    }for res in cliente]
+    return JsonResponse({'data': items}, safe=True)
+
+
+def savePos(request, id):
+    data = request.body.decode('utf-8')
+    datos = json.loads(data)
+    estado = EstadoFactura.objects.all().filter(estado='cerrada')
+
+    if(len(datos['cliente']) == 0):
+        c = Cliente.objects.all().filter(nit_cc='POS')
+        f = Remision(
+            vivero_id=id,
+            estado_id=estado[0].pk,
+            cliente_id=c[0].pk)
+
+        f.save()
+        id_fac = f.pk
+        for res in datos['venta']:
+            detalleRemison.objects.create(remision_id=id_fac,
+                                          cantidad=res['cantidad'],
+                                          producto_id=res['id'],
+                                          val_unitario=res['precio'],
+                                          iva=res['iva'],
+                                          val_neto=int(
+                                              res['cantidad']) * int(res['precio']))
+            informe = detalleRemison.objects.select_related(
+                'remision', 'producto', 'remision__cliente').filter(
+                    remision_id=id_fac)
+            data = [{
+                'factura': res.remision.pk,
+                'cliente': res.remision.cliente.nombre,
+                'nit': res.remision.cliente.nit_cc,
+                'direccion': res.remision.cliente.direccion,
+                'telefono': res.remision.cliente.telefono,
+                'codigo': res.producto_id,
+                'nombre': res.producto.nombre,
+                'cantidad': res.cantidad,
+                'iva': res.iva,
+                'valor': res.val_unitario,
+                'valneto': res.val_neto,
+                'fecha': res.remision.fecha,
+                'vivero': res.remision.vivero.nombre,
+                'nit_vivero': res.remision.vivero.identificacion
+
+            }for res in informe]
+        return JsonResponse({'data': data}, safe=True)
+    else:
+        c = Cliente.objects.all().filter(nit_cc='POS')
+        f = Remision(
+            vivero_id=id,
+            estado_id=estado[0].pk,
+            cliente_id=datos['cliente']['id'])
+
+        f.save()
+        id_fac = f.pk
+        for res in datos['venta']:
+            detalleRemison.objects.create(remision_id=id_fac,
+                                          cantidad=res['cantidad'],
+                                          producto_id=res['id'],
+                                          val_unitario=res['precio'],
+                                          iva=res['iva'],
+                                          val_neto=int(
+                                              res['cantidad']) * int(res['precio']))
+            informe = detalleRemison.objects.select_related(
+                'remision', 'producto', 'remision__cliente').filter(
+                    remision_id=id_fac)
+            data = [{
+                'remision': res.remision.pk,
+                'cliente': res.remision.cliente.nombre,
+                'nit': res.remision.cliente.nit_cc,
+                'direccion': res.remision.cliente.direccion,
+                'telefono': res.remision.cliente.telefono,
+                'codigo': res.producto_id,
+                'nombre': res.producto.nombre,
+                'cantidad': res.cantidad,
+                'iva': res.iva,
+                'valor': res.val_unitario,
+                'valneto': res.val_neto,
+                'fecha': res.remision.fecha,
+                'vivero': res.remision.vivero.nombre,
+                'nit_vivero': res.remision.vivero.identificacion
+
+            }for res in informe]
+        return JsonResponse({'data': data}, safe=True)
