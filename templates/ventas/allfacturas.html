@@ -7,28 +7,41 @@
 {% block content %}
 {% csrf_token %}
   <div class="ui grid container">
+    <div class="wide column">
+      <div class="ui message ">
+        <div class="content header_facturas">
+          <div class="header ">
+            <i class="disk outline big icon"></i>
+            Facturas de Venta
+          </div>
+          <a href="{% url 'ventas:nuevafactura'%}" class="ui button btn">
+            <i class="plus large icon"></i>
+            Nueva factura de venta
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="ui grid container">
     <div class="ui wide four column">
-      <a class="ui button_color font-thead labeled icon button" href="{% url 'ventas:nuevafactura' vivero %}">
-        <i class="file text outline  icon"></i>
-        Nueva Factura
-      </a>
+
     </div>
   </div>
   <section class="ui grid container">
     <div class="ui  wide sixteen column">
-      <table  class="ui celled teal table ">
-        <thead class="font-thead">
+      <table  class="ui celled structured small table">
+        <thead >
           <tr >
-            <th>FACTURA</th>
-            <th>FECHA</th>
-            <th>CC/NIT</th>
-            <th>NOMBRE</th>
-            <th>TOTAL</th>
-            <th>ESTADO</th>
-            <th>ACCIONES</th>
+            <th>Numero</th>
+            <th>Creación</th>
+            <th>Cliente</th>
+            <th>Nombre</th>
+            <th>Total</th>
+            <th>Estado</th>
+            <th>Acciones</th>
           </tr>
         </thead>
-        <tbody class="font-tbody" id="TableFact">
+        <tbody  id="TableFact">
 
         </tbody >
 

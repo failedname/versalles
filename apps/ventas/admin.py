@@ -1,14 +1,19 @@
 # -*- coding: utf-8 -*-
 from django.contrib import admin
 from .models import (
-                        Cliente, Producto, Categoria,
-                        Presentacion, Vivero, EstadoFactura,
-                        Detalle_FacturaReal,
-                        Numeracion, FacturaReal, Remision, detalleRemison)
+    Cliente, Producto, Categoria,
+    Presentacion, Vivero, EstadoFactura,
+    Detalle_FacturaReal,
+    Numeracion, FacturaReal, Remision, detalleRemison, detalleUser)
 
 
 class ExampleAdmin(admin.ModelAdmin):
     change_list_template = 'smuggler/change_list.html'
+
+
+@admin.register(detalleUser)
+class DetalleUser(admin.ModelAdmin):
+    pass
 
 
 @admin.register(Cliente)

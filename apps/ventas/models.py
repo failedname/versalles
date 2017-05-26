@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.db import models
+from django.contrib.auth.models import User
 
 
 class Cliente(models.Model):
@@ -52,25 +53,39 @@ class Vivero(models.Model):
         return self.nombre
 
 
+class detalleUser(models.Model):
+    vivero = models.ForeignKey(Vivero)
+    usuario = models.OneToOneField(User)
+
+    class Meta:
+        verbose_name = 'Detalle de Usuario'
+        verbose_name_plural = 'Detalles de Usuarios'
+
+
 class Producto(models.Model):
     nombre = models.CharField(max_length=100)
     precio_venta = models.IntegerField(verbose_name='precio', null=True)
     iva_porce = models.IntegerField(verbose_name='iva', null=True)
     id_categoria = models.ForeignKey(Categoria, verbose_name='Categoria')
     id_presentacion = models.ForeignKey(
-                                     Presentacion, verbose_name='Presentación')
+        Presentacion, verbose_name='Presentación')
     vivero = models.ForeignKey(Vivero, null=True)
     precio_compra = models.IntegerField(null=True)
     tran_porce = models.IntegerField(verbose_name='Trasporte %', null=True)
-    mayor_porce = models.IntegerField(verbose_name='Utilidad x mayor %', null=True)
-    precioxmayor = models.IntegerField(blank=True, verbose_name='precio al por mayor', null=True)
-    valor_real_compra = models.IntegerField(blank=True, verbose_name='valor compra real', null=True)
+    mayor_porce = models.IntegerField(
+        verbose_name='Utilidad x mayor %', null=True)
+    precioxmayor = models.IntegerField(
+        blank=True, verbose_name='precio al por mayor', null=True)
+    valor_real_compra = models.IntegerField(
+        blank=True, verbose_name='valor compra real', null=True)
 
     def save(self):
-        preciocompra = ((self.tran_porce / 100) * self.precio_compra) + self.precio_compra
+        preciocompra = ((self.tran_porce / 100) *
+                        self.precio_compra) + self.precio_compra
         print(preciocompra)
         self.valor_real_compra = preciocompra
-        self.precioxmayor = ((self.mayor_porce / 100) * preciocompra) + preciocompra
+        self.precioxmayor = ((self.mayor_porce / 100) *
+                             preciocompra) + preciocompra
         super(Producto, self).save()
 
     class Meta:

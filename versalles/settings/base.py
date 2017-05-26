@@ -26,8 +26,8 @@ LOCAL_APPS = (
     'apps.ventas',
     'apps.compras',
     'apps.pedidos',
-    'apps.translados',
-    'apps.dashboard'
+    'apps.dashboard',
+    'apps.reportes'
 )
 
 EXTERNAL_APPS = (

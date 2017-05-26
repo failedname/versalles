@@ -7,26 +7,93 @@ document.addEventListener('DOMContentLoaded', function () {
   		}
   	})
 
-$('#search-cliente')
+// $('#search-cliente')
+//
+// .search({
+//   source: clientes,
+//   fields: {
+//     title: 'nombre',
+//     price: 'cc'
+//
+//   },
+//   searchFields: [
+//     'nombre',
+//     'cc'
+//   ],
+//   searchFullText: false,
+//   onSelect: function(result,response){
+//     document.getElementById('iden').value=result.cc
+//     document.getElementById('nombre').value=result.nombre
+//   }
+//
+// })
+var inputCliente = document.getElementById('cliente_search')
+inputCliente.addEventListener('input', () => {
 
-.search({
-  source: clientes,
-  fields: {
-    title: 'nombre',
-    price: 'cc'
 
-  },
-  searchFields: [
-    'nombre',
-    'cc'
-  ],
-  searchFullText: false,
-  onSelect: function(result,response){
-    document.getElementById('iden').value=result.cc
-    document.getElementById('nombre').value=result.nombre
-  }
+  let valInput = inputCliente.value
+  var idClass = document.getElementById('clienteResult')
+  if(valInput.length > 0){
+
+
+  $.ajax({
+    url: 'cliente/',
+    type: 'POST',
+    data: valInput
+  })
+  .done(function(data) {
+
+      var html = ''
+      var objeto = data.data
+
+      if (!data.length) {
+
+        for (var i = 0, len = objeto.length; i < len; i++) {
+          if (i < 9) {
+            html += `<a data-id="${objeto[i].iden}" data-nombre="${objeto[i].nombre}"
+                        class="result" >
+                      <div class="content">
+                        <div class="title">${objeto[i].nombre}</div>
+                        <div class="description">${objeto[i].iden}</div>
+                      </div>
+                    </a>
+                    `
+          }
+
+
+        }
+        idClass.className = 'results transition visible'
+        idClass.innerHTML = html
+      } else {
+        idClass.className = 'results transition hidden'
+      }
+
+
+
+
+  })
+  .fail(function() {
+    console.log("error");
+  })
+  .always(function() {
+    var idClass = document.getElementById('clienteResult')
+    for (var j = 0; j < idClass.children.length; j++ ) {
+      var enlace = idClass.children[j]
+          enlace.addEventListener('click',function ()  {
+            document.getElementById('iden').value = this.dataset.id
+            document.getElementById('nombre').value = this.dataset.nombre
+            idClass.className = 'results transition hidden'
+          })
+    }
+  })
+}else{
+  idClass.className = 'results transition hidden'
+}
 
 })
+
+
+
 
 var valSel = ''
 document.getElementById('selectprecios').addEventListener('change', () => {
@@ -164,7 +231,7 @@ var addRow = function( codigo, producto, iva, precio, cantidad) {
   tr.innerHTML = `<td>${codigo}</td><td>${producto}</td>
                 <td>${precio}</td><td>${resIva}</td>
                 <td>${cantidad}</td>
-                <td><button class="ui icon button">
+                <td><button class="ui icon button btn">
                   <i class="remove icon"></i>
                   </button></td>`
   tbody.appendChild(tr)
@@ -203,9 +270,9 @@ function calcular(tagbody){
   }
 
 
-  subTotal.value = sub
-  subIva.value = iv
-  resTot.value = tot
+  subTotal.innerHTML = sub
+  subIva.innerHTML = iv
+  resTot.innerHTML = tot
 
 
 }
@@ -219,7 +286,8 @@ var todos = {
 
 var btnsaveReal = document.getElementById('id_saveReal')
 
-function saveFactReal(){
+function saveFactReal(e){
+  e.preventDefault()
   var allSAve ={}
   var tbody = document.getElementById('bodyTable')
   var ident = document.getElementById('iden').value
@@ -244,15 +312,14 @@ function saveFactReal(){
   })
   .done(function (res) {
     removeAll()
-    document.getElementById('messageSucces').classList.remove('hidden')
-    document.getElementById('messageSucces').classList.add('visible')
+
     FacturaPdf(res.data, res.nume)
-    console.log(res)
+
 
 
   })
   .fail(function () {
-    console.log('error')
+    
   })
 
 }

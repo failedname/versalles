@@ -17,8 +17,8 @@
 
 
     {% block nav %}
-    <div class="ui  top attached large menu">
-      <a class="browse item ">
+    <div class="ui  top attached large menu fondo_menu">
+      <a class="browse item item_menu">
         Menu
         <i class="dropdown icon"></i>
       </a>
@@ -29,7 +29,7 @@
             <h4 class="ui header font-thead">Ventas</h4>
             <div class="ui link list ">
               <a href="{% url 'dashboard:panel' %}" class="item">Inicio</a>
-              <a href="{% url 'ventas:selfacturas' %}" class="item">Facturas</a>
+              <a href="{% url 'ventas:allfacturas' %}" class="item">Facturas</a>
               <a href="{% url 'ventas:remisiones' %}" class="item">Remisiones</a>
               <a href="{% url 'ventas:vivero' %}" class="item">POS</a>
             </div>
@@ -57,7 +57,8 @@
           <div class="column">
             <h4 class="ui header">Reportes</h4>
             <div class="ui link list">
-              <a href="" class="item">Ventas</a>
+              <a href="{% url 'reportes:reportventas' %}" class="item">Ventas</a>
+              <a href="" class="item">Remisiones</a>
             </div>
           </div>
           <div class="column">
@@ -71,8 +72,12 @@
 
         </div>
       </div>
-        <div class="right menu">
-         <a href="{% url 'dashboard:logout'%}" class="item">Salir</a>
+        <div class="right labeled icon menu">
+         <a href="{% url 'dashboard:logout'%}" class="item item_menu">
+           <i class="large sign out icon"></i>
+           Salir
+         </a>
+
        </div>
 
       </div>

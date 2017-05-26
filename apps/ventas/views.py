@@ -14,6 +14,7 @@ def pdfFactura(request):
 
 @login_required
 def vivero_factura(request):
+
     template_name = 'ventas/vivero_factura.html'
     data = Vivero.objects.all()
     return render(request, template_name, {'data': data})
@@ -55,7 +56,7 @@ def SearchFac(request, pro, fac):
 
 
 @login_required
-def AllFacturas(request, pro):
+def AllFacturas(request):
     template_name = 'ventas/allfacturas.html'
     data = Detalle_FacturaReal.objects.extra(
         select={'total': 'SELECT sum(ventas_detalle_facturareal.val_neto)  FROM ventas_detalle_facturareal WHERE ventas_detalle_facturareal.factura_id = ventas_facturareal.codigo'}).select_related(
@@ -63,7 +64,7 @@ def AllFacturas(request, pro):
         'factura__estado',
         'factura__vivero',
         'factura__cliente').filter(
-        factura__vivero_id=pro).distinct(
+        factura__vivero_id=request.session['vivero']).distinct(
         'factura_id')
     fact = [{
         'id': res.factura.pk,
@@ -75,12 +76,11 @@ def AllFacturas(request, pro):
         'total': res.total
     }for res in data]
 
-    return render(request, template_name, {'data': json.dumps(fact),
-                                           'vivero': pro})
+    return render(request, template_name, {'data': json.dumps(fact)
+                                           })
 
 
-def nueva_factura(request, pro):
-    request.session['vivero'] = pro
+def nueva_factura(request):
     cliente_row = Cliente.objects.all()
     data = [{
         'id': res.pk,
@@ -92,12 +92,12 @@ def nueva_factura(request, pro):
     return render(request, template_name, {'data': json.dumps(data)})
 
 
-def search_productos(request, pro):
+def search_productos(request):
 
     if (len(request.POST['valinput']) > 0):
         prods = Producto.objects.select_related(
             'id_presentacion').filter(
-                nombre__icontains=request.POST['valinput'], vivero_id=pro)[:9]
+                nombre__icontains=request.POST['valinput'], vivero_id=request.session['vivero'])[:9]
         if (request.POST['precio'] == 'generales'):
 
             data = [{
@@ -133,12 +133,13 @@ def search_productos(request, pro):
         return JsonResponse({'sin': 'hola'}, safe=False)
 
 
-def save_facturaReal(request, pro):
+def save_facturaReal(request):
     data = request.body.decode('utf-8')
     datos = json.loads(data)
-    num = Numeracion.objects.all().filter(vivero_id=pro)
+    num = Numeracion.objects.all().filter(vivero_id=request.session['vivero'])
     estado = EstadoFactura.objects.all().filter(estado='cerrada')
-    rows = FacturaReal.objects.filter(vivero_id=pro).count()
+    rows = FacturaReal.objects.filter(
+        vivero_id=request.session['vivero']).count()
     nume = [{
         'resu': res.resolucion,
         'fecha': res.fecha,
@@ -147,9 +148,8 @@ def save_facturaReal(request, pro):
     }for res in num]
     if rows == 0:
         c = Cliente.objects.all().filter(nit_cc=datos['cliente']['id'])
-        print(c[0])
         f = FacturaReal(codigo=num[0].num_ini,
-                        vivero_id=pro,
+                        vivero_id=request.session['vivero'],
                         estado_id=estado[0].pk,
                         cliente_id=c[0].pk)
 
@@ -192,7 +192,7 @@ def save_facturaReal(request, pro):
         c = Cliente.objects.all().filter(nit_cc=datos['cliente']['id'])
         numeracion = 1 + ultimo.codigo
         f = FacturaReal(codigo=numeracion,
-                        vivero_id=pro,
+                        vivero_id=request.session['vivero'],
                         estado_id=estado[0].pk,
                         cliente_id=c[0].pk)
 
@@ -285,6 +285,18 @@ def getProductos(request, pro):
         'precioxmayor': response.precioxmayor
     }for response in data]
     return render(request, template_name, {'data': json.dumps(res)})
+
+
+def clienteFactura(request):
+    data = request.body.decode('utf-8')
+    cliente = Cliente.objects.all().filter(nombre__icontains=data)[:5]
+    items = [{
+        'id': res.pk,
+        'nombre': res.nombre,
+        'iden': res.nit_cc
+
+    }for res in cliente]
+    return JsonResponse({'data': items}, safe=True)
 
 
 def ViveroRem(request):

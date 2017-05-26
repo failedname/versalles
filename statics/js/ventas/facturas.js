@@ -58,7 +58,7 @@ function cargar (data) {
   $('#pagging').pagination({
     dataSource: data,
     classPrefix: 'item',
-    pageSize: 20,
+    pageSize: 10,
     disableClassName: 'disabled',
     callback: function (data, pagination) {
       var html = simpleTemplating(data)
@@ -80,13 +80,13 @@ function cargar (data) {
   function simpleTemplating (data) {
     var html = ''
     $.each(data, function (index, item) {
-      let estado  = item.estado === 'cerrada' ? `<td class="positive">${item.estado}</td>`: `<td class="negative">${item.estado}</td>`
+      let estado  = item.estado === 'cerrada' ? `<td class="positive center aligned">${item.estado}</td>`: `<td class="negative">${item.estado}</td>`
       let data = moneda(item.total)
-      html += `<tr><td>${item.codigo}</td><td>${item.fecha}</td>
+      html += `<tr><td class="center aligned">${item.codigo}</td><td class="center aligned">${item.fecha}</td>
                 <td>${item.identificacion}</td>
-                <td>${item.nombre}</td><td >${data}</td>
+                <td>${item.nombre}</td><td class="right aligned">${data}</td>
                 ${estado}
-                <td><a href="/ventas/facturas/1/detallefac/${item.codigo}"  data-tooltip="Ver" ><i  class="large circular link teal unhide icon"></i></a>
+                <td class="center aligned"><a href="/ventas/facturas/1/detallefac/${item.codigo}"  data-tooltip="Ver" ><i  class="large circular link teal unhide icon"></i></a>
 
                 </td>
               </tr>`
