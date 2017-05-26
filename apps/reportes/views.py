@@ -11,6 +11,7 @@ class ventasReport(TemplateView):
 
 def report_ventas(request):
     fechas = json.loads(request.body)
+
     data = Detalle_FacturaReal.objects.extra(
         select={'total': 'SELECT sum(ventas_detalle_facturareal.val_neto)  FROM ventas_detalle_facturareal WHERE ventas_detalle_facturareal.factura_id = ventas_facturareal.codigo',
                 'iva': 'SELECT sum(ventas_detalle_facturareal.iva) FROM ventas_detalle_facturareal WHERE ventas_detalle_facturareal.factura_id = ventas_facturareal.codigo'

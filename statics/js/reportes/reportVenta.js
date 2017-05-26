@@ -62,6 +62,17 @@ function reportVenta() {
 
   fetch('filtro/',myInit)
     .then((response)=>{
+      if(!response.length){
+        body.innerHTML =`<tr>
+                          <td colspan="5">
+                            <div class="sin_ventas">
+                              <div class="ui active dimmer">
+                                <div class="ui loader"></div>
+                              </div>
+                            </div>
+                          </td>
+                        </tr>`
+      }
       return response.json()
     })
     .then((data)=>{
