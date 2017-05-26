@@ -1,10 +1,10 @@
 @font-face {
   font-family: Roboto Slab;
-  src: url("../css/Roboto_Slab/RobotoSlab-Bold.ttf");
+  src: url("../css/Roboto_Slab/RobotoSlab-Bold.d63ef2329945.ttf");
   font-weight: bold; }
 @font-face {
   font-family: Roboto Slab R;
-  src: url("../css/Roboto_Slab/RobotoSlab-Regular.ttf"); }
+  src: url("../css/Roboto_Slab/RobotoSlab-Regular.1ec06eed11bb.ttf"); }
 .ui.header {
   font-family: "Roboto Slab R", monospace !important;
   font-weight: bold; }

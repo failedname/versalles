@@ -3,6 +3,7 @@
 {% load static from staticfiles %}
 {% block css %}
   <link rel="stylesheet" href="{% static 'css/calendar.css' %}">
+  <link rel="stylesheet" href="{% static 'css/pagination.css'%}" >
 {% endblock css %}
 {% block content %}
   <div class="ui grid container">
@@ -26,7 +27,7 @@
             <div class="ui calendar" id="rangestart">
               <div class="ui input corner labeled left icon">
                 <i class="calendar icon"></i>
-                <input type="text" placeholder="Desde">
+                <input id="fechaStart" type="text" placeholder="Desde">
                 <div class="ui corner label">
                   <i class="asterisk icon"></i>
                 </div>
@@ -38,7 +39,7 @@
             <div class="ui calendar" id="rangeend">
               <div class="ui input corner labeled left icon">
                 <i class="calendar icon"></i>
-                <input type="text" placeholder="Hasta">
+                <input id="fechaEnd" type="text" placeholder="Hasta">
                 <div class="ui corner label">
                   <i class="asterisk icon"></i>
                 </div>
@@ -57,7 +58,7 @@
     </div>
     <div class="ui grid container">
       <div class="wide column">
-        <table class="ui celled structured small table">
+        <table id="tableFactura" class="ui celled structured small table">
           <thead>
             <tr>
               <th>Número</th>
@@ -67,21 +68,34 @@
               <th>Total</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody id="report_body">
 
           </tbody>
           <tfoot class="full-width">
             <tr>
-              <th colspan="5"></th>
+              <th colspan="5">
+                <div class="total_subtotal ">
+                  <div class="labeled label">
+                    Total
+                  </div>
+                  <div id="totiva" class="value">$</div>
+                  <div id="total" class="value" style="width:200px">$</div>
+                </div>
+              </th>
             </tr>
           </tfoot>
         </table>
+        <div class="ui right floated"  id="pagging" >
+
+        </div>
       </div>
     </div>
 
   </div>
 {% endblock content %}
 {% block js %}
+  <script type="text/javascript" src="{% static 'js/pagination.js' %}" ></script>
+  <script type="text/javascript" src="{% static 'js/moneda.js' %}"></script>
   <script type="text/javascript" src="{% static 'js/calendar.js' %}"></script>
-  <script type="text/javascript" src="{% static 'js/ventas/reportVenta.js' %}"></script>
+  <script type="text/javascript" src="{% static 'js/reportes/reportVenta.js' %}"></script>
 {% endblock js %}
