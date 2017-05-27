@@ -270,9 +270,9 @@ function calcular(tagbody){
   }
 
 
-  subTotal.innerHTML = sub
-  subIva.innerHTML = iv
-  resTot.innerHTML = tot
+  subTotal.innerHTML = moneda(sub)
+  subIva.innerHTML = moneda(iv)
+  resTot.innerHTML = moneda(tot)
 
 
 }
@@ -319,7 +319,7 @@ function saveFactReal(e){
 
   })
   .fail(function () {
-    
+
   })
 
 }
