@@ -1,114 +1,114 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    {% load static from staticfiles %}
-    <meta name="viewport"  content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <meta charset="utf-8">
-    <title>{% block title %}{% endblock title %}</title>
-    <link rel="stylesheet" href="{% static 'semantic-ui/semantic.min.css'%}" >
-    <link rel="stylesheet" href="{% static 'css/style.css'%}" >
-    <link rel="shortcut icon" type="image/x-icon" href="{% static 'img/vivero.ico' %}" />
-    {% block css %}{% endblock css %}
-    {% block js1 %}{% endblock js1 %}
 
-  </head>
-  <body  class="fondo">
+<head>
+  {% load static from staticfiles %}
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta charset="utf-8">
+  <title>{% block title %}{% endblock title %}</title>
+  <link rel="stylesheet" href="{% static 'semantic-ui/semantic.min.css'%}">
+  <link rel="stylesheet" href="{% static 'css/style.css'%}">
+  <link rel="shortcut icon" type="image/x-icon" href="{% static 'img/vivero.ico' %}" /> {% block css %}{% endblock css %} {% block js1 %}{% endblock js1 %}
+
+</head>
+
+<body class="fondo">
 
 
 
-    {% block nav %}
-    <div class="ui  top attached large menu fondo_menu">
-      <a class="browse item item_menu">
+  {% block nav %}
+  <div class="ui  top attached large menu fondo_menu">
+    <a class="browse item item_menu">
         Menu
         <i class="dropdown icon"></i>
       </a>
 
-      <div class="ui fluid popup top left transition hidden" >
-        <div class="ui four column relaxed equal height divided grid">
-          <div class="column">
-            <h4 class="ui header font-thead">Ventas</h4>
-            <div class="ui link list ">
-              <a href="{% url 'dashboard:panel' %}" class="item">Inicio</a>
-              <a href="{% url 'ventas:allfacturas' %}" class="item">Facturas</a>
-              <a href="{% url 'ventas:remisiones' %}" class="item">Remisiones</a>
-              <a href="{% url 'ventas:vivero' %}" class="item">POS</a>
-            </div>
+    <div class="ui fluid popup top left transition hidden">
+      <div class="ui four column relaxed equal height divided grid">
+        <div class="column">
+          <h4 class="ui header font-thead">Ventas</h4>
+          <div class="ui link list ">
+            <a href="{% url 'dashboard:panel' %}" class="item">Inicio</a>
+            <a href="{% url 'ventas:allfacturas' %}" class="item">Facturas</a>
+            <a href="{% url 'ventas:remisiones' %}" class="item">Remisiones</a>
+            <a href="{% url 'ventas:vivero' %}" class="item">POS</a>
           </div>
-          <div class="column">
-            <h4 class="ui header">Compras</h4>
-            <div class="ui link list">
-              <a href="" class="item">Facturas de Proveedores</a>
-            </div>
-          </div>
-          <div class="column">
-            <h4 class="ui header">Contactos</h4>
-            <div class="ui link list">
-              <a href=""  class="item">Clientes</a>
-              <a href="" class="item">Proveedores</a>
-            </div>
-          </div>
-          <div class="column">
-            <h4 class="ui header">Inventario</h4>
-            <div class="ui link list">
-              <a href="{% url 'ventas:viveroproductos' %}"  class="item">Productos</a>
-
-            </div>
-          </div>
-          <div class="column">
-            <h4 class="ui header">Reportes</h4>
-            <div class="ui link list">
-              <a href="{% url 'reportes:reportventas' %}" class="item">Ventas</a>
-              <a href="{% url 'reportes:reportremisiones' %}" class="item">Remisiones</a>
-            </div>
-          </div>
-          <div class="column">
-            <h4 class="ui header">Administracion</h4>
-            <div class="ui link list">
-              <a href="/admin"  class="item">Admin</a>
-
-            </div>
-          </div>
-
-
         </div>
+        <div class="column">
+          <h4 class="ui header">Compras</h4>
+          <div class="ui link list">
+            <a href="" class="item">Facturas de Proveedores</a>
+          </div>
+        </div>
+        <div class="column">
+          <h4 class="ui header">Contactos</h4>
+          <div class="ui link list">
+            <a href="" class="item">Clientes</a>
+            <a href="" class="item">Proveedores</a>
+          </div>
+        </div>
+        <div class="column">
+          <h4 class="ui header">Inventario</h4>
+          <div class="ui link list">
+            <a href="{% url 'ventas:viveroproductos' %}" class="item">Productos</a>
+
+          </div>
+        </div>
+        <div class="column">
+          <h4 class="ui header">Reportes</h4>
+          <div class="ui link list">
+            <a href="{% url 'reportes:reportventas' %}" class="item">Ventas</a>
+            <a href="{% url 'reportes:reportremisiones' %}" class="item">Remisiones</a>
+          </div>
+        </div>
+        <div class="column">
+          <h4 class="ui header">Administracion</h4>
+          <div class="ui link list">
+            <a href="/admin" target="_blank" class="item">Admin</a>
+
+          </div>
+        </div>
+
+
       </div>
-        <div class="right labeled icon menu">
-         <a href="{% url 'dashboard:logout'%}" class="item item_menu">
+    </div>
+    <div class="right labeled icon menu">
+      <a href="{% url 'dashboard:logout'%}" class="item item_menu">
            <i class="large sign out icon"></i>
            Salir
          </a>
 
-       </div>
+    </div>
 
-      </div>
+  </div>
 
-    {% endblock nav %}
+  {% endblock nav %}
 
 
 
-      <div class=" pusher " style="padding-top:40px">
-      {% block content %}
-      {% endblock content %}
-      </div>
-
+  <div class=" pusher " style="padding-top:40px">
+    {% block content %} {% endblock content %}
+  </div>
 
 
 
 
 
 
-	  {% block footer %}{% endblock footer %}
 
-    <script type="text/javascript" src="{% static 'js/jquery.js'%}"></script>
-    <script type="text/javascript" src="{% static 'semantic-ui/semantic.min.js'%}"></script>
-    <script type="text/javascript" src="{% static 'js/menu.js'%}"></script>
-    <script type="text/javascript" src="{% static 'js/js.cookie.js'%}"></script>
+  {% block footer %}{% endblock footer %}
 
-
-    {% block js %}{% endblock js %}
+  <script type="text/javascript" src="{% static 'js/jquery.js'%}"></script>
+  <script type="text/javascript" src="{% static 'semantic-ui/semantic.min.js'%}"></script>
+  <script type="text/javascript" src="{% static 'js/menu.js'%}"></script>
+  <script type="text/javascript" src="{% static 'js/js.cookie.js'%}"></script>
 
 
+  {% block js %}{% endblock js %}
 
 
-  </body>
+
+
+</body>
+
 </html>

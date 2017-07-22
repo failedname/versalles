@@ -6,16 +6,17 @@ from .views import (
     selViveroPro, getProductos, ViveroRem, remionesAll,
     nuevaRemision, remisionCliente, remisionProductos,
     saveRemision, copiaFactura, ventasPOS, productosPos,
-    viveroPos, savePos, clientePos, clienteFactura)
+    viveroPos, savePos, clientePos, clienteFactura, detalleRemision)
 
 urlpatterns = [
     url(r'^seleccionar/$', vivero_factura, name='viverofactura'),
     url(r'^viveroproductos/$', selViveroPro, name='viveroproductos'),
-    url(r'^remisiones/$', ViveroRem, name='remisiones'),
-    url(r'^remisiones/vivero/(?P<vivero_id>\w+)/todos/$',
-        remionesAll, name='todosremisiones'),
-    url(r'^remisiones/vivero/(?P<vivero_id>\w+)/crear/$',
+    url(r'^remisiones/$',
+        remionesAll, name='remisiones'),
+    url(r'^remisiones/nueva/$',
         nuevaRemision.as_view(), name='crearremision'),
+    url(r'^remisiones/detalle/(?P<remision_id>\w+)/$',
+        detalleRemision, name='detalleremision'),
     url(r'^remisiones/vivero/(?P<vivero_id>\w+)/crear/cliente/$',
         remisionCliente, name='remisioncliente'),
     url(r'^remisiones/vivero/(?P<vivero_id>\w+)/crear/producto/$',

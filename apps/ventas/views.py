@@ -305,7 +305,7 @@ def ViveroRem(request):
     return render(request, template_name, {'data': data})
 
 
-def remionesAll(request, vivero_id):
+def remionesAll(request):
     template_name = 'ventas/allremisiones.html'
     data = detalleRemison.objects.extra(
         select={'total':
@@ -314,7 +314,7 @@ def remionesAll(request, vivero_id):
         'remision__estado',
         'remision__vivero',
         'remision__cliente').filter(
-        remision__vivero_id=vivero_id
+        remision__vivero_id=request.session['vivero']
     ).distinct(
         'remision_id')
     rem = [{
@@ -325,7 +325,7 @@ def remionesAll(request, vivero_id):
         'estado': res.remision.estado.estado,
         'total': res.total
     }for res in data]
-    return render(request, template_name, {'data': json.dumps(rem), 'vivero': vivero_id})
+    return render(request, template_name, {'data': json.dumps(rem)})
 
 
 class nuevaRemision(TemplateView):
@@ -387,6 +387,13 @@ def remisionProductos(request, vivero_id):
         return JsonResponse({'sin': 'hola'}, safe=False)
 
 
+def detalleRemision(request, remision_id):
+    template_name = "ventas/detalleremision.html"
+    rem = detalleRemison.objects.select_related('remision').filter(
+        pk=remision_id, remision__vivero=request.session['vivero'])
+    return render(request, template_name, )
+
+
 def saveRemision(request, vivero_id):
     data = request.body.decode('utf-8')
     datos = json.loads(data)
@@ -412,8 +419,8 @@ def saveRemision(request, vivero_id):
         'remision__vivero').filter(
         remision_id=id_fac)
     data = [{
-            'remision': res.remision.pk,
-            'cliente': res.remision.cliente.nombre,
+        'remision': res.remision.pk,
+        'cliente': res.remision.cliente.nombre,
             'direccion': res.remision.cliente.direccion,
             'nit': res.remision.cliente.nit_cc,
             'telefono': res.remision.cliente.telefono,
