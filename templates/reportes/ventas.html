@@ -1,101 +1,98 @@
-{% extends "base.html" %}
-{% block title %}Reporte de Ventas{% endblock title %}
-{% load static from staticfiles %}
-{% block css %}
-  <link rel="stylesheet" href="{% static 'css/calendar.css' %}">
-  <link rel="stylesheet" href="{% static 'css/pagination.css'%}" >
-{% endblock css %}
-{% block content %}
-  <div class="ui grid container">
-    <div class="wide column">
-      <div class="ui message ">
-        <div class="content header_report_invoice">
-          <div class="header ">
-            VENTAS
-          </div>
-          <p>Consulta el detalle de las facturas de venta en un período de tiempo.</p>
+{% extends "base.html" %} {% block title %}Reporte de Ventas{% endblock title %} {% load static from staticfiles %} {% block css %}
+<link rel="stylesheet" href="{% static 'css/calendar.css' %}">
+<link rel="stylesheet" href="{% static 'css/pagination.css'%}"> {% endblock css %} {% block content %}
+<div class="ui grid container">
+  <div class="wide column">
+    <div class="ui message ">
+      <div class="content header_report_invoice">
+        <div class="header ">
+          VENTAS
         </div>
+        <p>Consulta el detalle de las facturas de venta en un período de tiempo.</p>
       </div>
     </div>
   </div>
-  <div class="ui grid container">
-    <div class="wide column ">
-      <div class="ui form">
-        <div class="fields">
-          <div class=" eight wide field required">
-            <label>Desde</label>
-            <div class="ui calendar" id="rangestart">
-              <div class="ui input corner labeled left icon">
-                <i class="calendar icon"></i>
-                <input id="fechaStart" type="text" placeholder="Desde">
-                <div class="ui corner label">
-                  <i class="asterisk icon"></i>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="eight wide field required">
-            <label>Hasta</label>
-            <div class="ui calendar" id="rangeend">
-              <div class="ui input corner labeled left icon">
-                <i class="calendar icon"></i>
-                <input id="fechaEnd" type="text" placeholder="Hasta">
-                <div class="ui corner label">
-                  <i class="asterisk icon"></i>
-                </div>
+</div>
+<div class="ui grid container">
+  <div class="wide column ">
+    <div class="ui form">
+      <div class="fields">
+        <div class=" eight wide field required">
+          <label>Desde</label>
+          <div class="ui calendar" id="rangestart">
+            <div class="ui input corner labeled left icon">
+              <i class="calendar icon"></i>
+              <input id="fechaStart" type="text" placeholder="Desde">
+              <div class="ui corner label">
+                <i class="asterisk icon"></i>
               </div>
             </div>
           </div>
         </div>
-        <div class="fields">
-          <div class="field">
-            <div id="btn_reportVentas" class="ui submit button btn">Generar Reporte</div>
+        <div class="eight wide field required">
+          <label>Hasta</label>
+          <div class="ui calendar" id="rangeend">
+            <div class="ui input corner labeled left icon">
+              <i class="calendar icon"></i>
+              <input id="fechaEnd" type="text" placeholder="Hasta">
+              <div class="ui corner label">
+                <i class="asterisk icon"></i>
+              </div>
+            </div>
           </div>
         </div>
-
+      </div>
+      <div class="fields">
+        <div class="field">
+          <div id="btn_reportVentas" class="ui submit button btn">Generar Reporte</div>
+        </div>
+        <div class="field">
+          <div id="exportExcel" class="ui submit button btn">Exportar a excel</div>
         </div>
       </div>
+
     </div>
-    <div class="ui grid container">
-      <div class="wide column">
-        <table id="tableFactura" class="ui celled structured small table">
-          <thead>
-            <tr>
-              <th>Número</th>
-              <th>Cliente</th>
-              <th>Creación</th>
-              <th>IVA</th>
-              <th>Total</th>
-            </tr>
-          </thead>
-          <tbody id="report_body">
-
-          </tbody>
-          <tfoot class="full-width">
-            <tr>
-              <th colspan="5">
-                <div class="total_subtotal ">
-                  <div class="labeled label">
-                    Total
-                  </div>
-                  <div id="totiva" class="value">$</div>
-                  <div id="total" class="value" style="width:200px">$</div>
-                </div>
-              </th>
-            </tr>
-          </tfoot>
-        </table>
-        <div class="ui right floated"  id="pagging" >
-
-        </div>
-      </div>
-    </div>
-
   </div>
-{% endblock content %}
-{% block js %}
-  <script type="text/javascript" src="{% static 'js/pagination.js' %}" ></script>
-  <script type="text/javascript" src="{% static 'js/moneda.js' %}"></script>
-  <script type="text/javascript" src="{% static 'js/calendar.js' %}"></script>
-  <script type="text/javascript" src="{% static 'js/reportes/reportVenta.js' %}"></script>
+</div>
+<div class="ui grid container">
+  <div class="wide column">
+    <table id="tableFactura" class="ui celled structured small table">
+      <thead>
+        <tr>
+          <th>Número</th>
+          <th>Cliente</th>
+          <th>Creación</th>
+          <th>IVA</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody id="report_body">
+
+      </tbody>
+      <tfoot class="full-width">
+        <tr>
+          <th colspan="5">
+            <div class="total_subtotal ">
+              <div class="labeled label">
+                Total
+              </div>
+              <div id="totiva" class="value">$</div>
+              <div id="total" class="value" style="width:200px">$</div>
+            </div>
+          </th>
+        </tr>
+      </tfoot>
+    </table>
+    <div class="ui right floated" id="pagging">
+
+    </div>
+  </div>
+</div>
+
+</div>
+{% endblock content %} {% block js %}
+<script type="text/javascript" src="{% static 'js/pagination.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/moneda.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/calendar.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/reportes/reportVenta.js' %}"></script>
 {% endblock js %}

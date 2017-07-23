@@ -1,57 +1,135 @@
-document.addEventListener('DOMContentLoaded',()=>{
+document.addEventListener('DOMContentLoaded', () => {
   $('#rangeend').calendar({
-  type: 'date',
-  startCalendar: $('#rangestart'),
-  formatter: {
-    date: function (date, settings) {
-      if (!date) return '';
-      var day = date.getDate();
-      var month = date.getMonth() + 1;
-      var year = date.getFullYear();
-      return year + '-' + month + '-' + day;
-    }
-  },
-  text: {
-      days: ['D', 'L', 'M', 'M', 'J', 'V', 'S'],
-      months: ['Enero', 'Febrero', 'Marzo', 'April', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Novimbre', 'Deciembre'],
-      monthsShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
-      today: 'Hoy',
-
+    type: 'date',
+    startCalendar: $('#rangestart'),
+    formatter: {
+      date: function(date, settings) {
+        if (!date)
+          return '';
+        var day = date.getDate();
+        var month = date.getMonth() + 1;
+        var year = date.getFullYear();
+        return year + '-' + month + '-' + day;
+      }
     },
-});
-$('#rangestart').calendar({
-  type: 'date',
-  endCalendar: $('#rangeend'),
-  formatter: {
-    date: function (date, settings) {
-      if (!date) return '';
-      var day = date.getDate();
-      var month = date.getMonth() + 1;
-      var year = date.getFullYear();
-      return year + '-' + month + '-' + day;
+    text: {
+      days: [
+        'D',
+        'L',
+        'M',
+        'M',
+        'J',
+        'V',
+        'S'
+      ],
+      months: [
+        'Enero',
+        'Febrero',
+        'Marzo',
+        'April',
+        'Mayo',
+        'Junio',
+        'Julio',
+        'Agosto',
+        'Septiembre',
+        'Octubre',
+        'Novimbre',
+        'Deciembre'
+      ],
+      monthsShort: [
+        'Ene',
+        'Feb',
+        'Mar',
+        'Abr',
+        'May',
+        'Jun',
+        'Jul',
+        'Ago',
+        'Sep',
+        'Oct',
+        'Nov',
+        'Dic'
+      ],
+      today: 'Hoy'
     }
-  },
-  text: {
-      days: ['D', 'L', 'M', 'M', 'J', 'V', 'S'],
-      months: ['Enero', 'Febrero', 'Marzo', 'April', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Novimbre', 'Deciembre'],
-      monthsShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
-      today: 'Hoy',
-
+  });
+  $('#rangestart').calendar({
+    type: 'date',
+    endCalendar: $('#rangeend'),
+    formatter: {
+      date: function(date, settings) {
+        if (!date)
+          return '';
+        var day = date.getDate();
+        var month = date.getMonth() + 1;
+        var year = date.getFullYear();
+        return year + '-' + month + '-' + day;
+      }
     },
-
-});
-document.getElementById('btn_reportVentas').addEventListener('click', reportVenta)
+    text: {
+      days: [
+        'D',
+        'L',
+        'M',
+        'M',
+        'J',
+        'V',
+        'S'
+      ],
+      months: [
+        'Enero',
+        'Febrero',
+        'Marzo',
+        'April',
+        'Mayo',
+        'Junio',
+        'Julio',
+        'Agosto',
+        'Septiembre',
+        'Octubre',
+        'Novimbre',
+        'Deciembre'
+      ],
+      monthsShort: [
+        'Ene',
+        'Feb',
+        'Mar',
+        'Abr',
+        'May',
+        'Jun',
+        'Jul',
+        'Ago',
+        'Sep',
+        'Oct',
+        'Nov',
+        'Dic'
+      ],
+      today: 'Hoy'
+    }
+  });
+  document.getElementById('btn_reportVentas').addEventListener('click', reportVenta)
+  document.getElementById('exportExcel').addEventListener('click', exportVenta)
 })
+
+function exportVenta() {
+  let start = document.getElementById('fechaStart').value
+  console.log(typeof(start))
+  let end = document.getElementById('fechaEnd').value
+  window.location.href = `/reportes/ventas/excel/${start}/${end}`
+}
 
 function reportVenta() {
   let start = document.getElementById('fechaStart').value
-  let end =   document.getElementById('fechaEnd').value
+  let end = document.getElementById('fechaEnd').value
   let body = document.getElementById('report_body')
   let totivadiv = document.getElementById('totiva')
-  let totaldiv= document.getElementById('total')
+  let totaldiv = document.getElementById('total')
   let csrftoken = Cookies.get('csrftoken');
   let myHeaders = new Headers({"X-CSRFToken": csrftoken});
-  let fechas = {start,end}
+  let fechas = {
+    start,
+    end
+  }
 
   var myInit = {
     method: 'POST',
@@ -60,10 +138,9 @@ function reportVenta() {
     credentials: 'include'
   }
 
-  fetch('filtro/',myInit)
-    .then((response)=>{
-      if(!response.length){
-        body.innerHTML =`<tr>
+  fetch('filtro/', myInit).then((response) => {
+    if (!response.length) {
+      body.innerHTML = `<tr>
                           <td colspan="5">
                             <div class="sin_ventas">
                               <div class="ui active dimmer">
@@ -72,42 +149,40 @@ function reportVenta() {
                             </div>
                           </td>
                         </tr>`
-      }
-      return response.json()
-    })
-    .then((data)=>{
-      if(!data.data.length){
-        body.innerHTML =`<tr>
+    }
+    return response.json()
+  }).then((data) => {
+    if (!data.data.length) {
+      body.innerHTML = `<tr>
                           <td colspan="5">
                             <div class="sin_ventas">¡No tienes ventas en este periodo!</div>
                           </td>
                         </tr>`
-        let total = 0
-        let totalIva = 0
+      let total = 0
+      let totalIva = 0
 
-        let result = data.data
-        $('#pagging').pagination({
-          dataSource: data.data,
-          classPrefix: 'item',
-          pageSize: 7,
-          disableClassName: 'disabled',
-          callback: function(result){
+      let result = data.data
+      $('#pagging').pagination({
+        dataSource: data.data,
+        classPrefix: 'item',
+        pageSize: 7,
+        disableClassName: 'disabled',
+        callback: function(result) {
 
-              let html = simpleTemplating(result)
-              console.log(html)
-              body.innerHTML = html
-          }
-        })
-        data.data.map((item)=>{
-          total += item.total
-          totalIva += item.totaliva
+          let html = simpleTemplating(result)
+          console.log(html)
+          body.innerHTML = html
+        }
+      })
+      data.data.map((item) => {
+        total += item.total
+        totalIva += item.totaliva
 
-        })
-        totivadiv.innerHTML = moneda(totalIva)
-        totaldiv.innerHTML = moneda(total)
+      })
+      totivadiv.innerHTML = moneda(totalIva)
+      totaldiv.innerHTML = moneda(total)
 
-      }else{
-
+    } else {
 
       let html = ''
       let total = 0
@@ -119,14 +194,14 @@ function reportVenta() {
         classPrefix: 'item',
         pageSize: 7,
         disableClassName: 'disabled',
-        callback: function(result){
+        callback: function(result) {
 
-            let html = simpleTemplating(result)
-            console.log(html)
-            body.innerHTML = html
+          let html = simpleTemplating(result)
+          console.log(html)
+          body.innerHTML = html
         }
       })
-      data.data.map((item)=>{
+      data.data.map((item) => {
         total += item.total
         totalIva += item.totaliva
 
@@ -134,14 +209,13 @@ function reportVenta() {
       totivadiv.innerHTML = moneda(totalIva)
       totaldiv.innerHTML = moneda(total)
     }
-    })
+  })
 
 }
 
-
-function simpleTemplating (data) {
+function simpleTemplating(data) {
   let html = ''
-  $.each(data, function (index, item) {
+  $.each(data, function(index, item) {
     html += `<tr>
               <td class="center aligned">${item.codigo}</td>
               <td>${item.identificacion} -- ${item.nombre}</td>
