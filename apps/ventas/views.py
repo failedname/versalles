@@ -332,7 +332,7 @@ class nuevaRemision(TemplateView):
     template_name = 'ventas/nuevaremision.html'
 
 
-def remisionCliente(request, vivero_id):
+def remisionCliente(request):
     if(len(request.POST['data']) > 0):
         data = Cliente.objects.all().filter(
             nombre__icontains=request.POST['data'])[:9]
@@ -346,12 +346,12 @@ def remisionCliente(request, vivero_id):
         return JsonResponse({'error': 'no hay registros'}, safe=True)
 
 
-def remisionProductos(request, vivero_id):
+def remisionProductos(request):
     if (len(request.POST['data']) > 0):
         prods = Producto.objects.select_related(
             'id_presentacion').filter(
                 nombre__icontains=request.POST['data'],
-                vivero_id=vivero_id)[:9]
+                vivero_id=request.session['vivero'])[:9]
         if (request.POST['precio'] == 'generales'):
 
             data = [{
@@ -394,13 +394,12 @@ def detalleRemision(request, remision_id):
     return render(request, template_name, )
 
 
-def saveRemision(request, vivero_id):
+def saveRemision(request):
     data = request.body.decode('utf-8')
     datos = json.loads(data)
     estado = EstadoFactura.objects.all().filter(estado='cerrada')
     c = Cliente.objects.all().filter(nit_cc=datos['cliente']['id'])
-    print(c[0])
-    f = Remision(vivero_id=vivero_id,
+    f = Remision(vivero_id=request.session['vivero'],
                  estado_id=estado[0].pk,
                  cliente_id=c[0].pk)
 
