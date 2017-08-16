@@ -334,7 +334,8 @@ function FacturaPdf(dat) {
       cell: 6
     }
   });
-  doc.output('dataurlnewwindow');
+  doc.autoPrint();
+  window.open(doc.output('bloburl'), '_blank');
 }
 
 function moneda(number) {
