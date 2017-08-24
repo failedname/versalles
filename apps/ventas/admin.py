@@ -4,11 +4,26 @@ from .models import (
     Cliente, Producto, Categoria,
     Presentacion, Vivero, EstadoFactura,
     Detalle_FacturaReal,
-    Numeracion, FacturaReal, Remision, detalleRemison, detalleUser)
+    Numeracion, FacturaReal, Remision, detalleRemison, detalleUser,
+    estadoPedido, Pedido, abonoPedido)
 
 
 class ExampleAdmin(admin.ModelAdmin):
     change_list_template = 'smuggler/change_list.html'
+
+@admin.register(estadoPedido)
+class estadoPedidoAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(Pedido)
+class PedidoAdmin(admin.ModelAdmin):
+    pass  
+
+
+@admin.register(abonoPedido)
+class abonoPedidoAdmin(admin.ModelAdmin):
+    pass      
 
 
 @admin.register(detalleUser)

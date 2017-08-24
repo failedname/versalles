@@ -1,0 +1,55 @@
+{% extends "base.html" %} {% block title %}Pedidos{% endblock title %} {% block content %}
+<div class="ui grid container">
+  <div class="wide column">
+    <div class="ui message ">
+      <div class="content header_facturas">
+        <div class="header ">
+          <i class="disk outline big icon"></i> Pedidos
+        </div>
+        <a href="{% url 'ventas:nuevopedido'%}" class="ui button btn">
+          <i class="plus large icon"></i>
+          Nuevo Pedido
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="ui grid container">
+  <div class="ui wide four column">
+
+  </div>
+</div>
+<section class="ui grid container">
+  <div class="wide sixteen column">
+    <table class="ui celled structured small table">
+      <thead>
+        <tr>
+          <th>Creación</th>
+          <th>Cliente</th>
+          <th>Nombre</th>
+          <th>Total</th>
+          <th>Saldo</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody id="TableFact">
+
+      </tbody>
+      <tfoot>
+        <tr>
+          <th colspan="7">
+            <div class="ui right floated" id="pagging">
+
+            </div>
+          </th>
+        </tr>
+      </tfoot>
+
+    </table>
+
+
+  </div>
+
+</section>
+{% endblock content %}

@@ -1,0 +1,170 @@
+{% extends "base.html" %}
+{% load static from staticfiles %} 
+{% block title %}Nuevo Pedido{% endblock title %} 
+{% block content %} 
+{% csrf_token %}
+<div class="ui grid container">
+  <div class="wide column">
+    <div class="ui message ">
+      <div class="content header_facturas">
+        <div class="header ">
+          <i class="add to cart big icon"></i> Nuevo Pedido
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="ui grid container">
+  <div class="wide column">
+    <form class="ui form" autocomplete="off">
+      <div class="ui segment" style="padding: 2em !important">
+
+
+        <div class="fields">
+          <div class="six wide required field">
+
+            <div class="ui search">
+              <div class="ui icon input">
+                <input id="cliente_search" class="prompt" type="text" placeholder="Buscar...">
+                <i class="search icon"></i>
+              </div>
+              <div id="clienteResult" class="results"></div>
+            </div>
+          </div>
+        </div>
+        <div class="fields">
+          <div class="eight wide  required field">
+            <label for="">Indentificación</label>
+            <input id="iden" type="text" name="ident" value="" readonly required>
+          </div>
+          <div class="eight wide required field">
+            <label for="">Nombre</label>
+            <input id="nombre" type="text" name="name" value="" readonly required>
+          </div>
+        </div>
+      </div>
+      <div class="ui segment" style="padding: 2em !important">
+
+
+        <div class="fields">
+          <div class="six wide required field">
+            <label for="">Precios</label>
+            <select class="ui fluid dropdown" id="selectprecios">
+              <option value=""></option>
+              <option value="generales">precios generales</option>
+              <option value="compra">precios de compra</option>
+              <option value="mayor">precios al x mayor</option>
+            </select>
+          </div>
+        </div>
+        <div class="fields">
+          <div class="six wide field">
+            <div id="producto_search" class="ui fluid search">
+              <div class="ui icon input">
+                <input id="pro_search" class="prompt" type="text" placeholder="Buscar...">
+                <i class="search icon"></i>
+              </div>
+              <div id="result" class="results"></div>
+            </div>
+          </div>
+        </div>
+        <div class="fields">
+          <div class="two wide required field">
+            <label for="">Codigo</label>
+            <input id="id_codigo" type="text" name="name" value="" readonly>
+          </div>
+          <div class="six wide  required field">
+            <label for="">Producto</label>
+            <input id="id_producto" type="text" name="name" value="" readonly>
+          </div>
+          <div class="two wide required field">
+            <label for="">IVA</label>
+            <input id="id_iva" type="text" name="name" value="" readonly>
+          </div>
+          <div class="three wide required  field">
+            <label for="">Precio</label>
+            <input id="id_precio" type="text" name="name" value="">
+          </div>
+          <div class="three wide required field">
+            <label for="">Cantidad</label>
+            <input id="id_cantidad" type="number" name="name" value="">
+          </div>
+        </div>
+        <div class="fields aligning right">
+          <div class="two field ">
+            <button id="btnAgregar" class="ui  button btn">
+                Agregar
+            </button>
+          </div>
+        </div>
+
+      </div>
+      <div class="ui segment" style="padding: 2em !important">
+
+        <div class="wide field">
+          <table class="ui celled structured small table">
+            <thead>
+              <tr>
+                <th>CODIGO</th>
+                <th>PRODUCTO</th>
+                <th>VALOR</th>
+                <th>IVA</th>
+                <th>CANTIDAD</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="bodyTable">
+
+            </tbody>
+            <tfoot>
+              <tr>
+                <th colspan="6">
+                  <div class="total_factura">
+                    <div>
+                      <div class="label">SubTotal</div>
+                      <div class="label">IVA</div>
+                      <div class="label">Total</div>
+                    </div>
+                    <div>
+                      <div id="id_sub" class="label"></div>
+                      <div id="id_iv" class="label"></div>
+                      <div id="id_tot" class="label"></div>
+                    </div>
+                  </div>
+                </th>
+              </tr>
+            </tfoot>
+
+
+          </table>
+        </div>
+      </div>
+      <div class="ui segment">
+        <div class="six wide required field">
+          <label for="">Abono Inicial 40%</label>
+          <input id="id_abono" type="number" name="name" value="">
+        </div>
+      </div>
+      <div class="ui message ">
+        <div class="content header_facturas">
+          <div class="header ">
+            <button id="guardarpedido" class="ui   button btn">
+              Facturar
+            </button>
+          </div>
+        </div>
+      </div>
+
+
+
+    </form>
+  </div>
+</div>
+{% endblock content %} 
+{% block js %}
+<script type="text/javascript" src="{% static 'js/moneda.js'%}"></script>
+<script type="text/javascript" src="{% static 'js/ventas/pedidos.js'%}"></script>
+<script src="{% static 'js/jspdf.min.js'%}"></script>
+<script src="{% static 'js/autotable.js'%}"></script>
+{% endblock js %}

@@ -6,11 +6,19 @@ from .views import (
     selViveroPro, getProductos, ViveroRem, remionesAll,
     nuevaRemision, remisionCliente, remisionProductos,
     saveRemision, copiaFactura, ventasPOS, productosPos,
-    viveroPos, savePos, clientePos, clienteFactura, detalleRemision)
+    viveroPos, savePos, clientePos, clienteFactura, detalleRemision, allPedidos, 
+    nuevoPedido, clientePedido,productoPedido,guardarPedido)
 
 urlpatterns = [
     url(r'^seleccionar/$', vivero_factura, name='viverofactura'),
     url(r'^viveroproductos/$', selViveroPro, name='viveroproductos'),
+    url(r'^pedidos/$', allPedidos, name='pedidos'),
+    url(r'^pedidos/nuevo/$', nuevoPedido, name='nuevopedido'),
+    url(r'^pedidos/nuevo/cliente/$', clientePedido, name='cliente'),
+    url(r'^pedidos/nuevo/producto/$', productoPedido, name='producto'),
+    url(r'^pedidos/nuevo/guardar/$', guardarPedido, name='guardar'),
+
+
     url(r'^remisiones/$',
         remionesAll, name='remisiones'),
     url(r'^remisiones/nueva/$',

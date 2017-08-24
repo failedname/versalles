@@ -4,8 +4,123 @@ from django.views.generic import TemplateView
 from django.contrib.auth.decorators import login_required
 from .models import (Cliente, Producto, Vivero,
                      FacturaReal, Detalle_FacturaReal,
-                     Numeracion, EstadoFactura, Remision, detalleRemison)
+                     Numeracion, EstadoFactura, Remision, detalleRemison,
+                     Pedido, detallePedido, abonoPedido, estadoPedido)
 import json
+
+
+def allPedidos(request):
+    template_name = "ventas/allpedidos.html"
+    return render(request, template_name)
+
+
+def nuevoPedido(request):
+    template_name = "ventas/nuevopedido.html"
+    return render(request, template_name)
+
+
+def clientePedido(request):
+    data = request.body.decode('utf-8')
+    print('hola')
+    cliente = Cliente.objects.all().filter(nombre__icontains=data)[:5]
+    items = [{
+        'id': res.pk,
+        'nombre': res.nombre,
+        'iden': res.nit_cc
+
+    }for res in cliente]
+    return JsonResponse({'data': items}, safe=True)
+
+def productoPedido(request):
+    if (len(request.POST['valinput']) > 0):
+        prods = Producto.objects.select_related(
+            'id_presentacion').filter(
+                nombre__icontains=request.POST['valinput'],
+                vivero_id=request.session['vivero'])[:9]
+        if (request.POST['precio'] == 'generales'):
+
+            data = [{
+                'id': res.pk,
+                'nombre': res.nombre,
+                'iva': res.iva_porce,
+                'precio': res.precio_venta,
+                'presentacion': res.id_presentacion.tipo
+
+            }for res in prods]
+            return JsonResponse({'data': data}, safe=False)
+        elif (request.POST['precio'] == 'compra'):
+            data = [{
+                'id': res.pk,
+                'nombre': res.nombre,
+                'iva': res.iva_porce,
+                'precio': res.valor_real_compra,
+                'presentacion': res.id_presentacion.tipo
+
+            }for res in prods]
+            return JsonResponse({'data': data}, safe=False)
+        elif (request.POST['precio'] == 'mayor'):
+            data = [{
+                'id': res.pk,
+                'nombre': res.nombre,
+                'iva': res.iva_porce,
+                'precio': res.precioxmayor,
+                'presentacion': res.id_presentacion.tipo
+
+            }for res in prods]
+            return JsonResponse({'data': data}, safe=False)
+    else:
+        return JsonResponse({'sin': 'hola'}, safe=False)
+
+
+
+def guardarPedido(request):
+    data = request.body.decode('utf-8')
+    datos = json.loads(data)
+    estado = estadoPedido.objects.all().filter(codigo=1)
+    c = Cliente.objects.all().filter(nit_cc=datos['cliente']['id'])
+    f = Pedido(vivero_id=request.session['vivero'],
+                 estado_id=estado[0].pk,
+                 cliente_id=c[0].pk)
+
+    f.save()
+    id_fac = f.pk
+    for res in datos['res']:
+        detallePedido.objects.create(pedido_id=id_fac,
+                                      cantidad=res['cantidad'],
+                                      producto_id=res['codigo'],
+                                      val_unitario=res['valorU'],
+                                      iva=res['iva'],
+                                      val_neto=res['valorN'])
+    abonoPedido.objects.create(pedido_id = id_fac,valorabono= datos['abono']['valor'] )
+
+    informe = detallePedido.objects.select_related(
+        'pedido', 'producto',
+        'pedido__cliente',
+        'pedido__vivero').filter(
+        pedido_id=id_fac)
+    abonos = abonoPedido.objects.all().filter(pedido_id= id_fac)
+    detalleAbonos = [{
+        'valor': res.valorabono
+    }for res in abonos]
+    data = [{
+            'pedido': res.pedido.pk,
+            'cliente': res.pedido.cliente.nombre,
+            'direccion': res.pedido.cliente.direccion,
+            'nit': res.pedido.cliente.nit_cc,
+            'telefono': res.pedido.cliente.telefono,
+            'codigo': res.producto_id,
+            'nombre': res.producto.nombre,
+            'cantidad': res.cantidad,
+            'iva': res.iva,
+            'valor': res.val_unitario,
+            'valneto': res.val_neto,
+            'fecha': res.pedido.fecha,
+            'vivero': res.pedido.vivero.nombre,
+            'nit_vivero': res.pedido.vivero.identificacion
+
+
+            }for res in informe]
+    return JsonResponse({'data': data,'abn': detalleAbonos}, safe=True)
 
 
 def pdfFactura(request):
