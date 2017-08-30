@@ -1,4 +1,6 @@
 {% extends "base.html" %} {% block title %}Pedidos{% endblock title %} {% block content %}
+{% load static from staticfiles%}
+{% block css %}<link rel="stylesheet" href="{% static 'css/pagination.css'%}" >{% endblock css  %}
 <div class="ui grid container">
   <div class="wide column">
     <div class="ui message ">
@@ -24,10 +26,12 @@
     <table class="ui celled structured small table">
       <thead>
         <tr>
+          <th>Pedido</th>
           <th>Creación</th>
           <th>Cliente</th>
           <th>Nombre</th>
           <th>Total</th>
+          <th>Abonos</th>
           <th>Saldo</th>
           <th>Estado</th>
           <th>Acciones</th>
@@ -38,7 +42,7 @@
       </tbody>
       <tfoot>
         <tr>
-          <th colspan="7">
+          <th colspan="9">
             <div class="ui right floated" id="pagging">
 
             </div>
@@ -53,3 +57,10 @@
 
 </section>
 {% endblock content %}
+{% block js %}
+  <script>
+    let data = JSON.parse('{{data|safe}}')
+  </script>
+  <script type="text/javascript" src="{% static 'js/pagination.js' %}" ></script>
+  <script type="text/javascript" src="{% static 'js/ventas/allpedidos.js' %}"></script>
+{% endblock js%}

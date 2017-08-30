@@ -110,7 +110,7 @@ class Pedido(models.Model):
     fecha = models.DateField(auto_now_add=True)
     cliente = models.ForeignKey(Cliente)
     vivero = models.ForeignKey(Vivero)
-    estado = models.ForeignKey(estadoPedido,null=True) 
+    estadopedido = models.ForeignKey(estadoPedido,null=True) 
 
 
 class detallePedido(models.Model):

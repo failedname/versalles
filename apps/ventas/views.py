@@ -10,8 +10,19 @@ import json
 
 
 def allPedidos(request):
+    pedidos= Pedido.objects.raw('SELECT sum("public".ventas_abonopedido.valorabono) AS abono, sum("public".ventas_detallepedido.val_neto) AS total, "public"."ventas_estadopedido".estado, "public"."ventas_pedido".fecha, "public"."ventas_cliente"."nit_cc", "public"."ventas_cliente".nombre, "public"."ventas_pedido"."id" FROM "public"."ventas_pedido" JOIN "public"."ventas_estadopedido" ON "public"."ventas_pedido"."estadopedido_id" = "public"."ventas_estadopedido".codigo  JOIN "public"."ventas_detallepedido" ON "public"."ventas_pedido"."id" = "public"."ventas_detallepedido"."pedido_id"  JOIN "public"."ventas_cliente" ON "public"."ventas_pedido"."cliente_id" = "public"."ventas_cliente"."id"  JOIN "public"."ventas_abonopedido" ON "public"."ventas_pedido"."id" = "public"."ventas_abonopedido"."pedido_id" GROUP BY "public"."ventas_estadopedido".estado,"public"."ventas_pedido".fecha, "public"."ventas_cliente"."nit_cc","public"."ventas_cliente".nombre,"public"."ventas_pedido"."id"')
+    data = [{
+        'pedido': res.id,
+        'fecha':  str(res.fecha),
+        'identificacion':res.nit_cc,
+        'nombre': res.nombre,
+        'total': res.total,
+        'abonos': res.abono,
+        'estado':res.estado
+    }for res in pedidos]
+    print(data)
     template_name = "ventas/allpedidos.html"
-    return render(request, template_name)
+    return render(request, template_name,{'data': json.dumps(data)})
 
 
 def nuevoPedido(request):
@@ -79,7 +90,7 @@ def guardarPedido(request):
     estado = estadoPedido.objects.all().filter(codigo=1)
     c = Cliente.objects.all().filter(nit_cc=datos['cliente']['id'])
     f = Pedido(vivero_id=request.session['vivero'],
-                 estado_id=estado[0].pk,
+                 estadopedido_id=estado[0].pk,
                  cliente_id=c[0].pk)
 
     f.save()
