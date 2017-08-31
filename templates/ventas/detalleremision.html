@@ -1,11 +1,54 @@
-{% extends "base.html" %} {% block title %}Detalle{% endblock title %} {% block content %}
-<div class="ui grid container">
-  <div class="ui wide sixteen column">
-    <div class="ui segments">
-      <div class="ui segment">
+{% extends "base.html" %}
+{% block title %}.:Detalle Remision:.{% endblock title %}
+{% load static from staticfiles %}
+{% block content %}
+{% csrf_token %}
+  <div class="ui grid container">
+    <div class="ui wide sixteen column">
+      <div class="ui segments">
+        <div id="action" class="ui segment">
+        </div>
+        <div id="datos" class="ui segment">
+
+        </div>
+        <div  class="ui segment">
+          <table class="ui celled table">
+            <thead>
+              <tr>
+                <th>CODIGO</th>
+                <th>PRODUCTO</th>
+                <th>VALOR</th>
+                <th>IVA</th>
+                <th>CANTIDAD</th>
+                <th>TOTAL</th>
+
+              </tr>
+            </thead>
+            <tbody id="dattable">
+
+            </tbody>
+          </table>
+
+        </div>
       </div>
 
     </div>
+
   </div>
-</div>
+  {{data.factura}}
+
 {% endblock content %}
+{% block js %}
+  <script type="text/javascript">
+    var detalle = JSON.parse('{{data|safe}}')
+    console.log(detalle)
+  </script>
+
+  <script type="text/javascript" src="{% static 'js/moneda.js' %}" ></script>
+  <script type="text/javascript" src="{% static 'js/ventas/detalleremision.js' %}" ></script>
+  <script src="{% static 'js/jspdf.min.js'%}"></script>
+  <script src="{% static 'js/autotable.js'%}"></script>
+
+
+
+{% endblock js %}

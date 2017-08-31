@@ -21,7 +21,7 @@ def allPedidos(request):
         'abonos': res.abono,
         'estado':res.estado
     }for res in pedidos]
-    
+
     template_name = "ventas/allpedidos.html"
     return render(request, template_name,{'data': json.dumps(data)})
 
@@ -515,10 +515,66 @@ def remisionProductos(request):
 
 
 def detalleRemision(request, remision_id):
+    
     template_name = "ventas/detalleremision.html"
-    rem = detalleRemison.objects.select_related('remision').filter(
-        pk=remision_id, remision__vivero=request.session['vivero'])
-    return render(request, template_name, )
+    rem = detalleRemison.objects.select_related('remision',
+        'producto',
+        'remision__cliente',
+        'remision__vivero',
+        'remision__estado'
+    ).filter(
+        remision__pk=remision_id, remision__vivero=request.session['vivero'])
+
+    
+    data = [{
+        'remision': res.remision.pk,
+        'estado': res.remision.estado.estado,
+        'cliente': res.remision.cliente.nombre,
+        'direccion': res.remision.cliente.direccion,
+        'nit': res.remision.cliente.nit_cc,
+        'telefono': res.remision.cliente.telefono,
+        'codigo': res.producto_id,
+        'nombre': res.producto.nombre,
+        'cantidad': res.cantidad,
+        'iva': res.iva,
+        'valor': res.val_unitario,
+        'valneto': res.val_neto,
+        'fecha': str(res.remision.fecha),
+        'vivero': res.remision.vivero.nombre,
+        'nit_vivero': res.remision.vivero.identificacion
+
+
+    }for res in rem]  
+      
+    return render(request, template_name,{'data': json.dumps(data)} )
+
+def copiaRemision(request, remision_id):
+   
+    informe = detalleRemison.objects.select_related(
+        'remision', 'producto',
+        'remision__cliente',
+        'remision__vivero').filter(
+        remision_id=remision_id, remision__vivero=request.session['vivero'])
+
+    data = [{
+        'remision': res.remision.pk,
+        'cliente': res.remision.cliente.nombre,
+        'direccion': res.remision.cliente.direccion,
+        'nit': res.remision.cliente.nit_cc,
+        'telefono': res.remision.cliente.telefono,
+        'codigo': res.producto_id,
+        'nombre': res.producto.nombre,
+        'cantidad': res.cantidad,
+        'iva': res.iva,
+        'valor': res.val_unitario,
+        'valneto': res.val_neto,
+        'fecha': res.remision.fecha,
+        'vivero': res.remision.vivero.nombre,
+        'nit_vivero': res.remision.vivero.identificacion
+
+
+    }for res in informe]
+    return JsonResponse({'data': data}, safe=True)
 
 
 def saveRemision(request):

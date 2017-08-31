@@ -7,7 +7,7 @@ from .views import (
     nuevaRemision, remisionCliente, remisionProductos,
     saveRemision, copiaFactura, ventasPOS, productosPos,
     viveroPos, savePos, clientePos, clienteFactura, detalleRemision, allPedidos, 
-    nuevoPedido, clientePedido,productoPedido,guardarPedido)
+    nuevoPedido, clientePedido,productoPedido,guardarPedido,copiaRemision)
 
 urlpatterns = [
     url(r'^seleccionar/$', vivero_factura, name='viverofactura'),
@@ -25,6 +25,8 @@ urlpatterns = [
         nuevaRemision.as_view(), name='crearremision'),
     url(r'^remisiones/detalle/(?P<remision_id>\w+)/$',
         detalleRemision, name='detalleremision'),
+    url(r'^remisiones/detalle/(?P<remision_id>\w+)/copia/$',
+        copiaRemision, name='copiaremision'),    
     url(r'^remisiones/nueva/cliente/$',
         remisionCliente, name='remisioncliente'),
     url(r'^remisiones/nueva/producto/$',
