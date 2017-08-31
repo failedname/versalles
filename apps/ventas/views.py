@@ -21,7 +21,7 @@ def allPedidos(request):
         'abonos': res.abono,
         'estado':res.estado
     }for res in pedidos]
-    print(data)
+    
     template_name = "ventas/allpedidos.html"
     return render(request, template_name,{'data': json.dumps(data)})
 
