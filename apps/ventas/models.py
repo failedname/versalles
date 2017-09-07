@@ -113,13 +113,13 @@ class Pedido(models.Model):
     estadopedido = models.ForeignKey(estadoPedido,null=True) 
 
 
-class detallePedido(models.Model):
-    pedido = models.ForeignKey(Pedido)  
+class pedidoDetalle(models.Model):
+    pedido = models.ForeignKey(Pedido,null=True)  
     cantidad = models.IntegerField()
     producto = models.ForeignKey(Producto)
     val_unitario = models.IntegerField()
     iva = models.IntegerField()
-    val_neto = models.IntegerField()
+    val_neto = models.IntegerField(null=True)
 
 class abonoPedido(models.Model):
     pedido = models.ForeignKey(Pedido)

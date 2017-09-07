@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}.:Abono Pedido:.{% endblock title %}
+{% load static from staticfiles %}
+{% block content %}
+{% csrf_token %}
+  <div class="ui grid container">
+    <div class="wide column">
+        <form  class="ui form">
+            <div class="ui segment">
+                <div class="fields">
+                    <div class="six wide required field">
+                        <label for="">Valor Abono</label>
+                        <input id="valorabono" type="number"  value="" required>
+                    </div>
+                </div>
+                <div class="fields aligning right">
+                    <div class="two field ">
+                      <button id="btnAgregar" class="ui  button btn">
+                          Agregar
+                      </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+  </div>
+  {{data.factura}}
+
+{% endblock content %}
+{% block js %}
+  <script type="text/javascript" src="{% static 'js/moneda.js' %}" ></script>
+  <script type="text/javascript" src="{% static 'js/ventas/abonopedido.js' %}" ></script>
+  <script src="{% static 'js/jspdf.min.js'%}"></script>
+  <script src="{% static 'js/autotable.js'%}"></script>
+
+
+
+{% endblock js %}

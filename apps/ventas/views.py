@@ -6,25 +6,55 @@ from django.contrib.auth.decorators import login_required
 from .models import (Cliente, Producto, Vivero,
                      FacturaReal, Detalle_FacturaReal,
                      Numeracion, EstadoFactura, Remision, detalleRemison,
-                     Pedido, detallePedido, abonoPedido, estadoPedido)
+                     Pedido, pedidoDetalle, abonoPedido, estadoPedido)
 import json
 
 
 def allPedidos(request):
-    pedidos= Pedido.objects.raw('SELECT sum("public".ventas_abonopedido.valorabono) AS abono, sum("public".ventas_detallepedido.val_neto) AS total, "public"."ventas_estadopedido".estado, "public"."ventas_pedido".fecha, "public"."ventas_cliente"."nit_cc", "public"."ventas_cliente".nombre, "public"."ventas_pedido"."id" FROM "public"."ventas_pedido" JOIN "public"."ventas_estadopedido" ON "public"."ventas_pedido"."estadopedido_id" = "public"."ventas_estadopedido".codigo  JOIN "public"."ventas_detallepedido" ON "public"."ventas_pedido"."id" = "public"."ventas_detallepedido"."pedido_id"  JOIN "public"."ventas_cliente" ON "public"."ventas_pedido"."cliente_id" = "public"."ventas_cliente"."id"  JOIN "public"."ventas_abonopedido" ON "public"."ventas_pedido"."id" = "public"."ventas_abonopedido"."pedido_id" GROUP BY "public"."ventas_estadopedido".estado,"public"."ventas_pedido".fecha, "public"."ventas_cliente"."nit_cc","public"."ventas_cliente".nombre,"public"."ventas_pedido"."id"')
+    vivero = request.session['vivero']
+    pedidos = Pedido.objects.raw('SELECT "public"."ventas_pedido"."id", "public"."ventas_pedido".fecha, (SELECT sum(ventas_pedidodetalle.val_neto) FROM ventas_pedidodetalle WHERE ventas_pedidodetalle.pedido_id = ventas_pedido."id") AS total, (SELECT sum(ventas_abonopedido.valorabono) FROM ventas_abonopedido WHERE ventas_abonopedido.pedido_id = ventas_pedido."id" ) AS abonos, "public"."ventas_cliente"."nit_cc", "public"."ventas_cliente".nombre, "public"."ventas_pedido"."estadopedido_id","public"."ventas_estadopedido".estado FROM "public"."ventas_cliente" JOIN "public"."ventas_pedido" ON "public"."ventas_cliente"."id" = "public"."ventas_pedido"."cliente_id"  JOIN "public"."ventas_estadopedido" ON "public"."ventas_estadopedido".codigo = "public"."ventas_pedido"."estadopedido_id" WHERE ventas_pedido.vivero_id = %s', [vivero])
     data = [{
         'pedido': res.id,
         'fecha':  str(res.fecha),
         'identificacion':res.nit_cc,
         'nombre': res.nombre,
         'total': res.total,
-        'abonos': res.abono,
+        'abonos': res.abonos,
         'estado':res.estado
     }for res in pedidos]
 
     template_name = "ventas/allpedidos.html"
     return render(request, template_name,{'data': json.dumps(data)})
 
+def detallePedido(request,id):
+    template_name="ventas/detallepedidos.html"
+    return render(request, template_name)
+
+
+class abonosPedido(TemplateView):
+    template_name='ventas/abonopedido.html'
+    def post(self,request,*args,**kwargs):
+        valor = request.body.decode('utf-8')
+        abono = abonoPedido(pedido_id=kwargs.get('id'), valorabono= json.loads(valor) )
+        abono.save()
+        recibo = abonoPedido.objects.select_related(
+            'pedido','pedido__cliente'
+        ).filter(pk=abono.pk, pedido_id = kwargs.get('id') )
+        data = [{
+            'abono': res.pk,
+            'pedido': res.pedido.pk,
+            'cliente': res.pedido.cliente.nombre,
+            'direccion': res.pedido.cliente.direccion,
+            'nit': res.pedido.cliente.nit_cc,
+            'telefono': res.pedido.cliente.telefono,
+            'fecha': res.fecha,
+            'vivero': res.pedido.vivero.nombre,
+            'nit_vivero': res.pedido.vivero.identificacion,
+            'valorabono': res.valorabono
+
+
+            }for res in recibo]
+        return JsonResponse({'data':data},safe=True)
 
 def nuevoPedido(request):
     template_name = "ventas/nuevopedido.html"
@@ -33,7 +63,6 @@ def nuevoPedido(request):
 
 def clientePedido(request):
     data = request.body.decode('utf-8')
-    print('hola')
     cliente = Cliente.objects.all().filter(nombre__icontains=data)[:5]
     items = [{
         'id': res.pk,
@@ -85,7 +114,7 @@ def productoPedido(request):
 
 
 
-def guardarPedido(request):
+def guardarPedi(request):
     data = request.body.decode('utf-8')
     datos = json.loads(data)
     estado = estadoPedido.objects.all().filter(codigo=1)
@@ -96,16 +125,16 @@ def guardarPedido(request):
 
     f.save()
     id_fac = f.pk
-    for res in datos['res']:
-        detallePedido.objects.create(pedido_id=id_fac,
-                                      cantidad=res['cantidad'],
-                                      producto_id=res['codigo'],
-                                      val_unitario=res['valorU'],
-                                      iva=res['iva'],
-                                      val_neto=res['valorN'])
     abonoPedido.objects.create(pedido_id = id_fac,valorabono= datos['abono']['valor'] )
-
-    informe = detallePedido.objects.select_related(
+    for res in datos['res']:
+        detalle = pedidoDetalle(pedido_id=id_fac,
+                        cantidad=res['cantidad'],
+                        producto_id=res['codigo'],
+                        val_unitario=res['valorU'],
+                        iva=res['iva'],
+                        val_neto=res['valorN'])
+        detalle.save()                            
+    informe = pedidoDetalle.objects.select_related(
         'pedido', 'producto',
         'pedido__cliente',
         'pedido__vivero').filter(

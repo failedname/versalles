@@ -1,7 +1,10 @@
 document.addEventListener('DOMContentLoaded', cargar(data))
 
-function moneda (number) {
-  let dato = new Intl.NumberFormat('es-CO', {style: 'currency', currency: 'USD'}).format(number)
+function moneda(number) {
+  let dato = new Intl.NumberFormat('es-CO', {
+    style: 'currency',
+    currency: 'USD'
+  }).format(number)
   return dato
 }
 // function searchFac (fac) {
@@ -46,14 +49,14 @@ function moneda (number) {
 
 // }
 
-function cargar (data) {
+function cargar(data) {
   $.ajaxSetup({
-      beforeSend: function(xhr, settings) {
-        if(settings.type == "POST"){
-          xhr.setRequestHeader("X-CSRFToken", $('[name="csrfmiddlewaretoken"]').val())
-        }
+    beforeSend: function (xhr, settings) {
+      if (settings.type == "POST") {
+        xhr.setRequestHeader("X-CSRFToken", $('[name="csrfmiddlewaretoken"]').val())
       }
-    })
+    }
+  })
 
   $('#pagging').pagination({
     dataSource: data,
@@ -77,10 +80,10 @@ function cargar (data) {
     }
   })
 
-  function simpleTemplating (data) {
+  function simpleTemplating(data) {
     var html = ''
     $.each(data, function (index, item) {
-      let estado  = item.estado === 'cerrada' ? `<td class="positive center aligned">${item.estado}</td>`: `<td class="negative">${item.estado}</td>`
+      let estado = item.estado === 'cerrada' ? `<td class="positive center aligned">${item.estado}</td>` : `<td class="negative">${item.estado}</td>`
       let saldo = moneda(item.total - item.abonos)
       let data = moneda(item.total)
       let abonos = moneda(item.abonos)
@@ -90,7 +93,13 @@ function cargar (data) {
                 <td class="right aligned">${abonos}</td>
                 <td class="right aligned">${saldo}</td>
                 <td>${item.estado}</td>
-                <td class="center aligned"><a href="/ventas/facturas/1/detallefac/${item.codigo}"  data-tooltip="Ver" ><i  class="large circular link teal unhide icon"></i></a>
+                <td class="center aligned">
+                  <a href="/ventas/pedidos/detalle/${item.pedido}" data-tooltip="Ver" >
+                  <i  class="large circular link teal unhide icon"></i>
+                  </a>
+                  <a href="/ventas/pedidos/${item.pedido}/abono/" data-tooltip="Agregar Pago" >
+                  <i  class="large circular link teal money icon"></i>
+                  </a>
 
                 </td>
               </tr>`
