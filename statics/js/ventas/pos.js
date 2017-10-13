@@ -3,9 +3,25 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('btnSave').addEventListener('click', saveVenta)
   document.getElementById('invoice__cancel').addEventListener('click', deleteFactura)
   document.getElementById('buscarCliente').addEventListener('input',buscarCliente)
+  document.getElementById('cancelModal').addEventListener('click',()=>{
+    $('.ui.modal.otro')
+    .modal('hide')
+  })
+  document.getElementById('saveModal').addEventListener('click',(e)=>{
+    
+    let index = parseInt(e.target.dataset.index)
+    
+    items.venta[index].precio = precioModal.value
+    items.venta[index].cantidad = parseInt(cantidadModal.value)
+    reRender(items.venta)
+    
+    $('.ui.modal.otro')
+    .modal('hide')
+  })
 
 ;
 })
+
 
 function buscarProducto() {
   let csrftoken = Cookies.get('csrftoken');
@@ -204,34 +220,25 @@ function rowPro(e){
   let modalHeader = document.getElementById('modalHeader')
   let precioModal = document.getElementById('precioModal')
   let cantidadModal = document.getElementById('cantidadModal')
+  let botonSave = document.getElementById('saveModal')
   let index = items.venta.findIndex((item)=>{
     return item.id === e.dataset.key
   })
   modalHeader.innerHTML = items.venta[index].name
   precioModal.value = items.venta[index].precio
   cantidadModal.value = items.venta[index].cantidad
-  document.getElementById('cancelModal').addEventListener('click',()=>{
-    $('.ui.modal.otro')
-    .modal('hide')
-  })
-  document.getElementById('saveModal').addEventListener('click',()=>{
-    items.venta[index].precio = precioModal.value
-    items.venta[index].cantidad = cantidadModal.value
-    console.log(items)
-    reRender(items.venta)
-    $('.ui.modal.otro')
-    .modal('hide')
-  })
+  botonSave.setAttribute('data-index',index)
 
   $('.ui.modal.otro')
   .modal('show')
 }
 
+
 function saveVenta(){
   let inputCliente = document.getElementById('buscarCliente')
   let csrftoken = Cookies.get('csrftoken');
   let myHeaders = new Headers({"X-CSRFToken": csrftoken});
-
+  console.log(items)
   var myInit = {
     method: 'POST',
     body: JSON.stringify(items),
