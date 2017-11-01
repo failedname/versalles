@@ -107,6 +107,7 @@ function copiaFactura() {
     var columns = [
       'CODIGO',
       'PRODUCTO',
+      'EMPAQUE',
       'VALOR U',
       'CANTIDAD',
       'IVA',
@@ -121,6 +122,7 @@ function copiaFactura() {
       rows.push([
         dat[i].codigo,
         dat[i].nombre,
+        dat[i].presentacion,
         dat[i].valor,
         dat[i].cantidad,
         dat[i].iva,

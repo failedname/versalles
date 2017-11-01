@@ -321,6 +321,7 @@ def save_facturaReal(request):
                                                val_neto=res['valorN'])
             informe = Detalle_FacturaReal.objects.select_related(
                 'factura', 'producto',
+                'producto__id_presentacion',
                 'factura__cliente',
                 'factura__vivero').filter(
                     factura_id=id_fac)
@@ -332,6 +333,7 @@ def save_facturaReal(request):
                 'telefono': res.factura.cliente.telefono,
                 'codigo': res.producto_id,
                 'nombre': res.producto.nombre,
+                'presentacion': res.producto.id_presentacion.tipo,
                 'cantidad': res.cantidad,
                 'iva': res.iva,
                 'valor': res.val_unitario,
@@ -362,7 +364,9 @@ def save_facturaReal(request):
                                                iva=res['iva'],
                                                val_neto=res['valorN'])
             informe = Detalle_FacturaReal.objects.select_related(
-                'factura', 'producto', 'factura__cliente').filter(
+                'factura', 'producto',
+                'producto__id_presentacion', 
+                'factura__cliente').filter(
                     factura_id=id_fac)
             data = [{
                 'factura': res.factura.codigo,
@@ -372,6 +376,7 @@ def save_facturaReal(request):
                 'telefono': res.factura.cliente.telefono,
                 'codigo': res.producto_id,
                 'nombre': res.producto.nombre,
+                'presentacion': res.producto.id_presentacion.tipo,
                 'cantidad': res.cantidad,
                 'iva': res.iva,
                 'valor': res.val_unitario,
@@ -394,6 +399,7 @@ def copiaFactura(request, fac, pro):
     }for res in num]
     informe = Detalle_FacturaReal.objects.select_related(
         'factura', 'producto',
+        'producto__id_presentacion',
         'factura__cliente',
         'factura__vivero').filter(
         factura_id=fac, factura__vivero_id=pro)
@@ -406,6 +412,7 @@ def copiaFactura(request, fac, pro):
         'telefono': res.factura.cliente.telefono,
         'codigo': res.producto_id,
         'nombre': res.producto.nombre,
+        'presentacion': res.producto.id_presentacion.tipo,
         'cantidad': res.cantidad,
         'iva': res.iva,
         'valor': res.val_unitario,
