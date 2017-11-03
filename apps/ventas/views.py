@@ -554,7 +554,7 @@ def detalleRemision(request, remision_id):
     
     template_name = "ventas/detalleremision.html"
     rem = detalleRemison.objects.select_related('remision',
-        'producto',
+        'producto','producto__id_presentacion',
         'remision__cliente',
         'remision__vivero',
         'remision__estado'
@@ -571,6 +571,7 @@ def detalleRemision(request, remision_id):
         'telefono': res.remision.cliente.telefono,
         'codigo': res.producto_id,
         'nombre': res.producto.nombre,
+        'presentacion': res.producto.id_presentacion.tipo,
         'cantidad': res.cantidad,
         'iva': res.iva,
         'valor': res.val_unitario,
@@ -588,6 +589,7 @@ def copiaRemision(request, remision_id):
    
     informe = detalleRemison.objects.select_related(
         'remision', 'producto',
+        'producto__id_presentacion',
         'remision__cliente',
         'remision__vivero').filter(
         remision_id=remision_id, remision__vivero=request.session['vivero'])
@@ -600,6 +602,7 @@ def copiaRemision(request, remision_id):
         'telefono': res.remision.cliente.telefono,
         'codigo': res.producto_id,
         'nombre': res.producto.nombre,
+        'presentacion': res.producto.id_presentacion.tipo,
         'cantidad': res.cantidad,
         'iva': res.iva,
         'valor': res.val_unitario,
@@ -633,24 +636,26 @@ def saveRemision(request):
                                       val_neto=res['valorN'])
     informe = detalleRemison.objects.select_related(
         'remision', 'producto',
+        'producto__id_presentacion',
         'remision__cliente',
         'remision__vivero').filter(
         remision_id=id_fac)
     data = [{
         'remision': res.remision.pk,
         'cliente': res.remision.cliente.nombre,
-            'direccion': res.remision.cliente.direccion,
-            'nit': res.remision.cliente.nit_cc,
-            'telefono': res.remision.cliente.telefono,
-            'codigo': res.producto_id,
-            'nombre': res.producto.nombre,
-            'cantidad': res.cantidad,
-            'iva': res.iva,
-            'valor': res.val_unitario,
-            'valneto': res.val_neto,
-            'fecha': res.remision.fecha,
-            'vivero': res.remision.vivero.nombre,
-            'nit_vivero': res.remision.vivero.identificacion
+        'direccion': res.remision.cliente.direccion,
+        'nit': res.remision.cliente.nit_cc,
+        'telefono': res.remision.cliente.telefono,
+        'codigo': res.producto_id,
+        'nombre': res.producto.nombre,
+        'presentacion': res.producto.id_presentacion.tipo,
+        'cantidad': res.cantidad,
+        'iva': res.iva,
+        'valor': res.val_unitario,
+        'valneto': res.val_neto,
+        'fecha': res.remision.fecha,
+        'vivero': res.remision.vivero.nombre,
+        'nit_vivero': res.remision.vivero.identificacion
 
 
             }for res in informe]

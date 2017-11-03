@@ -261,6 +261,7 @@ function FacturaPdf(dat) {
   const columns = [
     'CODIGO',
     'PRODUCTO',
+    'EMPAQUE',
     'VALOR U',
     'CANTIDAD',
     'IVA',
@@ -275,6 +276,7 @@ function FacturaPdf(dat) {
     rows.push([
       dat[i].codigo,
       dat[i].nombre,
+      dat[i].presentacion,
       dat[i].valor,
       dat[i].cantidad,
       dat[i].iva,
