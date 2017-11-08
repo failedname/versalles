@@ -27,8 +27,25 @@ def allPedidos(request):
     return render(request, template_name,{'data': json.dumps(data)})
 
 def detallePedido(request,id):
+    vivero = request.session['vivero']
     template_name="ventas/detallepedidos.html"
-    return render(request, template_name)
+    pedido = pedidoDetalle.objects.select_related(
+        'pedido','producto','pedido__cliente'
+    ).filter(pedido__vivero_id=vivero,pedido_id=id)
+    data =[{
+        'codproducto': res.producto.pk,
+        'nombre': res.producto.nombre,
+        'precio':res.val_unitario,
+        'iva': res.iva,
+        'cantidad': res.cantidad,
+        'pedido':res.pedido_id,
+        'cliente': res.pedido.cliente.nombre,
+        'nit': res.pedido.cliente.nit_cc,
+        'telefono': res.pedido.cliente.telefono,
+        'direccion': res.pedido.cliente.direccion
+    }for res in pedido]
+    
+    return render(request, template_name,{'data':json.dumps(data)})
 
 
 class abonosPedido(TemplateView):

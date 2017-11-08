@@ -5,11 +5,41 @@
 {% csrf_token %}
   <div class="ui grid container">
     <div class="ui wide sixteen column">
-      <div class="ui segments">
+      <div class="ui segments" id="detPedido">
         <div id="action" class="ui segment">
         </div>
         <div id="datos" class="ui segment">
-
+          <div class="ui middle aligned divided list">
+            <div class="item">
+              
+              <i class="calendar icon"></i>
+              <div class="content" >
+                Pedido #:
+                <span v-text="detalle[0].pedido"></span>
+              </div>
+            </div>
+            <div class="item">
+              <i class="user icon"></i>
+              <div class="content">
+                Cliente:
+                <span v-text="detalle[0].cliente"></span>
+              </div>
+            </div>
+            <div class="item">
+              <i class="map outline icon"></i>
+              <div class="content">
+                Dirección:
+                <span v-text="detalle[0].direccion"></span>
+              </div>
+            </div>
+            <div class="item">
+              <i class="fax icon"></i>
+              <div class="content">
+                Telefono:
+                <span v-text="detalle[0].telefono"></span>
+              </div>
+            </div>
+          </div>
         </div>
         <div  class="ui segment">
           <table class="ui celled table">
@@ -24,7 +54,19 @@
 
               </tr>
             </thead>
-            <tbody id="dattable">
+            <tbody>
+              
+              <tr v-for="datos in detalle">
+              {%verbatim%}  
+                <td v-text="datos.codproducto"></td>
+                <td v-text="datos.nombre"></td>
+                <td v-text="datos.precio"></td>
+                <td v-text="datos.iva"></td>
+                <td v-text="datos.cantidad"></td>
+                <td v-text="moneda(datos.cantidad * datos.precio)"></td>
+              {%endverbatim%}  
+              </tr>
+              
 
             </tbody>
           </table>
@@ -41,10 +83,12 @@
 {% block js %}
   <script type="text/javascript">
     var detalle = JSON.parse('{{data|safe}}')
-    console.log(detalle)
   </script>
 
   <script type="text/javascript" src="{% static 'js/moneda.js' %}" ></script>
+  <script type="text/javascript" src="{% static 'js/vue.min.js' %}" ></script>  
+  <script type="text/javascript" src="{% static 'js/ventas/detalle_pedido.js' %}" ></script>    
+  
   <script src="{% static 'js/jspdf.min.js'%}"></script>
   <script src="{% static 'js/autotable.js'%}"></script>
 
