@@ -32,6 +32,14 @@ def detallePedido(request,id):
     pedido = pedidoDetalle.objects.select_related(
         'pedido','producto','pedido__cliente'
     ).filter(pedido__vivero_id=vivero,pedido_id=id)
+    abonos = abonoPedido.objects.select_related(
+        'pedido','pedido__vivero'
+    ).filter(pedido__vivero_id= vivero,pedido_id= id)
+    dataAbonos = [{
+        'id': res.pk,
+        'fecha': str(res.fecha),
+        'valor': res.valorabono
+    }for res in abonos]
     data =[{
         'codproducto': res.producto.pk,
         'nombre': res.producto.nombre,
@@ -45,7 +53,7 @@ def detallePedido(request,id):
         'direccion': res.pedido.cliente.direccion
     }for res in pedido]
     
-    return render(request, template_name,{'data':json.dumps(data)})
+    return render(request, template_name,{'data':json.dumps(data),'abonos': json.dumps(dataAbonos)})
 
 
 class abonosPedido(TemplateView):
@@ -180,6 +188,27 @@ def guardarPedi(request):
             }for res in informe]
     return JsonResponse({'data': data,'abn': detalleAbonos}, safe=True)
 
+def copiaAbono(request,id):
+    vivero = request.session['vivero']
+    idRecibo = request.body.decode('utf-8')
+    recibo = abonoPedido.objects.select_related(
+            'pedido','pedido__cliente','pedido__vivero'
+        ).filter(pedido_id = id,pedido__vivero_id= vivero, pk = idRecibo )
+    data = [{
+            'abono': res.pk,
+            'pedido': res.pedido.pk,
+            'cliente': res.pedido.cliente.nombre,
+            'direccion': res.pedido.cliente.direccion,
+            'nit': res.pedido.cliente.nit_cc,
+            'telefono': res.pedido.cliente.telefono,
+            'fecha': res.fecha,
+            'vivero': res.pedido.vivero.nombre,
+            'nit_vivero': res.pedido.vivero.identificacion,
+            'valorabono': res.valorabono
+
+
+            }for res in recibo]
+    return JsonResponse({'data':data},safe=True)        
 
 def pdfFactura(request):
     pass

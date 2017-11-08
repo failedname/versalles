@@ -41,6 +41,28 @@
             </div>
           </div>
         </div>
+        <div class="ui segment">
+          <table class="ui celled table">
+            <thead>
+                <tr>
+                    <th>Fecha Abono</th>
+                    <th>Valor Abono</th>
+                    <th></th>  
+                </tr>
+            </thead>
+            <tbody>
+              <tr v-for="abono in abonos">
+                <td class="center aligned" v-text="abono.fecha"></td>
+                <td class="right aligned" v-text="moneda(abono.valor)"></td>
+                <td class="center aligned">
+                  <button @click="pdfAbono(abono.id)" class="circular large ui icon button">
+                    <i class="file pdf outline icon"></i>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+        </table>
+        </div>
         <div  class="ui segment">
           <table class="ui celled table">
             <thead>
@@ -83,6 +105,8 @@
 {% block js %}
   <script type="text/javascript">
     var detalle = JSON.parse('{{data|safe}}')
+    var abonos = JSON.parse('{{abonos|safe}}')
+    
   </script>
 
   <script type="text/javascript" src="{% static 'js/moneda.js' %}" ></script>
