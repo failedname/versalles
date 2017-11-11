@@ -210,6 +210,37 @@ def copiaAbono(request,id):
             }for res in recibo]
     return JsonResponse({'data':data},safe=True)        
 
+def copiaPedido(request,id):
+    vivero=request.session['vivero']
+    informe = pedidoDetalle.objects.select_related(
+        'pedido', 'producto',
+        'pedido__cliente',
+        'pedido__vivero').filter(
+        pedido_id=id,pedido__vivero_id=vivero)
+    abonos = abonoPedido.objects.all().filter(pedido_id= id)
+    detalleAbonos = [{
+        'valor': res.valorabono
+    }for res in abonos]
+    data = [{
+            'pedido': res.pedido.pk,
+            'cliente': res.pedido.cliente.nombre,
+            'direccion': res.pedido.cliente.direccion,
+            'nit': res.pedido.cliente.nit_cc,
+            'telefono': res.pedido.cliente.telefono,
+            'codigo': res.producto_id,
+            'nombre': res.producto.nombre,
+            'cantidad': res.cantidad,
+            'iva': res.iva,
+            'valor': res.val_unitario,
+            'valneto': res.val_neto,
+            'fecha': res.pedido.fecha,
+            'vivero': res.pedido.vivero.nombre,
+            'nit_vivero': res.pedido.vivero.identificacion
+
+
+            }for res in informe]
+    return JsonResponse({'data': data,'abn': detalleAbonos}, safe=True)
+
 def pdfFactura(request):
     pass
 
