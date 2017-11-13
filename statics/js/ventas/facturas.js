@@ -10,26 +10,21 @@ new Vue({
         {
           label: 'Creación'
         },
-        {
-          label:'Vencimiento'
-        },
+        
         {
           label:'Cliente',
+          field: 'identificacion',
           filterable: true
         },
         {
           label:'Nombre',
+          field:'nombre',
           filterable:true
         },
         {
           label:'total'
         },
-        {
-          label:'Pagado'
-        },
-        {
-          label:'Por Pagar'
-        },
+       
         {
           label:'Estado'
         },
