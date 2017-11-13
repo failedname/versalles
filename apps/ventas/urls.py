@@ -8,13 +8,14 @@ from .views import (
     saveRemision, copiaFactura, ventasPOS, productosPos,
     viveroPos, savePos, clientePos, clienteFactura, detalleRemision, allPedidos, 
     nuevoPedido, clientePedido,productoPedido,guardarPedi,copiaRemision,detallePedido,abonosPedido,
-    copiaAbono,copiaPedido
+    copiaAbono,copiaPedido,jsonPedidos
     )
 
 urlpatterns = [
     url(r'^seleccionar/$', vivero_factura, name='viverofactura'),
     url(r'^viveroproductos/$', selViveroPro, name='viveroproductos'),
     url(r'^pedidos/$', allPedidos, name='pedidos'),
+    url(r'^pedidos/json/$', jsonPedidos, name='json'),
     url(r'^pedidos/nuevo/$', nuevoPedido, name='nuevopedido'),
     url(r'^pedidos/nuevo/cliente/$', clientePedido, name='cliente'),
     url(r'^pedidos/nuevo/producto/$', productoPedido, name='producto'),
@@ -52,11 +53,11 @@ urlpatterns = [
         clienteFactura, name='searchCli'),
     url(r'^facturas/nueva/savefactura/$',
         save_facturaReal, name='saveInvoicereal'),
-    url(r'^facturas/(?P<pro>\w+)/detallefac/(?P<fac>\w+)/copia/$',
+    url(r'^facturas/detallefac/(?P<fac>\w+)/copia/$',
         copiaFactura, name='copiafactura'),
-    url(r'^facturas/(?P<pro>\w+)/detallefac/(?P<fac>\w+)/$',
+    url(r'^facturas/detallefac/(?P<fac>\w+)/$',
         SearchFac, name='detallefactura'),
-    url(r'^facturas/(?P<pro>\w+)/detallefac/(?P<fac>\w+)/generar/$',
+    url(r'^facturas/detallefac/(?P<fac>\w+)/generar/$',
         SearchFac, name='generarcopiafactura'),
     url(r'^pos/vivero/(?P<id>\w+)/pos/$', ventasPOS, name='pos'),
     url(r'^pos/vivero/(?P<id>\w+)/pos/save/$', savePos, name='savepos'),

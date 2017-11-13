@@ -1,6 +1,5 @@
 {% extends "base.html" %} {% block title %}Pedidos{% endblock title %} {% block content %}
 {% load static from staticfiles%}
-{% block css %}<link rel="stylesheet" href="{% static 'css/pagination.css'%}" >{% endblock css  %}
 <div class="ui grid container">
   <div class="wide column">
     <div class="ui message ">
@@ -21,12 +20,12 @@
 
   </div>
 </div>
-<section class="ui grid container">
+<section class="ui grid container" id="gridpedidos">
   <div class="wide sixteen column">
-    <table class="ui celled structured small table">
+    {% comment %} <table class="ui celled structured small table">
       <thead>
         <tr>
-          <th>Pedido</th>
+          <th class="right aligned">Pedido</th>
           <th>Creación</th>
           <th>Cliente</th>
           <th>Nombre</th>
@@ -37,21 +36,69 @@
           <th>Acciones</th>
         </tr>
       </thead>
-      <tbody id="TableFact">
-
+      <tbody>
+        <tr v-for="datos in pedidos">
+          <td class="right aligned" v-text="datos.pedido"></td>
+          <td class="right aligned" v-text="datos.fecha"></td>
+          <td class="right aligned" v-text="datos.identificacion"></td>
+          <td v-text="datos.nombre"></td>
+          <td class="right aligned" v-text="datos.total"></td>
+          <td class="right aligned" v-text="datos.abonos"></td>
+          <td class="right aligned" v-text="datos.total - datos.abonos"></td>
+          <td v-text="datos.estado"></td>
+          <td>
+              <a :href="'/ventas/pedidos/detalle/' + datos.pedido" data-tooltip="Ver" >
+                <i  class="large circular link teal unhide icon"></i>
+              </a>
+              <a :href="'/ventas/pedidos/' + datos.pedido + '/abono/'" data-tooltip="Agregar Pago" >
+                <i  class="large circular link teal money icon"></i>
+              </a>
+          </td>
+        </tr>
       </tbody>
       <tfoot>
         <tr>
+          
           <th colspan="9">
-            <div class="ui right floated" id="pagging">
-
-            </div>
+            
           </th>
+          
         </tr>
       </tfoot>
 
-    </table>
-
+    </table> {% endcomment %}
+    {% verbatim %}
+    <div>
+      <vue-good-table
+        title=""
+        :columns="columns"
+        :rows="rows"
+        :paginate="true"
+        :lineNumbers="true"
+        styleClass="table table-bordered condensed"
+        >
+        <template slot="table-row" scope="props">
+          <td class="right aligned"> {{props.row.pedido}}</td>
+          <td class="right aligned">{{props.row.fecha}}</td>
+          <td class="right aligned">{{props.row.identificacion}}</td>
+          <td class="left aligned">{{props.row.nombre}}</td>
+          <td class="right aligned">{{moneda(props.row.total)}}</td>
+          <td class="right aligned">{{moneda(props.row.abonos)}}</td>
+          <td class="right aligned">{{moneda(props.row.total - props.row.abonos)}}</td>
+          <td class="left aligned">{{props.row.estado}}</td>
+          <td>
+            <a :href="'/ventas/pedidos/detalle/' + props.row.pedido" data-tooltip="Ver" >
+              <i  class="large circular link teal unhide icon"></i>
+            </a>
+            <a :href="'/ventas/pedidos/' + props.row.pedido + '/abono/'" data-tooltip="Agregar Pago" >
+              <i  class="large circular link teal money icon"></i>
+            </a>
+            
+          </td>
+        </template>
+      </vue-good-table>
+    </div>
+    {% endverbatim %}
 
   </div>
 
@@ -60,7 +107,9 @@
 {% block js %}
   <script>
     let data = JSON.parse('{{data|safe}}')
+    console.log(data)
   </script>
-  <script type="text/javascript" src="{% static 'js/pagination.js' %}" ></script>
+  <!-- <script type="text/javascript" src="{% static 'js/pagination.js' %}" ></script> -->
+  
   <script type="text/javascript" src="{% static 'js/ventas/allpedidos.js' %}"></script>
 {% endblock js%}
