@@ -6,10 +6,10 @@ from .views import (
     selViveroPro, getProductos, ViveroRem, remionesAll,
     nuevaRemision, remisionCliente, remisionProductos,
     saveRemision, copiaFactura, ventasPOS, productosPos,
-    viveroPos, savePos, clientePos, clienteFactura, detalleRemision, allPedidos, 
-    nuevoPedido, clientePedido,productoPedido,guardarPedi,copiaRemision,detallePedido,abonosPedido,
-    copiaAbono,copiaPedido,jsonPedidos
-    )
+    viveroPos, savePos, clientePos, clienteFactura, detalleRemision, allPedidos,
+    nuevoPedido, clientePedido, productoPedido, guardarPedi, copiaRemision, detallePedido, abonosPedido,
+    copiaAbono, copiaPedido, jsonPedidos, pagoFactura
+)
 
 urlpatterns = [
     url(r'^seleccionar/$', vivero_factura, name='viverofactura'),
@@ -22,8 +22,10 @@ urlpatterns = [
     url(r'^pedidos/nuevo/guardar/$', guardarPedi, name='guardar'),
     url(r'^pedidos/detalle/(?P<id>\w+)/$', detallePedido, name='detallepedido'),
     url(r'^pedidos/detalle/(?P<id>\w+)/copia/$', copiaAbono, name='copiaabono'),
-    url(r'^pedidos/detalle/(?P<id>\w+)/copia_pedido/$', copiaPedido, name='copiapedido'),
-    url(r'^pedidos/(?P<id>\w+)/abono/$', abonosPedido.as_view(), name='abonopedido'),
+    url(r'^pedidos/detalle/(?P<id>\w+)/copia_pedido/$',
+        copiaPedido, name='copiapedido'),
+    url(r'^pedidos/(?P<id>\w+)/abono/$',
+        abonosPedido.as_view(), name='abonopedido'),
 
 
     url(r'^remisiones/$',
@@ -33,7 +35,7 @@ urlpatterns = [
     url(r'^remisiones/detalle/(?P<remision_id>\w+)/$',
         detalleRemision, name='detalleremision'),
     url(r'^remisiones/detalle/(?P<remision_id>\w+)/copia/$',
-        copiaRemision, name='copiaremision'),    
+        copiaRemision, name='copiaremision'),
     url(r'^remisiones/nueva/cliente/$',
         remisionCliente, name='remisioncliente'),
     url(r'^remisiones/nueva/producto/$',
@@ -45,6 +47,8 @@ urlpatterns = [
     url(r'^selvivero/$', SelFacturas, name='selfacturas'),
     url(r'^facturas/$',
         AllFacturas, name='allfacturas'),
+    url(r'^facturas/pago/$',
+        pagoFactura, name='pagofactura'),
     url(r'^facturas/nueva/$',
         nueva_factura, name='nuevafactura'),
     url(r'^facturas/nueva/productos/$',

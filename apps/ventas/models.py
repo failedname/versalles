@@ -53,12 +53,6 @@ class Vivero(models.Model):
         return self.nombre
 
 
-
-
-
-
-
-
 class detalleUser(models.Model):
     vivero = models.ForeignKey(Vivero)
     usuario = models.OneToOneField(User)
@@ -101,6 +95,7 @@ class Producto(models.Model):
     def __str__(self):
         return self.nombre
 
+
 class estadoPedido(models.Model):
     codigo = models.IntegerField(primary_key=True)
     estado = models.CharField(max_length=100)
@@ -110,16 +105,17 @@ class Pedido(models.Model):
     fecha = models.DateField(auto_now_add=True)
     cliente = models.ForeignKey(Cliente)
     vivero = models.ForeignKey(Vivero)
-    estadopedido = models.ForeignKey(estadoPedido,null=True) 
+    estadopedido = models.ForeignKey(estadoPedido, null=True)
 
 
 class pedidoDetalle(models.Model):
-    pedido = models.ForeignKey(Pedido,null=True)  
+    pedido = models.ForeignKey(Pedido, null=True)
     cantidad = models.IntegerField()
     producto = models.ForeignKey(Producto)
     val_unitario = models.IntegerField()
     iva = models.IntegerField()
     val_neto = models.IntegerField(null=True)
+
 
 class abonoPedido(models.Model):
     pedido = models.ForeignKey(Pedido)
@@ -209,3 +205,9 @@ class detalleRemison(models.Model):
     val_unitario = models.IntegerField(null=True)
     iva = models.IntegerField(null=True)
     val_neto = models.IntegerField(null=True)
+
+
+class PagosFactura(models.Model):
+    pedido = models.ForeignKey(FacturaReal)
+    fecha = models.DateField(auto_now_add=True)
+    valorabono = models.IntegerField()

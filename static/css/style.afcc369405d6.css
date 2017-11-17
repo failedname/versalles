@@ -3,13 +3,13 @@
     font-family: Roboto Slab;
     font-weight: bold;
 
-    src: url('../css/Roboto_Slab/RobotoSlab-Bold.ttf');
+    src: url("../css/Roboto_Slab/RobotoSlab-Bold.d63ef2329945.ttf");
 }
 @font-face
 {
     font-family: Roboto Slab R;
 
-    src: url('../css/Roboto_Slab/RobotoSlab-Regular.ttf');
+    src: url("../css/Roboto_Slab/RobotoSlab-Regular.1ec06eed11bb.ttf");
 }
 .ui.header
 {

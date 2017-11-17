@@ -12,9 +12,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function detalleFac() {
   let action = document.getElementById('action')
-  let print = detalle[0].estado === 'cerrada'
-    ? `<a  id="print" dataa-id="${detalle[0].factura}" data-tooltip="Imprimir Copia" ><i  class="large circular link teal print icon"></i></a>`
-    : null
+  let print = `<a  id="print" dataa-id="${detalle[0].factura}" data-tooltip="Imprimir Copia" ><i  class="large circular link teal print icon"></i></a>`
+
   action.innerHTML = print
   // let generar= document.getElementById('print')
   // console.log(generar)

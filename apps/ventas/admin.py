@@ -5,11 +5,12 @@ from .models import (
     Presentacion, Vivero, EstadoFactura,
     Detalle_FacturaReal,
     Numeracion, FacturaReal, Remision, detalleRemison, detalleUser,
-    estadoPedido, Pedido, abonoPedido)
+    estadoPedido, Pedido, abonoPedido, PagosFactura)
 
 
 class ExampleAdmin(admin.ModelAdmin):
     change_list_template = 'smuggler/change_list.html'
+
 
 @admin.register(estadoPedido)
 class estadoPedidoAdmin(admin.ModelAdmin):
@@ -18,12 +19,12 @@ class estadoPedidoAdmin(admin.ModelAdmin):
 
 @admin.register(Pedido)
 class PedidoAdmin(admin.ModelAdmin):
-    pass  
+    pass
 
 
 @admin.register(abonoPedido)
 class abonoPedidoAdmin(admin.ModelAdmin):
-    pass      
+    pass
 
 
 @admin.register(detalleUser)
@@ -88,4 +89,9 @@ class remisionAdmin(admin.ModelAdmin):
 
 @admin.register(detalleRemison)
 class detalleRemision(admin.ModelAdmin):
+    pass
+
+
+@admin.register(PagosFactura)
+class PagosFacturaAdmin(admin.ModelAdmin):
     pass

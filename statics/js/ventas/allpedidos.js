@@ -1,77 +1,58 @@
-
-
-
 new Vue({
-  el:'#gridpedidos',
-  data(){
-    
-    return {
-      
-      columns:[
-        {
-        label: 'Pedido',
-        field: 'pedido',
-        filterable: false,
-      },
-      {
-        label: 'Creación',
-        field: 'fecha',
-        filterable: false,
-      },
-      {
-        label: 'Cliente',
-        field: 'identificacion',
-        filterable: true
-      },
-      {
-        label: 'Nombre',
-        field: 'nombre',
-        filterable: true
-      },
-      {
-        label: 'Total',
-        field: 'total'
-      },
-      {
-        label: 'Pagado',
-        field: 'abonos'
-      },
-      {
-        label: 'Por pagar',
-        
-      },
-      {
-        label: 'Estado',
-         
+  el: '#gridpedidos',
+  data() {
 
-      },
-      {
-        label: 'Acciones'
-      }
+    return {
+
+      columns: [
+        {
+          label: 'Pedido',
+          field: 'pedido',
+          filterable: false
+        }, {
+          label: 'Creación',
+          field: 'fecha',
+          filterable: false
+        }, {
+          label: 'Cliente',
+          field: 'identificacion',
+          filterable: true
+        }, {
+          label: 'Nombre',
+          field: 'nombre',
+          filterable: true
+        }, {
+          label: 'Total',
+          field: 'total'
+        }, {
+          label: 'Pagado',
+          field: 'abonos'
+        }, {
+          label: 'Por pagar'
+        }, {
+          label: 'Estado'
+        }, {
+          label: 'Acciones'
+        }
       ],
       rows: data,
-      style:{default:'ui celled table'}
-        
-      
+      style: {
+        default: 'ui celled table'
+      }
 
-      
-      
-      
     }
-    
+
   },
-  component:{
-    VueGoodTable:VueGoodTable
+  component: {
+    VueGoodTable: VueGoodTable
   },
-  methods:{
-    change(dta){
+  methods: {
+    change(dta) {
       this.rows[dta].total = 1000
     }
   }
-  
 
 })
-
 
 // document.addEventListener('DOMContentLoaded', cargar(data))
 

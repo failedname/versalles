@@ -1,101 +1,124 @@
-{% extends "base.html" %}
-{% block title %}Facturas{% endblock %}
-{% load static from staticfiles %}
-
-
-{% block content %}
-{% csrf_token %}
-  <div class="ui grid container">
-    <div class="wide column">
-      <div class="ui message ">
-        <div class="content header_facturas">
-          <div class="header ">
-            <i class="disk outline big icon"></i>
-            Facturas de Venta
-          </div>
-          <a href="{% url 'ventas:nuevafactura'%}" class="ui button btn">
+{% extends "base.html" %} {% block title %}Facturas{% endblock %} {% load static from staticfiles %} {% block content %} {% csrf_token %}
+<div class="ui grid container">
+  <div class="wide column">
+    <div class="ui message ">
+      <div class="content header_facturas">
+        <div class="header ">
+          <i class="disk outline big icon"></i> Facturas de Venta
+        </div>
+        <a href="{% url 'ventas:nuevafactura'%}" class="ui button btn">
             <i class="plus large icon"></i>
             Nueva factura de venta
           </a>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="ui grid container">
+  <div class="ui wide four column">
+
+  </div>
+</div>
+<section class="ui grid container">
+  <div class="wide sixteen column" id="id_facturas">
+    {% comment %}
+    <table class="ui celled structured small table">
+      <thead>
+        <tr>
+          <th>Número</th>
+          <th>Creación</th>
+          <th>Vencimiento</th>
+          <th>Cliente</th>
+          <th>Nombre</th>
+          <th>Total</th>
+          <th>Pagado</th>
+          <th>Por Pagar</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody id="TableFact">
+
+      </tbody>
+      <tfoot>
+        <tr>
+          <th colspan="7">
+            <div class="ui right floated" id="pagging">
+
+            </div>
+          </th>
+        </tr>
+      </tfoot>
+
+    </table> {% endcomment %} {% verbatim %}
+    <div class="ui modal">
+      <i class="close icon"></i>
+      <div class="header">
+        Ingresar Pago Factura No. {{pago.factura}}
+      </div>
+      <div class="image content">
+
+        <div class="description">
+          <div class="ui form">
+            <div class="inline fields">
+              <div class="eight wide field">
+                <label>Valor Pago</label>
+                <input v-model="pago.valor" type="number" placeholder="" required>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="actions">
+        <div class="ui black deny button">
+          Cancelar
+        </div>
+        <div class="ui positive right labeled icon button" @click="savePago">
+          Guardar Pago
+          <i class="checkmark icon"></i>
         </div>
       </div>
     </div>
-  </div>
-  <div class="ui grid container">
-    <div class="ui wide four column">
 
-    </div>
-  </div>
-  <section class="ui grid container">
-    <div class="wide sixteen column" id="id_facturas">
-      {% comment %} <table  class="ui celled structured small table">
-        <thead >
-          <tr >
-            <th>Número</th>
-            <th>Creación</th>
-            <th>Vencimiento</th>
-            <th>Cliente</th>
-            <th>Nombre</th>
-            <th>Total</th>
-            <th>Pagado</th>
-            <th>Por Pagar</th>
-            <th>Estado</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody  id="TableFact">
-
-        </tbody >
-        <tfoot>
-          <tr>
-            <th colspan="7">
-                <div class="ui right floated"  id="pagging" >
-
-                </div>
-            </th>
-          </tr>
-        </tfoot>
-
-      </table> {% endcomment %}
-      {% verbatim %}
-      <div>
-        <vue-good-table
-        title=""
-        :columns="columns"
-        :rows="rows"
-        :paginate="true"
-        :lineNumbers="true"
-        styleClass="table table-bordered condensed">
+    <div>
+      <vue-good-table title="" :columns="columns" :rows="rows" :paginate="true" :lineNumbers="true" styleClass="table table-bordered condensed">
         <template slot="table-row" scope="props">
           <td class=" right aligned">{{props.row.codigo}}</td>
           <td class=" right aligned">{{props.row.fecha}}</td>
-          
+
           <td class=" right aligned">{{props.row.identificacion}}</td>
           <td class=" left aligned">{{props.row.nombre}}</td>
           <td class=" right aligned">{{moneda(props.row.total)}}</td>
-          
-          <td class="left aligned">{{props.row.estado}}</td>
+          <td class="right aligned">{{moneda(props.row.abonos)}}</td>
+          <td class="right aligned">{{moneda(props.row.total - props.row.abonos)}}</td>
+
+          <td class="left aligned" :class="{'active':props.row.estado=='abierta','positive':props.row.estado=='cerrada'}">{{props.row.estado}}</td>
           <td>
             <a :href="'/ventas/facturas/detallefac/' + props.row.codigo"  data-tooltip="Ver" >
             <i  class="large circular link teal unhide icon"></i></a>
+
+            <button data-tooltip="Pago" @click="modalPago(props.row.codigo)" class="circular ui icon button" v-bind:class="{'disabled':props.row.estado=='cerrada'}">
+
+              <i  class=" link teal money icon"></i>
+            </button>
           </td>
         </template>
-          
-        </vue-good-table>
-      </div>
-      {% endverbatim %}
 
+      </vue-good-table>
     </div>
+    {% endverbatim %}
 
-  </section>
+  </div>
 
-{% endblock %}
-{% block js %}
-  <script type="text/javascript">
-    let data = JSON.parse('{{data|safe}}')
-    
-  </script>
-  <script type="text/javascript" src="{% static 'js/ventas/facturas.js' %}" ></script>
+</section>
+
+{% endblock %} {% block js %}
+<script type="text/javascript">
+  let data = JSON.parse('{{data|safe}}')
+  console.log(data)
+</script>
+<script type="text/javascript" src="{% static 'js/ventas/facturas.js' %}"></script>
 
 
 {% endblock %}
