@@ -84,7 +84,7 @@ class DetalleFacturaRealAdmin(admin.ModelAdmin):
 
 @admin.register(Remision)
 class remisionAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('pk', 'fecha', 'cliente', 'estado')
 
 
 @admin.register(detalleRemison)

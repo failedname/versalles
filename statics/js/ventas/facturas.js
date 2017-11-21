@@ -1,5 +1,8 @@
 new Vue({
   el: '#id_facturas',
+  delimiters: [
+    '[[', ']]'
+  ],
   data() {
     return {
       columns: [
@@ -36,6 +39,13 @@ new Vue({
     }
   },
   methods: {
+    modalCancel(index) {
+      $('#cancelModal').modal('show');
+    },
+    deleteModal() {
+      $('#deleteModal').modal('show');
+    },
+
     modalPago(index) {
       this.pago.factura = index
       $('.ui.modal').modal('show')

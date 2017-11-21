@@ -85,6 +85,12 @@
             <a class="circular ui icon button" :href="'/ventas/pedidos/' + props.row.pedido + '/abono/'" v-bind:class="{'disabled':props.row.estado=='cerrado'}" data-tooltip="Agregar Pago" >
               <i  class="link teal money icon"></i>
             </a>
+            <a class="circular ui icon button"   data-tooltip="Anular" >
+              <i  class="minus red money icon"></i>
+            </a>
+            <a class="circular ui icon button"   data-tooltip="Eliminar" >
+              <i  class="remove red money icon"></i>
+            </a>
 
           </td>
         </template>
