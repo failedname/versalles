@@ -35,12 +35,31 @@ new Vue({
       pago: {
         factura: '',
         valor: ''
-      }
+      },
+      index: ''
     }
   },
   methods: {
-    modalCancel(index) {
+    showCancel(index) {
       $('#cancelModal').modal('show');
+      this.index = index
+    },
+    cancelFactura() {
+
+      let csrftoken = Cookies.get('csrftoken');
+      let myHeaders = new Headers({"X-CSRFToken": csrftoken});
+      var myInit = {
+        method: 'POST',
+        body: index,
+        headers: myHeaders,
+        credentials: 'include'
+      }
+      fetch('cancel/', myInit).then((res) => {
+        return res.json()
+      }).then((data) => {
+        console.log(data)
+      })
+
     },
     deleteModal() {
       $('#deleteModal').modal('show');

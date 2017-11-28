@@ -103,7 +103,7 @@
               <i  class=" link teal money icon"></i>
             </button>
             {% if user.is_superuser %}
-              <a class="circular ui icon button" @click="modalCancel(props.row.codigo)"   data-tooltip="Anular" :class="{'disabled':props.row.estado=='cerrada'}">
+              <a class="circular ui icon button" @click="showCancel(props.row.codigo)"   data-tooltip="Anular" :class="{'disabled':props.row.estado=='cerrada'}">
                 <i  class="minus red  icon"></i>
               </a>
 
@@ -133,9 +133,9 @@
     <div class="ui red basic cancel inverted button">
       <i class="remove icon"></i> No
     </div>
-    <div class="ui green ok inverted button">
+    <button class="ui green ok inverted button" v-bind:click="cancelFactura">
       <i class="checkmark icon"></i> Si
-    </div>
+    </button>
   </div>
 </div>
 <div class="ui basic modal" id="deleteModal">

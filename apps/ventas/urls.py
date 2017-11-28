@@ -8,7 +8,7 @@ from .views import (
     saveRemision, copiaFactura, ventasPOS, productosPos,
     viveroPos, savePos, clientePos, clienteFactura, detalleRemision, allPedidos,
     nuevoPedido, clientePedido, productoPedido, guardarPedi, copiaRemision, detallePedido, abonosPedido,
-    copiaAbono, copiaPedido, jsonPedidos, pagoFactura
+    copiaAbono, copiaPedido, jsonPedidos, pagoFactura, cancelFactura
 )
 
 urlpatterns = [
@@ -47,6 +47,8 @@ urlpatterns = [
     url(r'^selvivero/$', SelFacturas, name='selfacturas'),
     url(r'^facturas/$',
         AllFacturas, name='allfacturas'),
+    url(r'^facturas/cancel/$',
+        cancelFactura, name='cancelfactura'),
     url(r'^facturas/pago/$',
         pagoFactura, name='pagofactura'),
     url(r'^facturas/nueva/$',

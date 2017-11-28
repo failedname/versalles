@@ -11,6 +11,10 @@ from .models import (Cliente, Producto, Vivero,
 import json
 
 
+def cancelFactura(request):
+    return JsonResponse({'data': 'hola'}, safe=True)
+
+
 def pagoFactura(request):
     valor = request.body.decode('utf-8')
     info = json.loads(valor)
