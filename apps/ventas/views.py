@@ -540,7 +540,7 @@ def save_facturaReal(request):
         return JsonResponse({'data': data, 'nume': nume}, safe=True)
     else:
         ultimo = FacturaReal.objects.latest('codigo')
-        c = Cliente.objects.all().filter(nit_cc=int(datos['cliente']['iden']))
+        c = Cliente.objects.all().filter(pk=int(datos['cliente']['id']))
         numeracion = 1 + ultimo.codigo
         f = FacturaReal(codigo=numeracion,
                         vivero_id=request.session['vivero'],
