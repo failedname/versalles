@@ -77,7 +77,7 @@ def export_ventas(request, start, end):
             'factura__estado',
             'factura__vivero',
             'factura__cliente').filter(
-            factura__vivero_id=request.session['vivero'], factura__fecha__gte=start, factura__fecha__lte=end, factura__estado__estado='cerrada').distinct(
+            factura__vivero_id=request.session['vivero'], factura__fecha__gte=start, factura__fecha__lte=end).distinct(
             'factura_id')
         fact = [{
             'id': res.factura.pk,
