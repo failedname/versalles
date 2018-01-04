@@ -26,7 +26,7 @@ def report_ventas(request):
             'factura__estado',
             'factura__vivero',
             'factura__cliente').filter(
-            factura__vivero_id=request.session['vivero'], factura__fecha__gte=fechas['start'], factura__fecha__lte=fechas['end'], factura__estado__estado='cerrada').distinct(
+            factura__vivero_id=request.session['vivero'], factura__fecha__gte=fechas['start'], factura__fecha__lte=fechas['end']).distinct(
             'factura_id')
         fact = [{
             'id': res.factura.pk,

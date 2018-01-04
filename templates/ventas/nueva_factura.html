@@ -1,25 +1,29 @@
 {% extends "base.html" %} {% load static from staticfiles %} {% block title %}Nueva Factura{% endblock title %} {% block content %} {% csrf_token %}
 <div class="ui grid container">
+
   <div class="wide column">
-    <div class="ui message ">
-      <div class="content header_facturas">
-        <div class="header ">
-          <i class="add to cart big icon"></i> Nueva factura de venta
-        </div>
+    <div class="grid_bar">
+      <div class="links_bar">
+        <a href="{% url 'ventas:allfacturas' %}" class="title-back-link">
+          <i class="angle left icon   icon-left"></i>
+          Facturas
+        </a>
       </div>
     </div>
+
   </div>
 </div>
-
+<!--
 <div class="ui grid container">
-  <div class="wide column" id="newInvoice">
-    <form class="ui form" autocomplete="off" v-on:submit.prevent>
-      <div class="ui segment" style="padding: 2em !important">
-
-        <h4 class="ui dividing header">Información Cliente</h4>
+  <div class="grid_bar">
+    <div class="six wide column">
+      <h1 class="title-bar-factura">Nueva factura</h1>
+    </div>
+    <div class="wide column invoice-border" id="newInvoice">
+      <h3 class="title-invoice">Cliente y fechas</h3>
+      <form class="ui form" autocomplete="off" v-on:submit.prevent>
         <div class="fields">
-          <div class="six wide required field">
-
+          <div class="five wide field">
             <div class="ui search">
               <div class="ui icon input">
                 <input v-on:keyup="la" v-model="text" id="cliente_search" class="prompt" type="text" placeholder="Buscar...">
@@ -36,6 +40,23 @@
               </div>
             </div>
           </div>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>-->
+
+
+
+<div class="ui grid container">
+  <div class="wide column">
+    <form class="ui form" autocomplete="off" v-on:submit.prevent>
+      <div class="ui segment" style="padding: 2em !important">
+
+        <h4 class="ui dividing header">Información Cliente</h4>
+        <div class="fields">
+
           <div class="six wide field">
             <button class="ui basic button">
               <i class="add user icon"></i>

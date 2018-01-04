@@ -3375,7 +3375,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'vue-good-table',
   props: {
-    styleClass: {default:'ui celled structured small table'},
+    styleClass: {default:'ui padded table bar_table'},
     title: '',
     columns: {},
     rows: {},

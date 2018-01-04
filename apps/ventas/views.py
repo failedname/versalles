@@ -4,6 +4,7 @@ from django.db.models import Sum
 from django.http import JsonResponse
 from django.views.generic import TemplateView
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 from .models import (Cliente, Producto, Vivero,
                      FacturaReal, Detalle_FacturaReal,
                      Numeracion, EstadoFactura, Remision, detalleRemison,
@@ -483,7 +484,7 @@ def save_facturaReal(request):
         'fin': res.num_fin
     }for res in num]
     if rows == 0:
-        c = Cliente.objects.all().filter(nit_cc=datos['cliente']['iden'])
+        c = Cliente.objects.all().filter(pk=datos['cliente']['id'])
         f = FacturaReal(codigo=num[0].num_ini,
                         vivero_id=request.session['vivero'],
                         estado_id=estado[0].pk,
@@ -659,7 +660,8 @@ def getProductos(request, pro):
 
 def clienteFactura(request):
     data = request.body.decode('utf-8')
-    cliente = Cliente.objects.all().filter(nombre__icontains=data)[:5]
+    cliente = Cliente.objects.all().filter(
+        Q(nombre__icontains=data) | Q(nit_cc__icontains=data))[:5]
     items = [{
         'id': res.pk,
         'nombre': res.nombre,

@@ -1,8 +1,70 @@
-{% extends "base.html" %}
-  {% load static from staticfiles %}
-{% block title %}Inicio{% endblock title %}
-{% block content %}
+{% extends "base.html" %} {% load static from staticfiles %} {% block title %}Inicio{% endblock title %} {% block content %}
+<div class="ui container">
+  <div class="container__sub">
+    <div class="ui grid">
+      <div class="sixteen wide column">
+        <div class="title-bar">
+          <h1 class="user-title">{{request.user.username}}</h1>
+        </div>
+      </div>
+      <div class="eleven wide column">
+        <div class="welcome">
+          <div class="welcome__title">
+            ¡Bienvenido a Vivero Versalles!
+          </div>
+          <div class="welcome__detail">
+            Crea tu primera factura en un segundo y envíala a tu cliente. Selecciona tu propio diseño y logo para darle a tus facturas un toque personal.
+          </div>
+          <div class="row">
+            <div class="column">
+              <a href="{% url 'ventas:nuevafactura'%}" class="ui primary button welcome__btn">Nueva Factura</a>
+            </div>
+          </div>
 
+        </div>
+        <div class="ingresos">
+          <div class="welcome__title">
+            Ingresos
+          </div>
+        </div>
+        <div class="gastos">
+          <div class="welcome__title">
+            Compras
+          </div>
+          <div class="gastos__info">
+            <i class="icns-sprite gastos__info__char"></i>
+            <p>Registrar tus compras y obtén una visión general de las compras de tu empresa.</p>
+            <a href="">Registrar compra</a>
+          </div>
+        </div>
+        <div class="gastos-ingresos">
+          <div class="welcome__title">
+            Ingresos y Compras
+          </div>
+          <div class="gastos-ingresos__info">
+            <i class="icns-sprite gastos-ingresos__info__char"></i>
+            <p>Haz un seguimiento de tu empresa en base a tus ingresos y tus gastos.</p>
+          </div>
+        </div>
+      </div>
+      <div class="five wide column">
+        <div class="caja">
+          <div class="welcome__title">
+            Banco y caja
+          </div>
+          <div class="caja__detail">
+            <div class="caja__detail__title">
+              <a href="#">Caja</a>
+            </div>
+            <div class="cellRight">0,00</div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
 
 
 {% endblock content %}

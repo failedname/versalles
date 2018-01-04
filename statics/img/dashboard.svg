@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="22px" height="22px" viewBox="0 0 22 22" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch 3.4 (15575) - http://www.bohemiancoding.com/sketch -->
+    <title>Artboard 1</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="1-dashboard" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="Artboard-1" sketch:type="MSArtboardGroup">
+            <rect id="Rectangle-7" fill="#7A3FFF" sketch:type="MSShapeGroup" x="6" y="12" width="4" height="10"></rect>
+            <rect id="Rectangle-6" fill="#B9A6ED" sketch:type="MSShapeGroup" x="7" y="13" width="2" height="8"></rect>
+            <rect id="Rectangle-8" fill="#7A3FFF" sketch:type="MSShapeGroup" x="12" y="6" width="4" height="16"></rect>
+            <rect id="Rectangle-9" fill="#7A3FFF" sketch:type="MSShapeGroup" x="18" y="0" width="4" height="22"></rect>
+            <rect id="Rectangle-6" fill="#7A3FFF" sketch:type="MSShapeGroup" x="0" y="16" width="4" height="6"></rect>
+            <rect id="Rectangle-10" fill="#B9A6ED" sketch:type="MSShapeGroup" x="1" y="17" width="2" height="4"></rect>
+            <rect id="Rectangle-7" fill="#B9A6ED" sketch:type="MSShapeGroup" x="13" y="7" width="2" height="14"></rect>
+            <rect id="Rectangle-8" fill="#B9A6ED" sketch:type="MSShapeGroup" x="19" y="1" width="2" height="20"></rect>
+        </g>
+    </g>
+</svg>

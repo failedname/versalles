@@ -1,21 +1,25 @@
 {% extends "base.html" %} {% block title %}Remisiones{% endblock title %} {% load static from staticfiles %} {% block css %}
 <link rel="stylesheet" href="{% static 'css/pagination.css'%}"> {% endblock %} {% block content %}
-<div class="ui container grid">
-  <div class="ui wide  column">
-    <div class="ui message">
-      <div class="content header_facturas">
-        <div class="header">
-          <i class="disk outline big icon"></i> Remisiones de venta
-        </div>
-        <a href="{% url 'ventas:crearremision'%}" class="ui button btn">
-          <i class="plus large icon"></i>
-          Nueva Remisión
-        </a>
+<div class="ui grid container">
+
+  <div class="wide column">
+    <div class="grid_bar">
+      <div class="links_bar">
+        <a href="{% url 'ventas:remisiones' %}" class="title-nav-link active">Remisiones</a>
       </div>
     </div>
 
   </div>
 </div>
+<div class="ui grid container">
+  <div class="grid_bar">
+    <div class="four column">
+      <a href="{% url 'ventas:crearremision'%}" class="ui primary button btn">Nueva Remision</a>
+    </div>
+  </div>
+
+</div>
+
 <div class="ui container grid">
   <div class="ui wide sixteen column">
     <table class="ui celled structured small table">

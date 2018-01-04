@@ -1,3 +1,6 @@
+document.addEventListener('DOMContentLoaded', () => {
+  $('.ui.dropdown').dropdown();
+})
 new Vue({
   el: '#id_facturas',
   delimiters: [
@@ -20,7 +23,7 @@ new Vue({
           field: 'nombre',
           filterable: true
         }, {
-          label: 'total'
+          label: 'Total'
         }, {
           label: 'Pagado'
         }, {
@@ -28,7 +31,7 @@ new Vue({
         }, {
           label: 'Estado'
         }, {
-          label: 'Acciones'
+          label: ''
         }
       ],
       rows: data,
@@ -67,7 +70,7 @@ new Vue({
 
     modalPago(index) {
       this.pago.factura = index
-      $('.ui.modal').modal('show')
+      $('#modalPago').modal('show')
     },
     savePago() {
       let csrftoken = Cookies.get('csrftoken');

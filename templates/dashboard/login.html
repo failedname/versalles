@@ -1,47 +1,49 @@
-
 <!DOCTYPE html>
 <html>
-  <head>
-    {% load static from staticfiles %}
-    <meta charset="utf-8">
-    <meta name="viewport"  content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Iniciar Sesion</title>
-    <link rel="stylesheet" href="{% static 'semantic-ui/semantic.min.css'%}" >
-    <link rel="stylesheet" href="{% static 'css/style.css'%}" >
 
-  </head>
-  <body class="back-login">
-    <div class="ui middle aligned center aligned grid grid_login">
-      <div class="column column_login">
-        <h2 class="ui teal header">
+<head>
+  {% load static from staticfiles %}
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Iniciar Sesion</title>
+  <link rel="stylesheet" href="{% static 'semantic-ui/semantic.min.css'%}">
+  <link rel="stylesheet" href="{% static 'css/style.css'%}">
+
+</head>
+
+<body class="back-login">
+  <div class="ui middle aligned center aligned grid grid_login">
+    <div class="column column_login">
+      <h2 class="ui teal header">
           <div class="content">
           </div>
         </h2>
-        <form class="ui large form" method="post">{% csrf_token %}
-          <div class="ui stacked segment">
-            <div class="field">
-              <div class="ui left icon input">
-                <i class="user icon"></i>
-                <input type="text" placeholder="usuario" name="username">
-              </div>
+      <form class="ui large form" method="post">{% csrf_token %}
+        <div class="ui stacked segment pad-login">
+          <div class="field">
+            <div class="ui left icon input">
+              <i class="user icon"></i>
+              <input class="text-login" type="text" placeholder="usuario" name="username">
+            </div>
 
-            </div>
-            <div class="field">
-              <div class="ui left icon input">
-                <i class="lock icon"></i>
-                <input type="password" placeholder="contraseña" name="password">
-              </div>
-            </div>
-            <div class="field">
-              <input type="submit" value="Ingresar" class="space-letter  button_color font-thead ui button large fluid teal">
+          </div>
+          <div class="field">
+            <div class="ui left icon input">
+              <i class="lock icon"></i>
+              <input class="text-login" type="password" placeholder="contraseña" name="password">
             </div>
           </div>
-        </form>
-        <div class="ui message">
-
-          <a class="font-tbody" href="#">Recuperar Contraseña</a>
+          <div class="field">
+            <input type="submit" value="Ingresar" class="space-letter  button_color font-thead ui button large fluid teal">
+          </div>
         </div>
+      </form>
+      <div class="ui message">
+
+        <a class="font-tbody" href="#">Recuperar Contraseña</a>
       </div>
     </div>
-  </body>
+  </div>
+</body>
+
 </html>
