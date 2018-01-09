@@ -80,7 +80,6 @@ new Vue({
       console.log(this.info)
     },
     la() {
-
       if (this.text.length > 3) {
         let csrftoken = Cookies.get('csrftoken');
         let myHeaders = new Headers({"X-CSRFToken": csrftoken});

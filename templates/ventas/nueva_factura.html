@@ -13,15 +13,17 @@
 
   </div>
 </div>
-<!--
+
+
+
+
+
 <div class="ui grid container">
-  <div class="grid_bar">
-    <div class="six wide column">
-      <h1 class="title-bar-factura">Nueva factura</h1>
-    </div>
-    <div class="wide column invoice-border" id="newInvoice">
-      <h3 class="title-invoice">Cliente y fechas</h3>
-      <form class="ui form" autocomplete="off" v-on:submit.prevent>
+  <div class="wide column" id="newInvoice">
+    <form class="ui form" autocomplete="off" v-on:submit.prevent>
+      <div class="ui segment" style="padding: 2em !important">
+
+        <h4 class="ui dividing header">Información Cliente</h4>
         <div class="fields">
           <div class="five wide field">
             <div class="ui search">
@@ -40,23 +42,6 @@
               </div>
             </div>
           </div>
-        </div>
-
-      </form>
-    </div>
-  </div>
-</div>-->
-
-
-
-<div class="ui grid container">
-  <div class="wide column">
-    <form class="ui form" autocomplete="off" v-on:submit.prevent>
-      <div class="ui segment" style="padding: 2em !important">
-
-        <h4 class="ui dividing header">Información Cliente</h4>
-        <div class="fields">
-
           <div class="six wide field">
             <button class="ui basic button">
               <i class="add user icon"></i>
@@ -91,9 +76,9 @@
         </div>
         <div class="fields">
           <div class="six wide field">
-            <div id="producto_search" class="ui fluid search">
+            <div class="ui fluid search">
               <div class="ui icon input">
-                <input @keyup="buscarProducto" v-model="producto" class="prompt" type="text" placeholder="Buscar...">
+                <input v-on:keyup="buscarProducto" v-model="producto" class="prompt" type="text" placeholder="Buscar...">
                 <i class="search icon"></i>
               </div>
               <div class="results transition" v-bind:class="{'visible':productos.length , 'hidden': !productos.length }">
@@ -231,7 +216,7 @@
   var clientes = JSON.parse('{{data|safe}}')
 </script>
 <script type="text/javascript" src="{% static 'js/moneda.js'%}"></script>
-<script type="text/javascript" src="{% static 'js/ventas/clientes.js'%}"></script>
+<script type="text/javascript" src="{% static 'js/ventas/cliente.js'%}"></script>
 
 <script src="{% static 'js/jspdf.min.js'%}"></script>
 <script src="{% static 'js/autotable.js'%}"></script>
