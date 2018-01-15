@@ -4,26 +4,16 @@ from ..inventario.models import Almacen
 import json
 
 
-def SelVivero(request):
-    template_name = 'inventario/vivero.html'
-    data = Vivero.objects.all()
-    return render(request, template_name, {'data': data})
-
-
-def Productos(request, pro):
+def Productos(request):
     template_name = 'inventario/productos.html'
-    produ = Almacen.objects.select_related(
-                                            'producto', 'vivero',
-                                            'producto__id_categoria',
-                                            'producto__id_presentacion').filter(vivero_id=pro)
+    productos = Producto.objects.all().filter(vivero=request.session['vivero'])
     data = [{
-        'nombre': res.producto.nombre,
-        'precio': res.producto.precio_venta,
-        'iva': res.producto.iva_porce,
-        'categoria': res.producto.id_categoria.nomb_cate,
-        'presentacion': res.producto.id_presentacion.tipo,
-        'vivero': res.vivero.nombre,
-        'stock': res.stock
-
-    }for res in produ]
+        'id': res.id,
+        'nombre': res.nombre,
+        'barra': res.barras,
+        'categoria': res.id_categoria.nomb_cate,
+        'presentacion': res.id_presentacion.tipo,
+        'precio': res.precio_venta,
+        'iva': res.iva_porce
+    }for res in productos]
     return render(request, template_name, {'data': json.dumps(data)})

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="20px" height="22px" viewBox="0 0 20 22" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch -->
+    <title>Artboard</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <rect id="path-1" x="2" y="6" width="3" height="13"></rect>
+        <rect id="path-2" x="15" y="6" width="3" height="13"></rect>
+        <rect id="path-3" x="6" y="6" width="3" height="13"></rect>
+        <rect id="path-4" x="11" y="6" width="3" height="13"></rect>
+        <polygon id="path-5" points="0 4 10 0 20 4 20 7 0 7"></polygon>
+        <polygon id="path-6" points="0 18 20 18 20 22 0 22"></polygon>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Artboard">
+            <g id="Group">
+                <g id="Rectangle">
+                    <use fill="#A3EBD0" fill-rule="evenodd" xlink:href="#path-1"></use>
+                    <rect stroke="#5A858C" stroke-width="1" x="2.5" y="6.5" width="2" height="12"></rect>
+                </g>
+                <g id="Rectangle">
+                    <use fill="#A3EBD0" fill-rule="evenodd" xlink:href="#path-2"></use>
+                    <rect stroke="#5A858C" stroke-width="1" x="15.5" y="6.5" width="2" height="12"></rect>
+                </g>
+                <g id="Rectangle">
+                    <use fill="#A3EBD0" fill-rule="evenodd" xlink:href="#path-3"></use>
+                    <rect stroke="#5A858C" stroke-width="1" x="6.5" y="6.5" width="2" height="12"></rect>
+                </g>
+                <g id="Rectangle">
+                    <use fill="#A3EBD0" fill-rule="evenodd" xlink:href="#path-4"></use>
+                    <rect stroke="#5A858C" stroke-width="1" x="11.5" y="6.5" width="2" height="12"></rect>
+                </g>
+                <g id="Rectangle">
+                    <use fill="#A3EBD0" fill-rule="evenodd" xlink:href="#path-5"></use>
+                    <path stroke="#5A858C" stroke-width="1" d="M0.5,4.33851648 L10,0.538516481 L19.5,4.33851648 L19.5,6.5 L0.5,6.5 L0.5,4.33851648 Z"></path>
+                </g>
+                <g id="Rectangle">
+                    <use fill="#A3EBD0" fill-rule="evenodd" xlink:href="#path-6"></use>
+                    <path stroke="#5A858C" stroke-width="1" d="M0.5,18.5 L19.5,18.5 L19.5,21.5 L0.5,21.5 L0.5,18.5 Z"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -287,6 +287,7 @@ function FacturaPdf(dat, nume) {
     }
   })
   doc.autoPrint();
+
   window.open(doc.output('bloburl'), '_blank');
 
 }

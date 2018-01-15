@@ -1,0 +1,80 @@
+{% extends "base.html" %} {% block title %}inventario{% endblock title %}{% load static from staticfiles %} {% block content %}
+<div class="ui grid container">
+
+  <div class="wide column">
+    <div class="grid_bar">
+      <div class="links_bar">
+        <a href="{% url 'inventario:productos' %}" class="title-nav-link active">Productos</a>
+      </div>
+    </div>
+
+  </div>
+</div>
+<div class="ui grid container">
+  <div class="grid_bar">
+    <div class="four column">
+      <a href="" class="ui primary button btn">Nuevo producto</a>
+    </div>
+  </div>
+
+</div>
+
+<section class="ui grid container">
+  <div class="grid_bar">
+    <div class="wide sixteen column" id="table_productos">
+
+
+      <div>
+        <vue-good-table title="" :columns="columns" :rows="rows" :paginate="true" :lineNumbers="true" styleClass="ui basic table">
+          <template slot="table-row" scope="props">
+          <td class=" ">[[props.row.id]]</td>
+
+          <td><barcode
+            v-bind:value=props.row.barra
+            :options="{displayValue: false,width:.9,height:30,format:'ean13'}"></barcode></td>
+          <td class=" ">[[props.row.nombre]]</td>
+
+          <td class=" ">[[props.row.categoria]]</td>
+          <td class=" ">[[props.row.iva]]</td>
+          <td class=" ">[[props.row.presentacion]]</td>
+          <td class=" ">[[moneda(props.row.precio)]]</td>
+          <td class="">[[moneda(props.row.abonos)]]</td>
+          <td class="">[[moneda(props.row.total - props.row.abonos)]]</td>
+
+          <td class="left aligned" :class="{'active':props.row.estado=='abierta','positive':props.row.estado=='cerrada'}">[[props.row.estado]]</td>
+
+          <td>
+            <div class="ui icon bottom top right pointing dropdown button icon_action ">
+            <i class="caret down icon"></i>
+            <div class="menu">
+              <a class="item" :href="'/ventas/facturas/detallefac/'+ props.row.codigo">Ver</a>
+              <a class="item" @click="modalPago(props.row.codigo)" v-bind:class="{'disabled':props.row.estado=='cerrada'}">Agregar Pago</a>
+              {% if user.is_superuser %}
+                <div class="item" @click="showCancel(props.row.codigo)" :class="{'disabled':props.row.estado=='cerrada'}">Anular</div>
+                <div class="item" @click="deleteModal(props.row.codigo)"  :class="{'disabled':props.row.estado=='cerrada'}">Eliminar</div>
+              {% endif %}
+
+
+            </div>
+          </div>
+          </td>
+        </template>
+
+        </vue-good-table>
+      </div>
+
+
+    </div>
+  </div>
+</section>
+
+
+{% endblock content %} {% block js %}
+<script type="text/javascript">
+  let data = JSON.parse('{{data|safe}}')
+  console.log(data)
+</script>
+<script type="text/javascript" src="{% static 'js/barcode.min.js' %}"></script>
+
+<script type="text/javascript" src="{% static 'js/inventario/productos.js' %}"></script>
+{% endblock js %}

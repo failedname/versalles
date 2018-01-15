@@ -27,6 +27,9 @@ h1
     font-weight: normal !important
 a
     text-decoration: none
+body
+    -webkit-font-smoothing: antialiased  !important
+
 //
 //
 // @font-face
@@ -72,11 +75,23 @@ a
     border: 2px dashed #DFDFEA
     margin-top: 20px
     padding: 20px
+.products-border
+    border-bottom: 2px dashed #DFDFEA
+    margin: 30px 0px
 .title-invoice
     font-size: 16px !important
     font-weight: normal !important
     font-style: italic !important
     color: #313140 !important
+.label-form
+    font-size: 12px !important
+    font-weight: normal !important
+    color: #313140 !important
+.float
+    float: right !important
+.invoice-tot
+    color: #313140
+    font-size: 12px
 //
 // body
 //     font-family: 'Open Sans Regular',Arial,sans-serif
@@ -516,6 +531,7 @@ section.ui.grid.container
     border: 0 !important
     border-radius: 0 !important
     border-collapse: separate !important
+    font-size: 12px !important
 .submenu
     width: 960px
     margin: 0 auto
@@ -532,7 +548,8 @@ section.ui.grid.container
     border-radius: 4px
     &.active
         background: #EAEDF1
-
+.nav-icon__pedidos
+    background: url("../img/banking.svg")
 .nav-icon__invoices
     background: url("../img/invoices.svg")
 .nav-icon__compras

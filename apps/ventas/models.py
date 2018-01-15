@@ -64,6 +64,7 @@ class detalleUser(models.Model):
 
 class Producto(models.Model):
     nombre = models.CharField(max_length=100)
+    barras = models.CharField(max_length=100, null=True)
     precio_venta = models.IntegerField(verbose_name='precio', null=True)
     iva_porce = models.IntegerField(verbose_name='iva', null=True)
     id_categoria = models.ForeignKey(Categoria, verbose_name='Categoria')

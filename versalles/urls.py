@@ -19,6 +19,8 @@ from apps.dashboard import urls as dash_url
 from apps.ventas import urls as ventas_url
 from apps.compras import urls as compras_url
 from apps.reportes import urls as reportes_url
+from apps.contactos import urls as contactos_url
+from apps.inventario import urls as inventario_url
 
 urlpatterns = [
     url(r'^admin/', include('smuggler.urls')),
@@ -27,4 +29,6 @@ urlpatterns = [
     url(r'^ventas/', include(ventas_url, namespace='ventas')),
     url(r'^compras/', include(compras_url, namespace='compras')),
     url(r'^reportes/', include(reportes_url, namespace='reportes')),
+    url(r'^contactos/', include(contactos_url, namespace='contactos')),
+    url(r'^inventario/', include(inventario_url, namespace='inventario')),
 ]

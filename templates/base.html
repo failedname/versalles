@@ -47,23 +47,29 @@
               </div>
               <span class="customizable-nav__label">Compras</span>
             </a>
+            <a class="customizable-nav__link home " href="{% url 'ventas:pedidos'%}">
+              <div class="customizable-nav__icon-place">
+                <i class="nav-icon__pedidos"></i>
+              </div>
+              <span class="customizable-nav__label">Pedidos</span>
+            </a>
             <a class="customizable-nav__link home " href="{% url 'reportes:reportventas' %}">
               <div class="customizable-nav__icon-place">
                 <i class="nav-icon__reports"></i>
               </div>
               <span class="customizable-nav__label">Informes</span>
             </a>
-            <a class="customizable-nav__link home " href="{% url 'reportes:reportventas' %}">
+            <a class="customizable-nav__link home " href="{% url 'contactos:contactos' %}">
               <div class="customizable-nav__icon-place">
                 <i class="nav-icon__contacts"></i>
               </div>
               <span class="customizable-nav__label">Contactos</span>
             </a>
-            <a class="customizable-nav__link home " href="{% url 'dashboard:panel' %}">
+            <a class="customizable-nav__link home " href="{% url 'inventario:productos' %}">
               <div class="customizable-nav__icon-place">
                 <i class="nav-icon__products"></i>
               </div>
-              <span class="customizable-nav__label">Productos</span>
+              <span class="customizable-nav__label">Inventario</span>
             </a>
             <a class="customizable-nav__link home " href="/admin" target="_blank">
               <div class="customizable-nav__icon-place">

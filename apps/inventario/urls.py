@@ -1,10 +1,9 @@
 
 from django.conf.urls import url
-from .views import Productos, SelVivero
+from .views import Productos
 
 urlpatterns = [
-    url(r'^seleccionar/$', SelVivero, name='seleccionar'),
-    url(r'^productos/vivero/(?P<pro>\w+)/$',
+    url(r'^productos/$',
         Productos, name='productos'),
 
 

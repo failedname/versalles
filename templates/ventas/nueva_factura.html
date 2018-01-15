@@ -14,197 +14,221 @@
   </div>
 </div>
 
-
-
-
-
 <div class="ui grid container">
-  <div class="wide column" id="newInvoice">
-    <form class="ui form" autocomplete="off" v-on:submit.prevent>
-      <div class="ui segment" style="padding: 2em !important">
+  <div class="grid_bar">
+    <div class="six wide column">
+      <h1 class="title-bar-factura">Nueva factura</h1>
+    </div>
+    <div class="wide column" id="newInvoice">
+      <div class="invoice-border">
+        <h3 class="title-invoice">Cliente y fechas</h3>
+        <form class="ui form" autocomplete="off" v-on:submit.prevent>
 
-        <h4 class="ui dividing header">Información Cliente</h4>
-        <div class="fields">
-          <div class="five wide field">
-            <div class="ui search">
-              <div class="ui icon input">
-                <input v-on:keyup="la" v-model="text" id="cliente_search" class="prompt" type="text" placeholder="Buscar...">
-                <i class="search icon"></i>
+          <div class="fields">
+            <div class="six wide field">
+              <label for="" class="label-form">Cliente</label>
+              <div class="ui search">
+                <div class="ui icon input">
 
+                  <input v-on:keyup="la" v-model="text" id="cliente_search" class="prompt" type="text" placeholder="Buscar...">
+                  <i class="search icon"></i>
+
+                </div>
+                <div class="results transition" :class="{'visible':client.length , 'hidden': !client.length }">
+                  <a @click="selectClient(index)" v-for="(cliente,index) in client" class="result">
+                    <div class="content">
+                      <div class="title" v-text="cliente.nombre"></div>
+                      <div class="description" v-text="cliente.iden"></div>
+                    </div>
+                  </a>
+                </div>
               </div>
-              <div class="results transition" :class="{'visible':client.length , 'hidden': !client.length }">
-                <a @click="selectClient(index)" v-for="(cliente,index) in client" class="result">
-                  <div class="content">
-                    <div class="title" v-text="cliente.nombre"></div>
-                    <div class="description" v-text="cliente.iden"></div>
-                  </div>
-                </a>
+            </div>
+            <div class="four wide field"></div>
+            <div class="three wide field">
+              <label for="" class="label-form">Fecha Factura</label>
+              <input type="text" name="" value="">
+            </div>
+            <div class="three wide field">
+              <label for="" class="label-form">Fecha Vencimiento</label>
+              <input type="text" name="" value="">
+            </div>
+          </div>
+
+
+
+          <div class="fields">
+            <div class="six wide  field">
+              <label for="" class="label-form">Indentificación</label>
+              <input v-bind:value="info.cliente.iden" type="text" name="ident" readonly required>
+            </div>
+            <div class="four wide field"></div>
+            <div class="six wide field">
+              <label for="" class="label-form">Notas</label>
+              <textarea name="name" rows="5" cols="50"></textarea>
+            </div>
+          </div>
+          <div class="products-border">
+
+          </div>
+          <h3 class="title-invoice">Linea de productos</h3>
+          <div class="fields">
+
+            <div class="six wide required field">
+              <label for="" class="label-form">Precios</label>
+              <select class="ui fluid dropdown" v-model="precio">
+                  <option value=""></option>
+                  <option v-bind:value="{precio:'generales'}">precios generales</option>
+                  <option v-bind:value="{precio:'compra'}">precios de compra</option>
+                  <option v-bind:value="{precio:'mayor'}">precios al x mayor</option>
+                </select>
+            </div>
+          </div>
+          <div class="fields">
+            <div class="six wide field">
+              <div class="ui fluid search">
+                <div class="ui icon input">
+                  <input v-on:keyup="buscarProducto" v-model="producto" class="prompt" type="text" placeholder="Buscar...">
+                  <i class="search icon"></i>
+                </div>
+                <div class="results transition" v-bind:class="{'visible':productos.length , 'hidden': !productos.length }">
+                  <a class="result" @click="selectProduct(index)" v-for="(product ,index) in productos">
+                    <div class="content">
+                      <div class="title" v-text="product.nombre"></div>
+                      <div class="description" v-text="product.presentacion"></div>
+                      <div class="price" v-text="product.precio"></div>
+                    </div>
+                  </a>
+                </div>
               </div>
             </div>
           </div>
-          <div class="six wide field">
-            <button class="ui basic button">
-              <i class="add user icon"></i>
-              Nuevo contacto
-            </button>
+          {% verbatim %}
+          <div class="fields">
+            <div class="two wide required field">
+              <label for="" class="label-form">Codigo</label>
+              <input id="id_codigo" type="text" name="name" value="" readonly :value="valuesProduct.id">
+            </div>
+            <div class="six wide  required field">
+              <label for="" class="label-form">Producto</label>
+              <input id="id_producto" type="text" name="name" value="" readonly :value="valuesProduct.nombre">
+            </div>
+            <div class="two wide required field">
+              <label for="" class="label-form">IVA</label>
+              <input id="id_iva" type="text" name="name" value="" readonly :value="valuesProduct.iva">
+            </div>
+            <div class="three wide required  field">
+              <label for="" class="label-form">Precio</label>
+              <input id="id_precio" type="number" name="name" :value="valuesProduct.precio" v-model="valuesProduct.precio">
+            </div>
+            <div class="three wide required field">
+              <label for="" class="label-form">Cantidad</label>
+              <input id="id_cantidad" type="number" name="name" :value="valuesProduct.cantidad" v-model="valuesProduct.cantidad">
+            </div>
           </div>
-        </div>
-        <div class="fields">
-          <div class="eight wide  required field">
-            <label for="">Indentificación</label>
-            <input v-bind:value="info.cliente.iden" type="text" name="ident" readonly required>
+          <div class="fields aligning right">
+            <div class="two field ">
+              <button @click="chargeData" class="ui  button btn">
+                  Agregar
+              </button>
+            </div>
           </div>
-          <div class="eight wide required field">
-            <label for="">Nombre</label>
-            <input v-bind:value="info.cliente.nombre" type="text" name="name" value="" readonly required>
-          </div>
-        </div>
-      </div>
-      <div class="ui segment" style="padding: 2em !important">
+          <div class="products-border">
 
-        <h4 class="ui dividing header">Información Productos</h4>
-        <div class="fields">
+          </div>
+          {% endverbatim %}
+          <div class="wide field">
+            <table class="ui padded basic table bar_table">
+              <thead>
+                <tr>
+                  <th>Codigo</th>
+                  <th>Producto</th>
+                  <th>Valor</th>
+                  <th>IVA</th>
+                  <th>Cantidad</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="(data,index) in info.datos">
+                  <td v-text="data.id"></td>
+                  <td v-text="data.nombre"></td>
+                  <td v-text="data.precio"></td>
+                  <td v-text="data.iva"></td>
+                  <td v-text="data.cantidad"></td>
+                  <td>
+                    <button @click="deleteRow(index)" class="ui icon button btn">
+                        <i class="remove icon"></i>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+
+
+
+            </table>
+          </div>
+          {% verbatim %}
+
+          <div class="products-border">
+
+          </div>
+          <div class="fields">
+            <div class="eight wide field">
+              <h3 class="title-invoice">Totales</h3>
+            </div>
+            <div class="four wide field">
+              <span>Subtotal</span>
+              <span id="id_sub" class="label float invoice-tot">${{subTotal}}</span>
+            </div>
+          </div>
+          <div class="fields">
+            <div class="eight wide field">
+
+            </div>
+            <div class="four wide field">
+              <span>IVA</span>
+              <span id="id_iv" class="label float invoice-tot">${{subIva}}</span>
+            </div>
+          </div>
+          <div class="fields">
+            <div class="eight wide field">
+
+            </div>
+            <div class="four wide field">
+              <span>Total</span>
+              <span id="id_tot" class="label float">${{total}}</span>
+            </div>
+          </div>
+          {% endverbatim %}
+          <div class="products-border">
+
+          </div>
           <div class="six wide required field">
-            <label for="">Precios</label>
-            <select class="ui fluid dropdown" v-model="precio">
-              <option value=""></option>
-              <option v-bind:value="{precio:'generales'}">precios generales</option>
-              <option v-bind:value="{precio:'compra'}">precios de compra</option>
-              <option v-bind:value="{precio:'mayor'}">precios al x mayor</option>
-            </select>
+            <label for="" class="label-form">Agregar Pago</label>
+            <input v-model="info.pago" type="number" name="name" value="">
           </div>
-        </div>
-        <div class="fields">
+          <div class="products-border">
+
+          </div>
           <div class="six wide field">
-            <div class="ui fluid search">
-              <div class="ui icon input">
-                <input v-on:keyup="buscarProducto" v-model="producto" class="prompt" type="text" placeholder="Buscar...">
-                <i class="search icon"></i>
-              </div>
-              <div class="results transition" v-bind:class="{'visible':productos.length , 'hidden': !productos.length }">
-                <a class="result" @click="selectProduct(index)" v-for="(product ,index) in productos">
-                  <div class="content">
-                    <div class="title" v-text="product.nombre"></div>
-                    <div class="description" v-text="product.presentacion"></div>
-                    <div class="price" v-text="product.precio"></div>
-                  </div>
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-        {% verbatim %}
-        <div class="fields">
-          <div class="two wide required field">
-            <label for="">Codigo</label>
-            <input id="id_codigo" type="text" name="name" value="" readonly :value="valuesProduct.id">
-          </div>
-          <div class="six wide  required field">
-            <label for="">Producto</label>
-            <input id="id_producto" type="text" name="name" value="" readonly :value="valuesProduct.nombre">
-          </div>
-          <div class="two wide required field">
-            <label for="">IVA</label>
-            <input id="id_iva" type="text" name="name" value="" readonly :value="valuesProduct.iva">
-          </div>
-          <div class="three wide required  field">
-            <label for="">Precio</label>
-            <input id="id_precio" type="number" name="name" :value="valuesProduct.precio" v-model="valuesProduct.precio">
-          </div>
-          <div class="three wide required field">
-            <label for="">Cantidad</label>
-            <input id="id_cantidad" type="number" name="name" :value="valuesProduct.cantidad" v-model="valuesProduct.cantidad">
-          </div>
-        </div>
-        <div class="fields aligning right">
-          <div class="two field ">
-            <button @click="chargeData" class="ui  button btn">
-                Agregar
-            </button>
-          </div>
-        </div>
-        {% endverbatim %}
-
-      </div>
-      <div class="ui segment" style="padding: 2em !important">
-
-        <div class="wide field">
-          <table class="ui celled structured small table">
-            <thead>
-              <tr>
-                <th>CODIGO</th>
-                <th>PRODUCTO</th>
-                <th>VALOR</th>
-                <th>IVA</th>
-                <th>CANTIDAD</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="(data,index) in info.datos">
-                <td v-text="data.id"></td>
-                <td v-text="data.nombre"></td>
-                <td v-text="data.precio"></td>
-                <td v-text="data.iva"></td>
-                <td v-text="data.cantidad"></td>
-                <td>
-                  <button @click="deleteRow(index)" class="ui icon button btn">
-                      <i class="remove icon"></i>
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-            <tfoot>
-              <tr>
-                <th colspan="6">
-                  <div class="total_factura">
-
-                    <div>
-                      <div class="label">SubTotal</div>
-                      <div class="label">IVA</div>
-                      <div class="label">Total</div>
-                    </div>
-
-                    {% verbatim %}
-                    <div>
-                      <div id="id_sub" class="label">{{subTotal}}</div>
-                      <div id="id_iv" class="label">{{subIva}}</div>
-                      <div id="id_tot" class="label">{{total}}</div>
-                    </div>
-                    {% endverbatim %}
-                  </div>
-                </th>
-              </tr>
-            </tfoot>
-
-
-          </table>
-        </div>
-
-
-      </div>
-      <div class="ui segment">
-        <div class="six wide required field">
-          <label for="">Agregar Pago</label>
-          <input v-model="info.pago" type="number" name="name" value="">
-        </div>
-      </div>
-      <div class="ui message ">
-        <div class="content header_facturas">
-          <div class="header ">
             <button @click="saveInvoice" class="ui   button btn">
               Facturar
             </button>
-
           </div>
-        </div>
+
       </div>
 
 
 
-    </form>
+      </form>
+    </div>
   </div>
 </div>
+
+
+
+
 
 
 
