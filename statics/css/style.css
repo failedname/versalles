@@ -74,6 +74,36 @@ body {
   color: #313140;
   font-size: 12px; }
 
+.title-new {
+  font-family: "OpenSansRegular", Arial, sans-serif !important;
+  font-weight: normal;
+  font-size: 14px !important;
+  color: #313140 !important;
+  text-align: center; }
+
+input, select {
+  border-radius: 0 !important;
+  border: 1px solid #DADAE4 !important;
+  -webkit-border-radius: 0 !important;
+  border-radius: 0px !important; }
+
+.select-form {
+  border: 1px solid #DADAE4 !important;
+  height: 32px !important; }
+
+.upload-area__drop {
+  height: 170px;
+  margin: 22px 0 -2px;
+  position: relative;
+  border: 1px dashed #ccc;
+  transition: border 100ms ease-in; }
+
+.err {
+  background-color: #FFF6F6 !important;
+  border-color: #E0B4B4 !important;
+  color: #9F3A38;
+  box-shadow: none; }
+
 .button_color {
   background-color: #32BFF1 !important;
   color: #fff;

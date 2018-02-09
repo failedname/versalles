@@ -1,16 +1,16 @@
 @font-face {
   font-family: "OpenSansRegular";
-  src: url("open_sans/OpenSans-Regular.ttf") format("truetype");
+  src: url("open_sans/OpenSans-Regular.d7d5d4588a9f.ttf") format("truetype");
   font-weight: normal;
   font-style: normal; }
 @font-face {
   font-family: "OpenSansSemibold";
-  src: url("open_sans/OpenSans-SemiBold.ttf") format("truetype");
+  src: url("open_sans/OpenSans-SemiBold.e1c83f9474e0.ttf") format("truetype");
   font-weight: normal;
   font-style: normal; }
 @font-face {
   font-family: "OpenSansbold";
-  src: url("open_sans/OpenSans-Bold.ttf") format("truetype");
+  src: url("open_sans/OpenSans-Bold.f5331cb6372b.ttf") format("truetype");
   font-weight: normal;
   font-style: normal; }
 body, button, input, select, textarea {
@@ -200,7 +200,7 @@ input, select {
   position: relative; }
 
 .nav-icon__dashboard {
-  background: url("../img/dashboard.svg"); }
+  background: url("../img/dashboard.cfe03f766758.svg"); }
 
 [class*='nav-icon'] {
   display: inline-block;
@@ -324,25 +324,25 @@ section.ui.grid.container {
     background: #EAEDF1; }
 
 .nav-icon__pedidos {
-  background: url("../img/banking.svg"); }
+  background: url("../img/banking.a8ee37dbf50d.svg"); }
 
 .nav-icon__invoices {
-  background: url("../img/invoices.svg"); }
+  background: url("../img/invoices.a6176f0022ec.svg"); }
 
 .nav-icon__compras {
-  background: url("../img/compras.svg"); }
+  background: url("../img/compras.6723a7af524d.svg"); }
 
 .nav-icon__reports {
-  background: url("../img/reports.svg"); }
+  background: url("../img/reports.1c11f4a4078c.svg"); }
 
 .nav-icon__contacts {
-  background: url("../img/contacts.svg"); }
+  background: url("../img/contacts.451e977bc60c.svg"); }
 
 .nav-icon__products {
-  background: url("../img/products.svg"); }
+  background: url("../img/products.1b33aa5a50ea.svg"); }
 
 .nav-icon__remision {
-  background: url("../img/expenses.svg"); }
+  background: url("../img/expenses.2017d39846aa.svg"); }
 
 .container__sub {
   width: 960px;
@@ -391,7 +391,7 @@ section.ui.grid.container {
   margin: 80px; }
 
 .gastos__info__char, .gastos-ingresos__info__char {
-  background-image: url("../img/sprite.png");
+  background-image: url("../img/sprite.7866fcdec6fd.png");
   width: 181px;
   height: 141px;
   background-position: 0px -979px;

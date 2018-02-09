@@ -1,47 +1,48 @@
 {% extends "base.html" %} {% block title %}inventario{% endblock title %}{% load static from staticfiles %} {% block content %}
-<div class="ui grid container">
+<div id="table_productos">
 
-  <div class="wide column">
+
+  <div class="ui grid container">
+
+    <div class="wide column">
+      <div class="grid_bar">
+        <div class="links_bar">
+          <a href="{% url 'inventario:productos' %}" class="title-nav-link active">Productos</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <div class="ui grid container">
     <div class="grid_bar">
-      <div class="links_bar">
-        <a href="{% url 'inventario:productos' %}" class="title-nav-link active">Productos</a>
+      <div class="four column">
+        <a @click="showModal" class="ui primary button btn">Nuevo producto</a>
       </div>
     </div>
 
-  </div>
-</div>
-<div class="ui grid container">
-  <div class="grid_bar">
-    <div class="four column">
-      <a href="" class="ui primary button btn">Nuevo producto</a>
-    </div>
+
   </div>
 
-</div>
-
-<section class="ui grid container">
-  <div class="grid_bar">
-    <div class="wide sixteen column" id="table_productos">
+  <section class="ui grid container">
+    <div class="grid_bar">
+      <div class="wide sixteen column">
 
 
-      <div>
-        <vue-good-table title="" :columns="columns" :rows="rows" :paginate="true" :lineNumbers="true" styleClass="ui basic table">
-          <template slot="table-row" scope="props">
+        <div>
+          <vue-good-table title="" :columns="columns" :rows="rows" :paginate="true" :lineNumbers="true" styleClass="ui basic table">
+            <template slot="table-row" scope="props">
           <td class=" ">[[props.row.id]]</td>
 
           <td><barcode
             v-bind:value=props.row.barra
-            :options="{displayValue: false,width:.9,height:30,format:'ean13'}"></barcode></td>
+            :options="{displayValue: false,width:.9,height:30}"></barcode></td>
           <td class=" ">[[props.row.nombre]]</td>
 
           <td class=" ">[[props.row.categoria]]</td>
           <td class=" ">[[props.row.iva]]</td>
           <td class=" ">[[props.row.presentacion]]</td>
           <td class=" ">[[moneda(props.row.precio)]]</td>
-          <td class="">[[moneda(props.row.abonos)]]</td>
-          <td class="">[[moneda(props.row.total - props.row.abonos)]]</td>
 
-          <td class="left aligned" :class="{'active':props.row.estado=='abierta','positive':props.row.estado=='cerrada'}">[[props.row.estado]]</td>
 
           <td>
             <div class="ui icon bottom top right pointing dropdown button icon_action ">
@@ -60,13 +61,101 @@
           </td>
         </template>
 
-        </vue-good-table>
+          </vue-good-table>
+        </div>
+
+
       </div>
-
-
     </div>
+  </section>
+  <div class="ui modal">
+    <i class="close icon"></i>
+    <div class="header title-new">
+      Nuevo producto
+    </div>
+    <div class=" content">
+      <div class="wide column">
+        <form class="ui form" v-on:submit.prevent="save_producto" enctype="multipart/form-data" id="form-producto">{% csrf_token %}
+          <div class="fields">
+            <div class="six wide field required">
+              <label for="" class="label-form">Nombre</label>
+              <input type="text" v-validate="'required|alpha'" name="nombre" value="">
+            </div>
+
+            <div class="five wide field required">
+              <label for="" class="label-form">Precio neto</label>
+
+              <input type="text" v-validate="'required|decimal'" name="precio_venta" value="" v-bind:class="{'err': errors.has('precio_venta')}">
+
+            </div>
+            <div class="five wide field">
+              <label for="" class="label-form">Imagen</label>
+              <input type="file" value="Imagen" name="imagen">
+            </div>
+          </div>
+          <div class="fields">
+            <div class="six wide field">
+              <label class="label-form" for="">Descripción</label>
+              <textarea name="descripcion" rows="4" cols="80"></textarea>
+            </div>
+            <div class="five wide field required">
+              <label for="" class="label-form">IVA</label>
+              <input type="text" name="iva" value="">
+            </div>
+          </div>
+          <div class="fields">
+            <div class="six wide field required">
+              <label class="label-form" for="">Categoria</label>
+              <select class="ui dropdown select-form" name="categoria">
+
+              </select>
+            </div>
+            <div class="five wide field required">
+              <label class="label-form" for="">Precio compra</label>
+              <input type="number" name="precio_compra" value="">
+            </div>
+          </div>
+          <div class="fields">
+            <div class="six wide field required">
+              <label class="label-form" for="">Presentación</label>
+              <select class="ui dropdown select-form" name="presentacion">
+
+              </select>
+            </div>
+            <div class="five wide field required">
+              <label class="label-form" for="">Transporte %</label>
+              <input type="number" name="transporte" value="">
+            </div>
+          </div>
+          <div class="fields">
+            <div class="six wide field">
+              <label for="" class="label-form">Codigo barras</label>
+              <input type="text" name="barras" value="">
+            </div>
+            <div class="five wide field required">
+              <label for="" class="label-form">Utilidad x mayor %</label>
+              <input type="number" name="utilidad" value="">
+            </div>
+          </div>
+          <div class="fields">
+            <div class="five wide field required">
+
+            </div>
+            <div class="five wide field required">
+
+            </div>
+            <div class="five wide field required">
+              <button class="ui right floated primary button" type="submit" name="button">Guardar</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
   </div>
-</section>
+
+</div>
+
 
 
 {% endblock content %} {% block js %}
@@ -77,4 +166,5 @@
 <script type="text/javascript" src="{% static 'js/barcode.min.js' %}"></script>
 
 <script type="text/javascript" src="{% static 'js/inventario/productos.js' %}"></script>
+
 {% endblock js %}

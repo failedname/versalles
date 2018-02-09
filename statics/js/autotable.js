@@ -135,6 +135,7 @@ function getDefaults() {
         // Properties
         startY: false,
         margin: 40 / scaleFactor,
+        marginReduce:0,
         pageBreak: 'auto',
         tableWidth: 'auto',
         showHeader: 'everyPage',

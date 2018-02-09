@@ -74,7 +74,7 @@ class NumeracionAdmin(admin.ModelAdmin):
 
 @admin.register(FacturaReal)
 class FacturaRealAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('pk',)
 
 
 @admin.register(Detalle_FacturaReal)
