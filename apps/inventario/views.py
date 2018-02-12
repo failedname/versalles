@@ -1,7 +1,8 @@
 from django.shortcuts import render
+from django.http import JsonResponse
 from ..ventas.models import Producto, Vivero, Presentacion
 from ..inventario.models import Almacen
-from ..ventas.models import Producto
+from ..ventas.models import Producto, Categoria, Presentacion
 import json
 
 
@@ -9,6 +10,9 @@ def Productos(request):
     template_name = 'inventario/productos.html'
     productos = Producto.objects.filter(
         vivero=request.session['vivero']).select_related('id_presentacion', 'id_categoria')
+    categoria = Categoria.objects.all()
+    presentacion = Presentacion.objects.all()
+
     data = [{
         'id': res.id,
         'nombre': res.nombre,
@@ -18,14 +22,23 @@ def Productos(request):
         'precio': res.precio_venta,
         'iva': res.iva_porce
     }for res in productos]
-    return render(request, template_name, {'data': json.dumps(data)})
+    cate = [{
+        'id': res.pk,
+        'nombre': res.nomb_cate
+    }for res in categoria]
+    pres = [{
+        'id': res.pk,
+        'nombre': res.tipo
+    }for res in presentacion]
+    return render(request, template_name, {'data': json.dumps(data),
+                                           'categoria': json.dumps(cate),
+                                           'presentacion': json.dumps(pres)})
 
 
 def SaveProducto(request):
+
     nombre = request.POST['nombre']
     precio_venta = request.POST['precio_venta']
-    imagen = request.POST['imagen']
-    descripcion = request.POST['descripcion']
     iva = request.POST['iva']
     categoria = request.POST['categoria']
     precio_compra = request.POST['precio_compra']
@@ -33,5 +46,23 @@ def SaveProducto(request):
     transporte = request.POST['transporte']
     barras = request.POST['barras']
     utilidad = request.POST['utilidad']
+    print(categoria)
+    p = Producto(
+        nombre=nombre, precio_venta=int(precio_venta), barras=barras,
+        vivero_id=request.session['vivero'],
+        id_categoria_id=categoria, iva_porce=int(iva),  precio_compra=int(
+            precio_compra),
+        id_presentacion_id=presentacion, tran_porce=int(transporte), mayor_porce=int(utilidad))
+    p.save()
+    product_save = Producto.objects.filter(pk=p.pk)
+    data = [{
+        'id': res.id,
+        'nombre': res.nombre,
+        'barra': res.barras,
+        'categoria': res.id_categoria.nomb_cate,
+        'presentacion': res.id_presentacion.tipo,
+        'precio': res.precio_venta,
+        'iva': res.iva_porce
+    }for res in product_save]
 
-    print(nombre)
+    return JsonResponse({'res': data}, safe=True)

@@ -83,7 +83,6 @@ class Producto(models.Model):
     def save(self):
         preciocompra = ((self.tran_porce / 100) *
                         self.precio_compra) + self.precio_compra
-        print(preciocompra)
         self.valor_real_compra = preciocompra
         self.precioxmayor = ((self.mayor_porce / 100) *
                              preciocompra) + preciocompra

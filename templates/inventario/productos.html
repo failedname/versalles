@@ -79,63 +79,66 @@
           <div class="fields">
             <div class="six wide field required">
               <label for="" class="label-form">Nombre</label>
-              <input type="text" v-validate="'required|alpha'" name="nombre" value="">
+              <input type="text" v-validate="'required|alpha'" name="nombre" value="" v-bind:class="{'err': errors.has('nombre')}">
             </div>
 
             <div class="five wide field required">
               <label for="" class="label-form">Precio neto</label>
 
-              <input type="text" v-validate="'required|decimal'" name="precio_venta" value="" v-bind:class="{'err': errors.has('precio_venta')}">
+              <input type="number" v-validate="'required|decimal'" name="precio_venta" value="" v-bind:class="{'err': errors.has('precio_venta')}">
 
             </div>
-            <div class="five wide field">
-              <label for="" class="label-form">Imagen</label>
-              <input type="file" value="Imagen" name="imagen">
-            </div>
+
           </div>
           <div class="fields">
-            <div class="six wide field">
-              <label class="label-form" for="">Descripción</label>
-              <textarea name="descripcion" rows="4" cols="80"></textarea>
+
+            <div class="six wide field required">
+              <label for="" class="label-form">IVA</label>
+              <input type="number" name="iva" value="" v-validate="'required|decimal'" v-bind:class="{'err': errors.has('iva')}">
             </div>
             <div class="five wide field required">
-              <label for="" class="label-form">IVA</label>
-              <input type="text" name="iva" value="">
+              <label class="label-form" for="">Precio compra</label>
+              <input type="number" name="precio_compra" value="" v-validate="'required|decimal'" v-bind:class="{'err': errors.has('precio_compra')}">
             </div>
           </div>
           <div class="fields">
             <div class="six wide field required">
               <label class="label-form" for="">Categoria</label>
-              <select class="ui dropdown select-form" name="categoria">
-
-              </select>
-            </div>
-            <div class="five wide field required">
-              <label class="label-form" for="">Precio compra</label>
-              <input type="number" name="precio_compra" value="">
-            </div>
-          </div>
-          <div class="fields">
-            <div class="six wide field required">
-              <label class="label-form" for="">Presentación</label>
-              <select class="ui dropdown select-form" name="presentacion">
-
+              <select class="ui dropdown select-form" name="categoria" v-validate="'required|numeric'" v-bind:class="{'err': errors.has('categoria')}">
+                <option value=""></option>
+                <option v-for="pres in categoria" v-bind:value="pres.id">
+                  [[pres.nombre]]
+                </option>
               </select>
             </div>
             <div class="five wide field required">
               <label class="label-form" for="">Transporte %</label>
-              <input type="number" name="transporte" value="">
+              <input type="number" name="transporte" value="" v-validate="'required|decimal'" v-bind:class="{'err': errors.has('transporte')}">
             </div>
+
+          </div>
+          <div class="fields">
+            <div class="six wide field required">
+              <label class="label-form" for="">Presentación</label>
+              <select class="ui dropdown select-form" name="presentacion" v-validate="'required|numeric'" v-bind:class="{'err': errors.has('presentacion')}">
+                <option value=""></option>
+                <option v-for="pres in presentacion" v-bind:value="pres.id">
+                  [[pres.nombre]]
+                </option>
+              </select>
+            </div>
+            <div class="five wide field required">
+              <label for="" class="label-form">Utilidad x mayor %</label>
+              <input type="number" name="utilidad" value="" v-validate="'required|decimal'" v-bind:class="{'err': errors.has('utilidad')}">
+            </div>
+
           </div>
           <div class="fields">
             <div class="six wide field">
               <label for="" class="label-form">Codigo barras</label>
               <input type="text" name="barras" value="">
             </div>
-            <div class="five wide field required">
-              <label for="" class="label-form">Utilidad x mayor %</label>
-              <input type="number" name="utilidad" value="">
-            </div>
+
           </div>
           <div class="fields">
             <div class="five wide field required">
@@ -161,6 +164,8 @@
 {% endblock content %} {% block js %}
 <script type="text/javascript">
   let data = JSON.parse('{{data|safe}}')
+  let categoria = JSON.parse('{{categoria|safe}}')
+  let presentacion = JSON.parse('{{presentacion|safe}}')
   console.log(data)
 </script>
 <script type="text/javascript" src="{% static 'js/barcode.min.js' %}"></script>

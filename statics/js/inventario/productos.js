@@ -37,6 +37,8 @@ new Vue({
         }
       ],
       rows: data,
+      categoria: categoria,
+      presentacion: presentacion,
       pago: {
         factura: '',
         valor: ''
@@ -50,9 +52,7 @@ new Vue({
     },
     save_producto() {
       this.$validator.validateAll().then((result) => {
-        console.log(result)
         if (result) {
-          alert('ñlisto')
           let form = document.getElementById('form-producto')
           let data = new FormData(form)
           let csrftoken = Cookies.get('csrftoken');
@@ -65,10 +65,14 @@ new Vue({
           }
           fetch('save_producto/', myInit).then((res) => {
             return res.json()
-          }).then((data) => {})
+          }).then((data) => {
+            this.rows.push(data.res[0])
+            form.reset()
+            $('.ui.modal').modal('hide');
+          })
 
         }
-        alert('perro')
+
       })
 
     }
