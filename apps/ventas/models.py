@@ -65,7 +65,8 @@ class detalleUser(models.Model):
 class Producto(models.Model):
     nombre = models.CharField(max_length=100)
     barras = models.CharField(max_length=100, null=True)
-    precio_venta = models.IntegerField(verbose_name='precio', null=True)
+    precio_venta = models.IntegerField(
+        verbose_name='precio', null=True, blank=True)
     iva_porce = models.IntegerField(verbose_name='iva', null=True)
     id_categoria = models.ForeignKey(Categoria, verbose_name='Categoria')
     id_presentacion = models.ForeignKey(
@@ -75,6 +76,7 @@ class Producto(models.Model):
     tran_porce = models.IntegerField(verbose_name='Trasporte %', null=True)
     mayor_porce = models.IntegerField(
         verbose_name='Utilidad x mayor %', null=True)
+    general_porce = models.IntegerField(verbose_name='ganancia %', null=True)
     precioxmayor = models.IntegerField(
         blank=True, verbose_name='precio al por mayor', null=True)
     valor_real_compra = models.IntegerField(
@@ -83,9 +85,12 @@ class Producto(models.Model):
     def save(self):
         preciocompra = ((self.tran_porce / 100) *
                         self.precio_compra) + self.precio_compra
+
         self.valor_real_compra = preciocompra
         self.precioxmayor = ((self.mayor_porce / 100) *
                              preciocompra) + preciocompra
+        self.precio_venta = ((self.general_porce / 100)
+                             * self. valor_real_compra) + self.valor_real_compra
         super(Producto, self).save()
 
     class Meta:

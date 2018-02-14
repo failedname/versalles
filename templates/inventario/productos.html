@@ -82,11 +82,9 @@
               <input type="text" v-validate="'required|alpha'" name="nombre" value="" v-bind:class="{'err': errors.has('nombre')}">
             </div>
 
-            <div class="five wide field required">
-              <label for="" class="label-form">Precio neto</label>
-
-              <input type="number" v-validate="'required|decimal'" name="precio_venta" value="" v-bind:class="{'err': errors.has('precio_venta')}">
-
+            <div class="six wide field required">
+              <label for="" class="label-form">Utilidad precio neto %</label>
+              <input type="text" name="ganancia" value="" v-validate="'required|decimal'" v-bind:class="{'err': errors.has('ganancia')}">
             </div>
 
           </div>
@@ -96,7 +94,7 @@
               <label for="" class="label-form">IVA</label>
               <input type="number" name="iva" value="" v-validate="'required|decimal'" v-bind:class="{'err': errors.has('iva')}">
             </div>
-            <div class="five wide field required">
+            <div class="six wide field required">
               <label class="label-form" for="">Precio compra</label>
               <input type="number" name="precio_compra" value="" v-validate="'required|decimal'" v-bind:class="{'err': errors.has('precio_compra')}">
             </div>
@@ -111,7 +109,7 @@
                 </option>
               </select>
             </div>
-            <div class="five wide field required">
+            <div class="six wide field required">
               <label class="label-form" for="">Transporte %</label>
               <input type="number" name="transporte" value="" v-validate="'required|decimal'" v-bind:class="{'err': errors.has('transporte')}">
             </div>
@@ -127,7 +125,7 @@
                 </option>
               </select>
             </div>
-            <div class="five wide field required">
+            <div class="six wide field required">
               <label for="" class="label-form">Utilidad x mayor %</label>
               <input type="number" name="utilidad" value="" v-validate="'required|decimal'" v-bind:class="{'err': errors.has('utilidad')}">
             </div>
@@ -138,6 +136,7 @@
               <label for="" class="label-form">Codigo barras</label>
               <input type="text" name="barras" value="">
             </div>
+
 
           </div>
           <div class="fields">

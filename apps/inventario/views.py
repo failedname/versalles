@@ -38,7 +38,6 @@ def Productos(request):
 def SaveProducto(request):
 
     nombre = request.POST['nombre']
-    precio_venta = request.POST['precio_venta']
     iva = request.POST['iva']
     categoria = request.POST['categoria']
     precio_compra = request.POST['precio_compra']
@@ -46,13 +45,14 @@ def SaveProducto(request):
     transporte = request.POST['transporte']
     barras = request.POST['barras']
     utilidad = request.POST['utilidad']
-    print(categoria)
+    por_ganancia = request.POST['ganancia']
     p = Producto(
-        nombre=nombre, precio_venta=int(precio_venta), barras=barras,
+        nombre=nombre,  barras=barras,
         vivero_id=request.session['vivero'],
-        id_categoria_id=categoria, iva_porce=int(iva),  precio_compra=int(
+        id_categoria_id=categoria, iva_porce=float(iva),  precio_compra=int(
             precio_compra),
-        id_presentacion_id=presentacion, tran_porce=int(transporte), mayor_porce=int(utilidad))
+        id_presentacion_id=presentacion, tran_porce=float(transporte), mayor_porce=float(utilidad),
+        general_porce=float(por_ganancia))
     p.save()
     product_save = Producto.objects.filter(pk=p.pk)
     data = [{
