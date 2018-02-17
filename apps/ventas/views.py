@@ -5,6 +5,7 @@ from django.http import JsonResponse
 from django.views.generic import TemplateView
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
+from ..inventario.models import Almacen
 from .models import (Cliente, Producto, Vivero,
                      FacturaReal, Detalle_FacturaReal,
                      Numeracion, EstadoFactura, Remision, detalleRemison,
@@ -491,6 +492,7 @@ def save_facturaReal(request):
                         cliente_id=c[0].pk)
 
         f.save()
+
         id_fac = f.codigo
         for res in datos['datos']:
             Detalle_FacturaReal.objects.create(factura_id=id_fac,
@@ -499,6 +501,14 @@ def save_facturaReal(request):
                                                val_unitario=int(res['precio']),
                                                iva=res['iva'],
                                                val_neto=int(res['precio']) * res(res['cantidad']))
+            stock = Almacen.objects.get(
+                producto_id=res['id'], vivero_id=request.session['vivero'])
+            if stock.stock > 0:
+
+                rest = int(stock.stock) - int(res['cantidad'])
+                print(rest)
+                stock.stock = rest
+                stock.save()
         if(len(datos['pago']) != 0):
 
             PagosFactura.objects.create(
@@ -555,9 +565,18 @@ def save_facturaReal(request):
             Detalle_FacturaReal.objects.create(factura_id=id_fac,
                                                cantidad=int(res['cantidad']),
                                                producto_id=res['id'],
-                                               val_unitario=int(res['precio']),
+                                               val_unitario=int(
+                                                   res['precio']),
                                                iva=res['iva'],
                                                val_neto=int(res['precio']) * int(res['cantidad']))
+            stock = Almacen.objects.get(
+                producto_id=res['id'], vivero_id=request.session['vivero'])
+            if stock.stock > 0:
+
+                rest = int(stock.stock) - int(res['cantidad'])
+                print(rest)
+                stock.stock = rest
+                stock.save()
         if(len(datos['pago']) != 0):
             PagosFactura.objects.create(
                 pedido_id=id_fac, valorabono=datos['pago'])
@@ -580,8 +599,8 @@ def save_facturaReal(request):
             'cliente': res.factura.cliente.nombre,
             'nit': res.factura.cliente.nit_cc,
             'direccion': res.factura.cliente.direccion,
-                'telefono': res.factura.cliente.telefono,
-                'codigo': res.producto_id,
+            'telefono': res.factura.cliente.telefono,
+            'codigo': res.producto_id,
                 'nombre': res.producto.nombre,
                 'presentacion': res.producto.id_presentacion.tipo,
                 'cantidad': res.cantidad,
