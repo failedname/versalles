@@ -6,22 +6,32 @@ from ..ventas.models import Producto, Categoria, Presentacion
 import json
 
 
+def Script(request):
+    pro = Producto.objects.all().filter(vivero_id=request.session['vivero'])
+    for res in pro:
+        Almacen.objects.create(producto_id=res.pk, stock=0,
+                               vivero_id=request.session['vivero'])
+
+
 def Productos(request):
     template_name = 'inventario/productos.html'
-    productos = Producto.objects.filter(
-        vivero=request.session['vivero']).select_related('id_presentacion', 'id_categoria')
+    product = Almacen.objects.select_related('producto',
+                                             'producto__id_presentacion',
+                                             'producto__id_categoria').filter(
+        vivero=request.session['vivero'])
     categoria = Categoria.objects.all()
     presentacion = Presentacion.objects.all()
 
     data = [{
-        'id': res.id,
-        'nombre': res.nombre,
-        'barra': res.barras,
-        'categoria': res.id_categoria.nomb_cate,
-        'presentacion': res.id_presentacion.tipo,
-        'precio': res.precio_venta,
-        'iva': res.iva_porce
-    }for res in productos]
+        'id': res.producto_id,
+        'nombre': res.producto.nombre,
+        'barra': res.producto.barras,
+        'categoria': res.producto.id_categoria.nomb_cate,
+        'presentacion': res.producto.id_presentacion.tipo,
+        'precio': res.producto.precio_venta,
+        'iva': res.producto.iva_porce,
+        'stock': res.stock
+    }for res in product]
     cate = [{
         'id': res.pk,
         'nombre': res.nomb_cate
@@ -54,15 +64,22 @@ def SaveProducto(request):
         id_presentacion_id=presentacion, tran_porce=float(transporte), mayor_porce=float(utilidad),
         general_porce=float(por_ganancia))
     p.save()
-    product_save = Producto.objects.filter(pk=p.pk)
+    Almacen.objects.create(producto_id=p.pk, stock=0,
+                           vivero_id=request.session['vivero'])
+
+    req_producto = product = Almacen.objects.select_related('producto',
+                                                            'producto__id_presentacion',
+                                                            'producto__id_categoria').filter(
+        vivero=request.session['vivero'], producto=p.pk)
     data = [{
-        'id': res.id,
-        'nombre': res.nombre,
-        'barra': res.barras,
-        'categoria': res.id_categoria.nomb_cate,
-        'presentacion': res.id_presentacion.tipo,
-        'precio': res.precio_venta,
-        'iva': res.iva_porce
-    }for res in product_save]
+        'id': res.producto_id,
+        'nombre': res.producto.nombre,
+        'barra': res.producto.barras,
+        'categoria': res.producto.id_categoria.nomb_cate,
+        'presentacion': res.producto.id_presentacion.tipo,
+        'precio': res.producto.precio_venta,
+        'iva': res.producto.iva_porce,
+        'stock': res.stock
+    }for res in req_producto]
 
     return JsonResponse({'res': data}, safe=True)

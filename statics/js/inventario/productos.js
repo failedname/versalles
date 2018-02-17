@@ -1,3 +1,6 @@
+document.addEventListener('DOMContentLoaded', () => {
+  $('.ui.dropdown').dropdown();
+})
 Vue.use(VeeValidate)
 new Vue({
   el: '#table_productos',
@@ -33,6 +36,9 @@ new Vue({
         }, {
           label: 'Precio'
         }, {
+          label: 'Stock',
+          field: 'stock'
+        }, {
           label: ''
         }
       ],
@@ -48,7 +54,10 @@ new Vue({
   },
   methods: {
     showModal() {
-      $('.ui.modal').modal('show');
+      $('#id_nuevo').modal('show');
+    },
+    showModalAjustes(id) {
+      $('#id_ajustes').modal('show');
     },
     save_producto() {
       this.$validator.validateAll().then((result) => {

@@ -42,18 +42,16 @@
           <td class=" ">[[props.row.iva]]</td>
           <td class=" ">[[props.row.presentacion]]</td>
           <td class=" ">[[moneda(props.row.precio)]]</td>
+          <td class=" ">[[props.row.stock]]</td>
 
 
           <td>
             <div class="ui icon bottom top right pointing dropdown button icon_action ">
             <i class="caret down icon"></i>
             <div class="menu">
-              <a class="item" :href="'/ventas/facturas/detallefac/'+ props.row.codigo">Ver</a>
-              <a class="item" @click="modalPago(props.row.codigo)" v-bind:class="{'disabled':props.row.estado=='cerrada'}">Agregar Pago</a>
-              {% if user.is_superuser %}
-                <div class="item" @click="showCancel(props.row.codigo)" :class="{'disabled':props.row.estado=='cerrada'}">Anular</div>
-                <div class="item" @click="deleteModal(props.row.codigo)"  :class="{'disabled':props.row.estado=='cerrada'}">Eliminar</div>
-              {% endif %}
+              <a class="item" >Ver</a>
+              <a class="item" @click="showModalAjustes(props.row.id)">Ajustes Inventario</a>
+
 
 
             </div>
@@ -68,7 +66,19 @@
       </div>
     </div>
   </section>
-  <div class="ui modal">
+  <div class="ui modal" id="id_ajustes">
+    <i class="close icon"></i>
+    <div class="header title-new">
+      Ajustes inventario
+    </div>
+    <div class="content">
+      <h4 class="ui dividing header">Agregar inventario</h4>
+    </div>
+    <div class="actions">
+
+    </div>
+  </div>
+  <div class="ui modal" id="id_nuevo">
     <i class="close icon"></i>
     <div class="header title-new">
       Nuevo producto
