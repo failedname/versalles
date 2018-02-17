@@ -83,3 +83,37 @@ def SaveProducto(request):
     }for res in req_producto]
 
     return JsonResponse({'res': data}, safe=True)
+
+
+def AddInventario(request):
+    cantidad = request.body.decode('utf-8')
+    data = json.loads(cantidad)
+    stock = Almacen.objects.get(
+        producto_id=data['id'], vivero_id=request.session['vivero'])
+    stock.stock = stock.stock + int(data['valor'])
+    stock.save()
+    stock_final = Almacen.objects.get(
+        producto_id=data['id'], vivero_id=request.session['vivero'])
+    data_final = {
+        'id_producto': stock_final.producto_id,
+        'stock': stock_final.stock
+    }
+
+    return JsonResponse({'data': data_final}, safe=True)
+
+
+def DelInventario(request):
+    cantidad = request.body.decode('utf-8')
+    data = json.loads(cantidad)
+    stock = Almacen.objects.get(
+        producto_id=data['id'], vivero_id=request.session['vivero'])
+    stock.stock = stock.stock - int(data['valor'])
+    stock.save()
+    stock_final = Almacen.objects.get(
+        producto_id=data['id'], vivero_id=request.session['vivero'])
+    data_final = {
+        'id_producto': stock_final.producto_id,
+        'stock': stock_final.stock
+    }
+
+    return JsonResponse({'data': data_final}, safe=True)

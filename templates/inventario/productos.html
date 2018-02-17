@@ -73,6 +73,37 @@
     </div>
     <div class="content">
       <h4 class="ui dividing header">Agregar inventario</h4>
+      <form class="ui form" v-on:submit.prevent="add_inventario" id="form_add">
+        <div class="fields">
+          <div class="six wide field">
+            <label for="">Cantidad a sumar</label>
+            <input type="text" name="add" value="" v-validate="'required|numeric'" v-bind:class="{'err': errors.has('add')}">
+          </div>
+
+        </div>
+        <div class="fields">
+          <div class="six wide field">
+            <button class="ui left floated primary button" type="submit">Agregar</button>
+          </div>
+        </div>
+
+      </form>
+      <h4 class="ui dividing header">Disminuir inventario</h4>
+      <form class="ui form" v-on:submit.prevent="del_inventario" id="form_del">
+        <div class="fields">
+          <div class="six wide field">
+            <label for="">Cantidad a restar</label>
+            <input type="text" name="del" value="" v-validate="'required|numeric'" v-bind:class="{'err': errors.has('del')}">
+          </div>
+
+        </div>
+        <div class="fields">
+          <div class="six wide field">
+            <button class="ui left floated primary button" type="submit">Quitar</button>
+          </div>
+        </div>
+
+      </form>
     </div>
     <div class="actions">
 

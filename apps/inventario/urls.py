@@ -1,14 +1,17 @@
 
 from django.conf.urls import url
-from .views import Productos, SaveProducto, Script
+from .views import Productos, SaveProducto, Script, AddInventario, DelInventario
 
 urlpatterns = [
     url(r'^productos/$',
         Productos, name='productos'),
     url(r'^productos/save_producto/$',
         SaveProducto, name='save_productos'),
-    url(r'^productos/script/$',
-        Script, name='script'),
+
+    url(r'^productos/add/$',
+        AddInventario, name='add'),
+    url(r'^productos/del/$',
+        DelInventario, name='del'),
 
 
 

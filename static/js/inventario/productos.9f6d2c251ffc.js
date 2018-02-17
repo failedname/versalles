@@ -45,6 +45,7 @@ new Vue({
       rows: data,
       categoria: categoria,
       presentacion: presentacion,
+      id_inventario: '',
       pago: {
         factura: '',
         valor: ''
@@ -58,7 +59,58 @@ new Vue({
     },
     showModalAjustes(id) {
       $('#id_ajustes').modal('show');
+      this.id_inventario = id
     },
+    add_inventario() {
+
+      let form = document.getElementById('form_add')
+
+      let csrftoken = Cookies.get('csrftoken');
+      let myHeaders = new Headers({"X-CSRFToken": csrftoken});
+      var myInit = {
+        method: 'POST',
+        body: JSON.stringify({valor: form.add.value, id: this.id_inventario}),
+        headers: myHeaders,
+        credentials: 'include'
+      }
+      fetch('add/', myInit).then((res) => {
+        return res.json()
+      }).then((data) => {
+        console.log(data)
+        let id = this.rows.findIndex((ele) => {
+          return ele.id == data.data.id_producto
+        })
+        this.rows[id].stock = data.data.stock
+        form.reset()
+        this.id_inventario = ''
+        $('#id_ajustes').modal('hide');
+      })
+
+    },
+    del_inventario() {
+      let form = document.getElementById('form_del')
+
+      let csrftoken = Cookies.get('csrftoken');
+      let myHeaders = new Headers({"X-CSRFToken": csrftoken});
+      var myInit = {
+        method: 'POST',
+        body: JSON.stringify({valor: form.del.value, id: this.id_inventario}),
+        headers: myHeaders,
+        credentials: 'include'
+      }
+      fetch('del/', myInit).then((res) => {
+        return res.json()
+      }).then((data) => {
+        let id = this.rows.findIndex((ele) => {
+          return ele.id == data.data.id_producto
+        })
+        this.rows[id].stock = data.data.stock
+        form.reset()
+        this.id_inventario = ''
+        $('#id_ajustes').modal('hide');
+      })
+    },
+
     save_producto() {
       this.$validator.validateAll().then((result) => {
         if (result) {
