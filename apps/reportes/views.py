@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from openpyxl import Workbook
 from django.http import JsonResponse, HttpResponse
-from apps.ventas.models import Detalle_FacturaReal, detalleUser, detalleRemison
+from apps.ventas.models import Detalle_FacturaReal, detalleUser, detalleRemison, Categoria, Producto
 
 import json
 
@@ -197,5 +197,75 @@ class report_remisiones(TemplateView):
                 'estado': res.remision.estado.estado,
                 'totaliva': res.iva,
                 'total': res.total
+            }for res in data]
+            return JsonResponse({'data': fact}, safe=True)
+
+
+class ReportCat(TemplateView):
+    template_name = 'reportes/categoria.html'
+
+    def get(self, request, *args, **kwargs):
+        cat = Categoria.objects.all()
+        return render(request, self.template_name, {'data': cat})
+
+    def post(self, request, *args, **kwargs):
+        if 'vivero' in request.session:
+            fechas = json.loads(request.body)
+
+            data = Producto.objects.raw(''' SELECT
+            ventas_producto.nombre,
+            sum(ventas_detalle_facturareal.cantidad) AS "cantidad",
+            sum(ventas_detalle_facturareal.val_neto) AS "total_venta",
+            sum(ventas_detalle_facturareal.iva) AS "iva",
+            sum(ventas_producto.valor_real_compra * cantidad) AS "valor_compra",
+            ventas_producto.id
+            FROM
+            ventas_producto
+            JOIN ventas_detalle_facturareal
+            ON ventas_producto.id = ventas_detalle_facturareal.producto_id
+            JOIN "public"."ventas_facturareal"
+            ON ventas_detalle_facturareal.factura_id = ventas_facturareal.codigo
+            WHERE
+            (ventas_facturareal.fecha BETWEEN %s AND %s) and (ventas_facturareal.vivero_id=%s) AND ventas_producto.id_categoria_id=%s
+            GROUP BY
+            ventas_producto.id ''', [fechas['start'], fechas['end'], request.session['vivero'], fechas['cate']])
+            fact = [{
+                'id': res.pk,
+                'nombre': res.nombre,
+                'cantidad': res.cantidad,
+                'totalventa': res.total_venta,
+                'iva': res.iva,
+                'totalcompra': res.valor_compra
+            }for res in data]
+            return JsonResponse({'data': fact}, safe=True)
+        else:
+            vivero = detalleUser.objects.get(usuario__pk=request.user.id)
+            request.session['vivero'] = vivero.vivero.id
+            fechas = json.loads(request.body)
+
+            data = Producto.objects.raw(''' SELECT
+            ventas_producto.nombre,
+            sum(ventas_detalle_facturareal.cantidad) AS "cantidad",
+            sum(ventas_detalle_facturareal.val_neto) AS "total_venta",
+            sum(ventas_detalle_facturareal.iva) AS "iva",
+            sum(ventas_producto.valor_real_compra * cantidad) AS "valor_compra",
+            ventas_producto.id
+            FROM
+            ventas_producto
+            JOIN ventas_detalle_facturareal
+            ON ventas_producto.id = ventas_detalle_facturareal.producto_id
+            JOIN "public"."ventas_facturareal"
+            ON ventas_detalle_facturareal.factura_id = ventas_facturareal.codigo
+            WHERE
+            (ventas_facturareal.fecha BETWEEN %s AND %s) and (ventas_facturareal.vivero_id=%s) AND ventas_producto.id_categoria_id=%s
+            GROUP BY
+            ventas_producto.id ''', [fechas['start'], fechas['end'], request.session['vivero'], fechas['cate']])
+            fact = [{
+                'id': res.pk,
+                'nombre': res.nombre,
+                'cantidad': res.cantidad,
+                'totalventa': res.total_venta,
+                'iva': res.iva,
+                'totalcompra': res.valor_compra
             }for res in data]
             return JsonResponse({'data': fact}, safe=True)

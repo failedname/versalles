@@ -1,6 +1,6 @@
 from django.conf.urls import url
 from .views import (ventasReport, report_ventas,
-                    report_remisiones, export_ventas)
+                    report_remisiones, export_ventas, ReportCat)
 
 urlpatterns = [
 
@@ -12,6 +12,8 @@ urlpatterns = [
         export_ventas, name='exportventas'),
     url(r'^remisiones/$',
         report_remisiones.as_view(), name='reportremisiones'),
+    url(r'^categoria/$',
+        ReportCat.as_view(), name='reportcategoria'),
 
 
 ]

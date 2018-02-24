@@ -21,7 +21,7 @@
         <div class="header ">
           VENTAS
         </div>
-        <p>Consulta el detalle de las facturas de venta en un período de tiempo.</p>
+        <p>Consulta el detalle de las facturas de venta por categoria.</p>
       </div>
     </div>
   </div>
@@ -29,6 +29,17 @@
 <div class="ui grid container">
   <div class="wide column ">
     <div class="ui form">
+      <div class="fields">
+        <div class="six wide field">
+          <label for="">Categoria</label>
+          <select class="ui fluid dropdown" name="" id="cat">
+            <option value=""></option>
+            {% for res in  data %}
+              <option value="{{res.pk}}">{{res.nomb_cate}}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
       <div class="fields">
         <div class=" eight wide field">
           <label>Desde</label>
@@ -68,11 +79,12 @@
     <table id="tableFactura" class="ui celled structured small table">
       <thead>
         <tr>
-          <th>Número</th>
-          <th>Cliente</th>
-          <th>Creación</th>
+          <th>Producto</th>
+          <th>Cantidad</th>
+          <th>Total ventas</th>
           <th>IVA</th>
-          <th>Total</th>
+          <th>Total compras</th>
+          <th>Ganancia</th>
         </tr>
       </thead>
       <tbody id="report_body">
@@ -80,13 +92,16 @@
       </tbody>
       <tfoot class="full-width">
         <tr>
-          <th colspan="5">
+          <th colspan="6">
             <div class="total_subtotal ">
               <div class="labeled label">
                 Total
               </div>
-              <div id="totiva" class="value">$</div>
-              <div id="total" class="value" style="width:200px">$</div>
+
+              <div id="total" class="value" style="width:200px"></div>
+              <div id="totalcompra" class="value" style="width:200px"></div>
+              <div id="totiva" class="value"></div>
+              <div id="ganancia" class="value"></div>
             </div>
           </th>
         </tr>
@@ -103,5 +118,5 @@
 <script type="text/javascript" src="{% static 'js/pagination.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/moneda.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/calendar.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/reportes/reportVenta.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/reportes/categoria.js' %}"></script>
 {% endblock js %}
