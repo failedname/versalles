@@ -46,7 +46,7 @@ def Productos(request):
 
 
 def SaveProducto(request):
-
+    print('hola')
     nombre = request.POST['nombre']
     iva = request.POST['iva']
     categoria = request.POST['categoria']

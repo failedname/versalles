@@ -158,7 +158,7 @@ function reportVenta() {
   }).then((data) => {
     if (!data.data.length) {
       body.innerHTML = `<tr>
-                          <td colspan="5">
+                          <td colspan="6">
                             <div class="sin_ventas">¡No tienes ventas en este periodo!</div>
                           </td>
                         </tr>`
@@ -222,11 +222,9 @@ function reportVenta() {
 
 function simpleTemplating(data) {
   let html = ''
-  console.log(data)
   $.each(data, function(index, item) {
 
     html += `<tr>
-
               <td>${item.nombre}</td>
               <td class="center aligned">${item.cantidad}</td>
               <td class="right aligned">${moneda(item.totalventa)}</td>
