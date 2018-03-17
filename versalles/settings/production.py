@@ -11,7 +11,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'versalles',
-        'USER': 'postgres',
+        'USER': 'app_vivero',
         'PASSWORD': 'luna',
         'HOST': 'localhost',
         'PORT': '5432',
