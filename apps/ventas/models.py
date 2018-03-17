@@ -54,8 +54,8 @@ class Vivero(models.Model):
 
 
 class detalleUser(models.Model):
-    vivero = models.ForeignKey(Vivero)
-    usuario = models.OneToOneField(User)
+    vivero = models.ForeignKey(Vivero,on_delete=models.CASCADE)
+    usuario = models.OneToOneField(User,on_delete=models.CASCADE)
 
     class Meta:
         verbose_name = 'Detalle de Usuario'
