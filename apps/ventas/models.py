@@ -68,10 +68,10 @@ class Producto(models.Model):
     precio_venta = models.IntegerField(
         verbose_name='precio', null=True, blank=True)
     iva_porce = models.IntegerField(verbose_name='iva', null=True)
-    id_categoria = models.ForeignKey(Categoria, verbose_name='Categoria')
+    id_categoria = models.ForeignKey(Categoria, verbose_name='Categoria',on_delete=models.CASCADE)
     id_presentacion = models.ForeignKey(
-        Presentacion, verbose_name='Presentación')
-    vivero = models.ForeignKey(Vivero, null=True)
+        Presentacion, verbose_name='Presentación',on_delete=models.CASCADE)
+    vivero = models.ForeignKey(Vivero, null=True,on_delete=models.CASCADE)
     precio_compra = models.IntegerField(null=True)
     tran_porce = models.IntegerField(verbose_name='Trasporte %', null=True)
     mayor_porce = models.IntegerField(
