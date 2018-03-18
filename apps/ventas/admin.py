@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.contrib import admin
+from import_export.admin import ImportExportModelAdmin
+from import_export import resources
 from .models import (
     Cliente, Producto, Categoria,
     Presentacion, Vivero, EstadoFactura,
@@ -7,6 +9,14 @@ from .models import (
     Numeracion, FacturaReal, Remision, detalleRemison, detalleUser,
     estadoPedido, Pedido, abonoPedido, PagosFactura)
 
+
+
+class BookResource(resources.ModelResource):
+    class Meta:
+        model = Producto
+
+class BookAdmin(ImportExportModelAdmin):
+    resource_class = BookResource
 
 class ExampleAdmin(admin.ModelAdmin):
     change_list_template = 'smuggler/change_list.html'
