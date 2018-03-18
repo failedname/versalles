@@ -24,7 +24,7 @@ from apps.inventario import urls as inventario_url
 
 urlpatterns = [
     url(r'^admin/', include('smuggler.urls')),
-    url(r'^admin/', include((admin.site.urls))),
+    url(r'^admin/', include(admin.site.urls,None)),
     url(r'^', include((dash_url,'dashboard'))),
     url(r'^ventas/', include((ventas_url,'ventas'))),
     url(r'^compras/', include((compras_url, 'compras'))),
