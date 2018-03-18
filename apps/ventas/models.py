@@ -108,30 +108,30 @@ class estadoPedido(models.Model):
 
 class Pedido(models.Model):
     fecha = models.DateField(auto_now_add=True)
-    cliente = models.ForeignKey(Cliente)
-    vivero = models.ForeignKey(Vivero)
-    estadopedido = models.ForeignKey(estadoPedido, null=True)
+    cliente = models.ForeignKey(Cliente,on_delete=models.CASCADE)
+    vivero = models.ForeignKey(Vivero,on_delete=models.CASCADE)
+    estadopedido = models.ForeignKey(estadoPedido, null=True,on_delete=models.CASCADE)
 
 
 class pedidoDetalle(models.Model):
-    pedido = models.ForeignKey(Pedido, null=True)
+    pedido = models.ForeignKey(Pedido, null=True,on_delete=models.CASCADE)
     cantidad = models.IntegerField()
-    producto = models.ForeignKey(Producto)
+    producto = models.ForeignKey(Producto,on_delete=models.CASCADE)
     val_unitario = models.IntegerField()
     iva = models.IntegerField()
     val_neto = models.IntegerField(null=True)
 
 
 class abonoPedido(models.Model):
-    pedido = models.ForeignKey(Pedido)
+    pedido = models.ForeignKey(Pedido,on_delete=models.CASCADE)
     fecha = models.DateField(auto_now_add=True)
     valorabono = models.IntegerField()
 
 
 class FacturaDoble(models.Model):
     fecha = models.DateField(auto_now_add=True)
-    cliente = models.ForeignKey(Cliente)
-    vivero = models.ForeignKey(Vivero)
+    cliente = models.ForeignKey(Cliente,on_delete=models.CASCADE)
+    vivero = models.ForeignKey(Vivero,on_delete=models.CASCADE)
 
     class Meta:
         verbose_name = 'Factura'
@@ -148,9 +148,9 @@ class EstadoFactura(models.Model):
 class FacturaReal(models.Model):
     codigo = models.IntegerField(primary_key=True)
     fecha = models.DateField(auto_now_add=True)
-    cliente = models.ForeignKey(Cliente)
-    vivero = models.ForeignKey(Vivero)
-    estado = models.ForeignKey(EstadoFactura, null=True)
+    cliente = models.ForeignKey(Cliente,on_delete=models.CASCADE)
+    vivero = models.ForeignKey(Vivero,on_delete=models.CASCADE)
+    estado = models.ForeignKey(EstadoFactura, null=True,on_delete=models.CASCADE)
 
     class Meta:
         verbose_name = 'Factura Real'
@@ -158,9 +158,9 @@ class FacturaReal(models.Model):
 
 
 class Detalle_FacturaDoble(models.Model):
-    factura = models.ForeignKey(FacturaDoble)
+    factura = models.ForeignKey(FacturaDoble,on_delete=models.CASCADE)
     cantidad = models.IntegerField()
-    producto = models.ForeignKey(Producto)
+    producto = models.ForeignKey(Producto,on_delete=models.CASCADE)
     descuento = models.IntegerField()
     val_unitario = models.IntegerField()
     iva = models.IntegerField()
@@ -172,9 +172,9 @@ class Detalle_FacturaDoble(models.Model):
 
 
 class Detalle_FacturaReal(models.Model):
-    factura = models.ForeignKey(FacturaReal)
+    factura = models.ForeignKey(FacturaReal,on_delete=models.CASCADE)
     cantidad = models.IntegerField()
-    producto = models.ForeignKey(Producto)
+    producto = models.ForeignKey(Producto,on_delete=models.CASCADE)
     val_unitario = models.IntegerField()
     iva = models.IntegerField()
     val_neto = models.IntegerField()
@@ -189,7 +189,7 @@ class Numeracion(models.Model):
     fecha = models.DateField(auto_now_add=False, null=True)
     num_ini = models.IntegerField()
     num_fin = models.IntegerField()
-    vivero = models.ForeignKey(Vivero)
+    vivero = models.ForeignKey(Vivero,on_delete=models.CASCADE)
 
     class Meta:
         verbose_name = 'Numeracion'
@@ -198,14 +198,14 @@ class Numeracion(models.Model):
 
 class Remision(models.Model):
     fecha = models.DateField(auto_now_add=True)
-    vivero = models.ForeignKey(Vivero)
-    cliente = models.ForeignKey(Cliente)
-    estado = models.ForeignKey(EstadoFactura, null=True)
+    vivero = models.ForeignKey(Vivero,on_delete=models.CASCADE)
+    cliente = models.ForeignKey(Cliente,on_delete=models.CASCADE)
+    estado = models.ForeignKey(EstadoFactura, null=True,on_delete=models.CASCADE)
 
 
 class detalleRemison(models.Model):
-    remision = models.ForeignKey(Remision)
-    producto = models.ForeignKey(Producto)
+    remision = models.ForeignKey(Remision,on_delete=models.CASCADE)
+    producto = models.ForeignKey(Producto,on_delete=models.CASCADE)
     cantidad = models.IntegerField()
     val_unitario = models.IntegerField(null=True)
     iva = models.IntegerField(null=True)
@@ -213,6 +213,6 @@ class detalleRemison(models.Model):
 
 
 class PagosFactura(models.Model):
-    pedido = models.ForeignKey(FacturaReal)
+    pedido = models.ForeignKey(FacturaReal,on_delete=models.CASCADE)
     fecha = models.DateField(auto_now_add=True)
     valorabono = models.IntegerField()

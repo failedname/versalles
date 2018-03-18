@@ -17,13 +17,13 @@ class Proveedor(models.Model):
 
 class Compra(models.Model):
     codigo = models.IntegerField(primary_key=True)
-    proveedor = models.ForeignKey(Proveedor)
+    proveedor = models.ForeignKey(Proveedor,on_delete=models.CASCADE)
     fecha = models.DateField(auto_now_add=False)
-    vivero = models.ForeignKey(Vivero)
+    vivero = models.ForeignKey(Vivero,on_delete=models.CASCADE)
 
 class DetalleCompra(models.Model):
-    compra = models.ForeignKey(Compra)
-    producto = models.ForeignKey(Producto)
+    compra = models.ForeignKey(Compra,on_delete=models.CASCADE)
+    producto = models.ForeignKey(Producto,on_delete=models.CASCADE)
     cantidad = models.IntegerField()
     valor_compra = models.IntegerField()
     iva = models.IntegerField()
