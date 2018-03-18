@@ -25,10 +25,10 @@ from apps.inventario import urls as inventario_url
 urlpatterns = [
     url(r'^admin/', include('smuggler.urls')),
     url(r'^admin/', admin.site.urls),
-    url(r'^', include(dash_url,'dashboard')),
-    url(r'^ventas/', include(ventas_url,'ventas')),
-    url(r'^compras/', include(compras_url, 'compras')),
-    url(r'^reportes/', include(reportes_url, 'reportes')),
-    url(r'^contactos/', include(contactos_url, 'contactos')),
-    url(r'^inventario/', include(inventario_url, 'inventario')),
+    url(r'^', include((dash_url,'dashboard'))),
+    url(r'^ventas/', include((ventas_url,'ventas'))),
+    url(r'^compras/', include((compras_url, 'compras'))),
+    url(r'^reportes/', include((reportes_url, 'reportes'))),
+    url(r'^contactos/', include((contactos_url, 'contactos'))),
+    url(r'^inventario/', include((inventario_url, 'inventario'))),
 ]
