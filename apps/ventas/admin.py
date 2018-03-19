@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.contrib import admin
-from import_export.admin import ImportExportModelAdmin
+from import_export.admin import ImportExportActionModelAdmin,ImportExportModelAdmin
 from import_export import resources
 from .models import (
     Cliente, Producto, Categoria,
@@ -17,6 +17,9 @@ class BookResource(resources.ModelResource):
 
 class BookAdmin(ImportExportModelAdmin):
     resource_class = BookResource
+
+class BookAdmin(ImportExportActionModelAdmin):
+    pass
 
 class ExampleAdmin(admin.ModelAdmin):
     change_list_template = 'smuggler/change_list.html'
