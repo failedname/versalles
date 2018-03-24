@@ -1,93 +1,90 @@
-{% extends "base.html" %}
-{% block title %}Ventas | POS{% endblock %}
-{% load static from staticfiles %}
-{% block content %}
-  {% csrf_token %}
-  <div class="ui stackable  grid ">
-      <div class="nine wide column" >
-        <div class="ui segment " style="min-height:470px">
-          <div class="ui icon fluid input">
-            <input id="buscarProductos" type="text" placeholder="Buscar Productos...">
-            <i class="search icon"></i>
-          </div>
-          <div id="items" class="ui stackable grid" style="margin-top: 10px">
+{% extends "base.html" %} {% block title %}Ventas | POS{% endblock %} {% load static from staticfiles %} {% block content %} {% csrf_token %}
 
-          </div>
-        </div>
+<div class="ui   grid " style="margin-top:10px">
+
+  <div class="nine wide column">
+    <div class="ui segment " style="min-height:470px">
+      <div class="ui icon fluid input">
+        <input id="buscarProductos" type="text" placeholder="Buscar Productos...">
+        <i class="search icon"></i>
       </div>
-      <div class="seven wide column" >
-        <div class="ui segment " style="min-height:470px">
-          <div class="ui top attached label">VENTA</div>
-          <div class="invoice__cliente">
-            <button class="ui button">
+      <div id="items" class="ui stackable grid" style="margin-top: 10px">
+
+      </div>
+    </div>
+  </div>
+  <div class="seven wide column">
+    <div class="ui segment " style="min-height:470px">
+      <div class="ui top attached label">VENTA</div>
+      <div class="invoice__cliente">
+        <button class="ui button">
               Follow
             </button>
-            <div class="ui search icon fluid input">
-              <i class="search icon"></i>
-              <input id="buscarCliente" type="text" placeholder="Buscar Cliente...">
-              <div id="clienteResult" class="results "></div>
-            </div>
+        <div class="ui search icon fluid input">
+          <i class="search icon"></i>
+          <input id="buscarCliente" type="text" placeholder="Buscar Cliente...">
+          <div id="clienteResult" class="results "></div>
+        </div>
 
-          </div>
-          <div id="itemVenta" class="ui divided link items">
+      </div>
+      <div id="itemVenta" class="ui divided link items">
 
+      </div>
+      <div id="invoice__summary">
+        <div id="invoice__totals">
+          <div class="invoice__total">
+            <div>SubTotal:</div>
+            <div id="subTotal"></div>
           </div>
-          <div id="invoice__summary">
-            <div id="invoice__totals">
-              <div class="invoice__total">
-                <div>SubTotal:</div>
-                <div id="subTotal"></div>
-              </div>
-              <div class="invoice__total">
-                <div>Iva:</div>
-                <div id="subIva"></div>
-              </div>
-            </div>
-            <div id="invoice__pay">
-              <button id="btnSave" class="fluid ui teal button btnPay" disabled>
+          <div class="invoice__total">
+            <div>Iva:</div>
+            <div id="subIva"></div>
+          </div>
+        </div>
+        <div id="invoice__pay">
+          <button id="btnSave" class="fluid ui teal button btnPay" disabled>
                 <p >VENDER</p>
                 <p id="total"></p>
 
               </button>
-            </div>
-            <div id="invoice__cancel" class="ui button">
-              CANCELAR
+        </div>
+        <div id="invoice__cancel" class="ui button">
+          CANCELAR
 
-            </div>
-          </div>
         </div>
       </div>
-      <div class="ui modal otro" id="modal">
-        <i class="close icon"></i>
-        <div id="modalHeader" class="header">
-          Modal Title
-        </div>
-        <div class="content">
-
-          <div class="description">
-            <div class="ui labeled input">
-              <div class="ui label">
-                Precio
-              </div>
-              <input id="precioModal" type="text" placeholder="" >
-            </div>
-            <div class="ui  labeled input">
-              <div class="ui label">
-                Cantidad
-              </div>
-              <input id="cantidadModal" type="number" placeholder="" >
-            </div>
-
-          </div>
-        </div>
-        <div class="actions">
-          <div id="cancelModal" class="ui button">Cancelar</div>
-          <div id="saveModal" class="ui button">Guardar</div>
-        </div>
     </div>
   </div>
-{% endblock %}
-{% block js %}
-  <script type="text/javascript" src="{% static 'js/moneda.js' %}"></script>
-  <script type="text/javascript" src="{% static 'js/ventas/pos.js' %}"></script>
+  <div class="ui modal otro" id="modal">
+    <i class="close icon"></i>
+    <div id="modalHeader" class="header">
+      Modal Title
+    </div>
+    <div class="content">
+
+      <div class="description">
+        <div class="ui labeled input">
+          <div class="ui label">
+            Precio
+          </div>
+          <input id="precioModal" type="text" placeholder="">
+        </div>
+        <div class="ui  labeled input">
+          <div class="ui label">
+            Cantidad
+          </div>
+          <input id="cantidadModal" type="number" placeholder="">
+        </div>
+
+      </div>
+    </div>
+    <div class="actions">
+      <div id="cancelModal" class="ui button">Cancelar</div>
+      <div id="saveModal" class="ui button">Guardar</div>
+    </div>
+  </div>
+</div>
+{% endblock %} {% block js %}
+<script type="text/javascript" src="{% static 'js/moneda.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/ventas/pos.js' %}"></script>
 {% endblock %}

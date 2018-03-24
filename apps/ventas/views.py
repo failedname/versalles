@@ -474,10 +474,11 @@ def search_productos(request):
 def save_facturaReal(request):
     data = request.body.decode('utf-8')
     datos = json.loads(data)
-    num = Numeracion.objects.all().filter(vivero_id=request.session['vivero'])
+
     estado = EstadoFactura.objects.all().filter(estado='abierta')
     rows = FacturaReal.objects.filter(
         vivero_id=request.session['vivero']).count()
+    num = Numeracion.objects.all().filter(vivero_id=request.session['vivero'])
     nume = [{
         'resu': res.resolucion,
         'fecha': res.fecha,
@@ -550,8 +551,9 @@ def save_facturaReal(request):
                 }for res in informe]
         return JsonResponse({'data': data, 'nume': nume}, safe=True)
     else:
-        ultimo = FacturaReal.objects.latest('codigo')
+
         c = Cliente.objects.all().filter(pk=int(datos['cliente']['id']))
+        ultimo = FacturaReal.objects.latest('codigo')
         numeracion = 1 + ultimo.codigo
         f = FacturaReal(codigo=numeracion,
                         vivero_id=request.session['vivero'],
@@ -890,7 +892,7 @@ def saveRemision(request):
     return JsonResponse({'data': data}, safe=True)
 
 
-def ventasPOS(request, id):
+def ventasPOS(request):
     template_name = 'ventas/pos.html'
     return render(request, template_name)
 
@@ -901,11 +903,11 @@ def viveroPos(request):
     return render(request, template_name, {'data': data})
 
 
-def productosPos(request, id):
+def productosPos(request):
     data = Producto.objects.select_related(
         'id_presentacion').filter(
         nombre__icontains=request.body.decode('utf-8'),
-        vivero_id=id)[:4]
+        vivero_id=request.session['vivero'])[:4]
     items = [{
         'id': res.pk,
         'nombre': res.nombre,
@@ -916,7 +918,7 @@ def productosPos(request, id):
     return JsonResponse({'data': items}, safe=True)
 
 
-def clientePos(request, id):
+def clientePos(request):
     data = request.body.decode('utf-8')
     cliente = Cliente.objects.all().filter(nombre__icontains=data)[:5]
     items = [{
@@ -928,84 +930,293 @@ def clientePos(request, id):
     return JsonResponse({'data': items}, safe=True)
 
 
-def savePos(request, id):
+def savePos(request):
     data = request.body.decode('utf-8')
     datos = json.loads(data)
-    estado = EstadoFactura.objects.all().filter(estado='cerrada')
 
-    if(len(datos['cliente']) == 0):
-        c = Cliente.objects.all().filter(nit_cc='POS')
-        f = Remision(
-            vivero_id=id,
-            estado_id=estado[0].pk,
-            cliente_id=c[0].pk)
+    estado = EstadoFactura.objects.all().filter(estado='abierta')
+    rows = FacturaReal.objects.filter(
+        vivero_id=request.session['vivero']).count()
+    num = Numeracion.objects.all().filter(vivero_id=request.session['vivero'])
+    nume = [{
+        'resu': res.resolucion,
+        'fecha': res.fecha,
+        'ini': res.num_ini,
+        'fin': res.num_fin
+    }for res in num]
+    if rows == 0:
+        if(len(datos['cliente']) == 0):
+            c = Cliente.objects.all().filter(nit_cc='POS')
+            f = FacturaReal(codigo=num[0].num_ini,
+                            vivero_id=request.session['vivero'],
+                            estado_id=estado[0].pk,
+                            cliente_id=c[0].pk)
 
-        f.save()
-        id_fac = f.pk
-        for res in datos['venta']:
-            detalleRemison.objects.create(remision_id=id_fac,
-                                          cantidad=res['cantidad'],
-                                          producto_id=res['id'],
-                                          val_unitario=res['precio'],
-                                          iva=res['iva'],
-                                          val_neto=int(
-                                              res['cantidad']) * int(res['precio']))
-            informe = detalleRemison.objects.select_related(
-                'remision', 'producto', 'remision__cliente').filter(
-                    remision_id=id_fac)
-            data = [{
-                'factura': res.remision.pk,
-                'cliente': res.remision.cliente.nombre,
-                'nit': res.remision.cliente.nit_cc,
-                'direccion': res.remision.cliente.direccion,
-                'telefono': res.remision.cliente.telefono,
-                'codigo': res.producto_id,
-                'nombre': res.producto.nombre,
-                'cantidad': res.cantidad,
-                'iva': res.iva,
-                'valor': res.val_unitario,
-                'valneto': res.val_neto,
-                'fecha': res.remision.fecha,
-                'vivero': res.remision.vivero.nombre,
-                'nit_vivero': res.remision.vivero.identificacion
+            f.save()
 
-            }for res in informe]
-        return JsonResponse({'data': data}, safe=True)
+            id_fac = f.codigo
+            for res in datos['datos']:
+                Detalle_FacturaReal.objects.create(factura_id=id_fac,
+                                                   cantidad=int(
+                                                       res['cantidad']),
+                                                   producto_id=res['id'],
+                                                   val_unitario=int(
+                                                       res['precio']),
+                                                   iva=res['iva'],
+                                                   val_neto=int(res['precio']) * res(res['cantidad']))
+                stock = Almacen.objects.get(
+                    producto_id=res['id'], vivero_id=request.session['vivero'])
+                if stock.stock > 0:
+
+                    rest = int(stock.stock) - int(res['cantidad'])
+                    print(rest)
+                    stock.stock = rest
+                    stock.save()
+            if(len(datos['pago']) != 0):
+
+                PagosFactura.objects.create(
+                    pedido_id=id_fac, valorabono=datos['pago'])
+                pago = PagosFactura.objects.annotate(
+                    total=Sum('valorabono')).filter(pedido_id=id_fac)
+                detalle = Detalle_FacturaReal.objects.annotate(
+                    total=Sum('val_neto')).filter(factura_id=id_fac)
+                if(pago[0].total == detalle[0].total):
+                    esta = EstadoFactura.objects.all().filter(estado='cerrada')
+                    update = FacturaReal.objects.get(pk=id_fac)
+                    update.estado_id = esta[0].pk
+                    update.save()
+
+                informe = Detalle_FacturaReal.objects.select_related(
+                    'factura', 'producto',
+                    'producto__id_presentacion',
+                    'factura__cliente',
+                    'factura__vivero').filter(
+                    factura_id=id_fac)
+                data = [{
+                    'factura': res.factura.codigo,
+                    'cliente': res.factura.cliente.nombre,
+                    'direccion': res.factura.cliente.direccion,
+                    'nit': res.factura.cliente.nit_cc,
+                    'telefono': res.factura.cliente.telefono,
+                    'codigo': res.producto_id,
+                    'nombre': res.producto.nombre,
+                    'presentacion': res.producto.id_presentacion.tipo,
+                    'cantidad': res.cantidad,
+                    'iva': res.iva,
+                    'valor': res.val_unitario,
+                    'valneto': res.val_neto,
+                    'fecha': res.factura.fecha,
+                    'vivero': res.factura.vivero.nombre,
+                    'nit_vivero': res.factura.vivero.identificacion
+
+
+                }for res in informe]
+                return JsonResponse({'data': data, 'nume': nume}, safe=True)
+            else:
+                c = Cliente.objects.all().filter(pk=datos['cliente']['id'])
+                f = FacturaReal(codigo=num[0].num_ini,
+                                vivero_id=request.session['vivero'],
+                                estado_id=estado[0].pk,
+                                cliente_id=c[0].pk)
+
+                f.save()
+
+                id_fac = f.codigo
+                for res in datos['venta']:
+                    Detalle_FacturaReal.objects.create(factura_id=id_fac,
+                                                       cantidad=int(
+                                                           res['cantidad']),
+                                                       producto_id=res['id'],
+                                                       val_unitario=int(
+                                                           res['precio']),
+                                                       iva=res['iva'],
+                                                       val_neto=int(res['precio']) * res(res['cantidad']))
+                    stock = Almacen.objects.get(
+                        producto_id=res['id'], vivero_id=request.session['vivero'])
+                    if stock.stock > 0:
+
+                        rest = int(stock.stock) - int(res['cantidad'])
+                        stock.stock = rest
+                        stock.save()
+                if(len(datos['pago']) != 0):
+
+                    PagosFactura.objects.create(
+                        pedido_id=id_fac, valorabono=datos['pago'])
+                    pago = PagosFactura.objects.annotate(
+                        total=Sum('valorabono')).filter(pedido_id=id_fac)
+                    detalle = Detalle_FacturaReal.objects.annotate(
+                        total=Sum('val_neto')).filter(factura_id=id_fac)
+                    if(pago[0].total == detalle[0].total):
+                        esta = EstadoFactura.objects.all().filter(estado='cerrada')
+                        update = FacturaReal.objects.get(pk=id_fac)
+                        update.estado_id = esta[0].pk
+                        update.save()
+
+                informe = Detalle_FacturaReal.objects.select_related(
+                    'factura', 'producto',
+                    'producto__id_presentacion',
+                    'factura__cliente',
+                    'factura__vivero').filter(
+                    factura_id=id_fac)
+                data = [{
+                    'factura': res.factura.codigo,
+                    'cliente': res.factura.cliente.nombre,
+                    'direccion': res.factura.cliente.direccion,
+                    'nit': res.factura.cliente.nit_cc,
+                        'telefono': res.factura.cliente.telefono,
+                        'codigo': res.producto_id,
+                        'nombre': res.producto.nombre,
+                        'presentacion': res.producto.id_presentacion.tipo,
+                        'cantidad': res.cantidad,
+                        'iva': res.iva,
+                        'valor': res.val_unitario,
+                        'valneto': res.val_neto,
+                        'fecha': res.factura.fecha,
+                        'vivero': res.factura.vivero.nombre,
+                        'nit_vivero': res.factura.vivero.identificacion
+
+
+                        }for res in informe]
+                return JsonResponse({'data': data, 'nume': nume}, safe=True)
     else:
-        c = Cliente.objects.all().filter(nit_cc='POS')
-        f = Remision(
-            vivero_id=id,
-            estado_id=estado[0].pk,
-            cliente_id=datos['cliente']['id'])
 
-        f.save()
-        id_fac = f.pk
-        for res in datos['venta']:
-            detalleRemison.objects.create(remision_id=id_fac,
-                                          cantidad=res['cantidad'],
-                                          producto_id=res['id'],
-                                          val_unitario=res['precio'],
-                                          iva=res['iva'],
-                                          val_neto=int(
-                                              res['cantidad']) * int(res['precio']))
-            informe = detalleRemison.objects.select_related(
-                'remision', 'producto', 'remision__cliente').filter(
-                    remision_id=id_fac)
+        if(len(datos['cliente']) == 0):
+            c = Cliente.objects.all().filter(nit_cc='POS')
+            ultimo = FacturaReal.objects.latest('codigo')
+
+            numeracion = 1 + ultimo.codigo
+            c = Cliente.objects.all().filter(nit_cc='POS')
+            f = FacturaReal(codigo=numeracion,
+                            vivero_id=request.session['vivero'],
+                            estado_id=estado[0].pk,
+                            cliente_id=c[0].pk)
+
+            f.save()
+
+            id_fac = f.codigo
+            for res in datos['venta']:
+                Detalle_FacturaReal.objects.create(factura_id=id_fac,
+                                                   cantidad=int(
+                                                       res['cantidad']),
+                                                   producto_id=res['id'],
+                                                   val_unitario=int(
+                                                       res['precio']),
+                                                   iva=res['iva'],
+                                                   val_neto=int(res['precio']) * int(res['cantidad']))
+                stock = Almacen.objects.get(
+                    producto_id=res['id'], vivero_id=request.session['vivero'])
+                if stock.stock > 0:
+
+                    rest = int(stock.stock) - int(res['cantidad'])
+                    stock.stock = rest
+                    stock.save()
+            if(len(datos['pago']) != 0):
+                print(len(datos['pago']))
+                PagosFactura.objects.create(
+                    pedido_id=id_fac, valorabono=datos['pago'])
+                pago = PagosFactura.objects.annotate(
+                    total=Sum('valorabono')).filter(pedido_id=id_fac)
+                detalle = Detalle_FacturaReal.objects.annotate(
+                    total=Sum('val_neto')).filter(factura_id=id_fac)
+                if(pago[0].total == detalle[0].total):
+                    esta = EstadoFactura.objects.all().filter(estado='cerrada')
+                    update = FacturaReal.objects.get(pk=id_fac)
+                    update.estado_id = esta[0].pk
+                    update.save()
+
+            informe = Detalle_FacturaReal.objects.select_related(
+                'factura', 'producto',
+                'producto__id_presentacion',
+                'factura__cliente',
+                'factura__vivero').filter(
+                factura_id=id_fac)
             data = [{
-                'remision': res.remision.pk,
-                'cliente': res.remision.cliente.nombre,
-                'nit': res.remision.cliente.nit_cc,
-                'direccion': res.remision.cliente.direccion,
-                'telefono': res.remision.cliente.telefono,
+                    'factura': res.factura.codigo,
+                    'cliente': res.factura.cliente.nombre,
+                    'direccion': res.factura.cliente.direccion,
+                    'nit': res.factura.cliente.nit_cc,
+                    'telefono': res.factura.cliente.telefono,
+                    'codigo': res.producto_id,
+                    'nombre': res.producto.nombre,
+                    'presentacion': res.producto.id_presentacion.tipo,
+                    'cantidad': res.cantidad,
+                    'iva': res.iva,
+                    'valor': res.val_unitario,
+                    'valneto': res.val_neto,
+                    'fecha': res.factura.fecha,
+                    'vivero': res.factura.vivero.nombre,
+                    'nit_vivero': res.factura.vivero.identificacion
+
+
+                    }for res in informe]
+            return JsonResponse({'data': data, 'nume': nume}, safe=True)
+        else:
+            c = Cliente.objects.all().filter(pk=datos['cliente']['id'])
+            ultimo = FacturaReal.objects.latest('codigo')
+
+            numeracion = 1 + ultimo.codigo
+            f = FacturaReal(codigo=numeracion,
+                            vivero_id=request.session['vivero'],
+                            estado_id=estado[0].pk,
+                            cliente_id=c[0].pk)
+
+            f.save()
+
+            id_fac = f.codigo
+            for res in datos['venta']:
+                print(res['id'])
+                Detalle_FacturaReal.objects.create(factura_id=id_fac,
+                                                   cantidad=int(
+                                                       res['cantidad']),
+                                                   producto_id=res['id'],
+                                                   val_unitario=int(
+                                                       res['precio']),
+                                                   iva=res['iva'],
+                                                   val_neto=int(res['precio']) * int(res['cantidad']))
+                stock = Almacen.objects.get(
+                    producto_id=res['id'], vivero_id=request.session['vivero'])
+                if stock.stock > 0:
+
+                    rest = int(stock.stock) - int(res['cantidad'])
+                    stock.stock = rest
+                    stock.save()
+            if(len(datos['pago']) != 0):
+
+                PagosFactura.objects.create(
+                    pedido_id=id_fac, valorabono=datos['pago'])
+                pago = PagosFactura.objects.annotate(
+                    total=Sum('valorabono')).filter(pedido_id=id_fac)
+                detalle = Detalle_FacturaReal.objects.annotate(
+                    total=Sum('val_neto')).filter(factura_id=id_fac)
+                if(pago[0].total == detalle[0].total):
+                    esta = EstadoFactura.objects.all().filter(estado='cerrada')
+                    update = FacturaReal.objects.get(pk=id_fac)
+                    update.estado_id = esta[0].pk
+                    update.save()
+
+            informe = Detalle_FacturaReal.objects.select_related(
+                'factura', 'producto',
+                'producto__id_presentacion',
+                'factura__cliente',
+                'factura__vivero').filter(
+                factura_id=id_fac)
+            data = [{
+                'factura': res.factura.codigo,
+                'cliente': res.factura.cliente.nombre,
+                'direccion': res.factura.cliente.direccion,
+                'nit': res.factura.cliente.nit_cc,
+                'telefono': res.factura.cliente.telefono,
                 'codigo': res.producto_id,
                 'nombre': res.producto.nombre,
+                'presentacion': res.producto.id_presentacion.tipo,
                 'cantidad': res.cantidad,
                 'iva': res.iva,
                 'valor': res.val_unitario,
                 'valneto': res.val_neto,
-                'fecha': res.remision.fecha,
-                'vivero': res.remision.vivero.nombre,
-                'nit_vivero': res.remision.vivero.identificacion
+                'fecha': res.factura.fecha,
+                'vivero': res.factura.vivero.nombre,
+                'nit_vivero': res.factura.vivero.identificacion
+
 
             }for res in informe]
-        return JsonResponse({'data': data}, safe=True)
+            return JsonResponse({'data': data, 'nume': nume}, safe=True)
