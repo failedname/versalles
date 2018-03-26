@@ -643,7 +643,7 @@ def copiaTicket(request, fac):
     p.text(' NIT: %s \n' % informe[0].factura.vivero.identificacion)
     p.text('Km. 15 Via a San Agustin \n')
     p.text('Tel:  320-8021865\n\n')
-    p.text('Factura:                      res.factura.codigo\n')
+    p.text('Factura:                      %s\n' % informe[0].factura.codigo)
     p.text('Fecha:               %s\n\n' % informe[0].factura.fecha)
     p.text('--------------------------------\n')
     p.set(align=u'left')
