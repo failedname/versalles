@@ -643,7 +643,7 @@ def copiaTicket(request, fac):
     p.text(' NIT: %s \n' % informe[0].factura.vivero.identificacion)
     p.text('Km. 15 Via a San Agustin \n')
     p.text('Tel:  320-8021865\n\n')
-    p.text('Factura:                      1\n')
+    p.text('Factura:                      res.factura.codigo\n')
     p.text('Fecha:               %s\n\n' % informe[0].factura.fecha)
     p.text('--------------------------------\n')
     p.set(align=u'left')
@@ -986,6 +986,7 @@ def clientePos(request):
 def savePos(request):
     data = request.body.decode('utf-8')
     datos = json.loads(data)
+    vivero = request.session['vivero']
 
     estado = EstadoFactura.objects.all().filter(estado='abierta')
     rows = FacturaReal.objects.filter(
@@ -1064,6 +1065,47 @@ def savePos(request):
 
 
                 }for res in informe]
+
+                informe = Detalle_FacturaReal.objects.select_related(
+                    'factura', 'producto',
+                    'producto__id_presentacion',
+                    'factura__cliente',
+                    'factura__vivero').filter(
+                    factura_id=id_fac, factura__vivero_id=vivero)
+                p = Usb(0x0456, 0x0808, 0, 0x82, 0x03)
+                p.set(align='center')
+                p.text('Vivero Versalles\n')
+                p.text(' NIT: %s \n' %
+                       informe[0].factura.vivero.identificacion)
+                p.text('Km. 15 Via a San Agustin \n')
+                p.text('Tel:  320-8021865\n\n')
+                p.text('Factura:                      id_fac\n')
+                p.text('Fecha:               %s\n\n' %
+                       informe[0].factura.fecha)
+                p.text('--------------------------------\n')
+                p.set(align=u'left')
+                tot = 0
+                for res in informe:
+                    nomb = res.producto.nombre.lower()
+                    total = Money(amount=res.cantidad *
+                                  res.val_unitario, currency='COP')
+                    nom_can = str(res.cantidad) + ' ' + nomb
+                    tot += res.val_neto
+                    if len(nom_can) > 12:
+
+                        p.text('%s %s\n' % (nom_can[0:12], total))
+                    elif len(res.producto.nombre) < 12:
+                        size = len(nom_can)
+                        new_size = (12 - size) * ' '
+                        p.text('%s %s\n' % (nom_can + new_size, total))
+                p.text('--------------------------------\n\n')
+                p.text('Total:     %s\n\n\n' %
+                       Money(amount=tot, currency='COP'))
+                p.set(align=u'center')
+                p.text(u'Esta factura de venta se asimila en todos sus efectos legales a una letra de cambio seg&aacuten el artículo No. 671 y S.S. 772 - 774 del código de comercio')
+
+                p.cut()
+
                 return JsonResponse({'data': data, 'nume': nume}, safe=True)
             else:
                 c = Cliente.objects.all().filter(pk=datos['cliente']['id'])
@@ -1118,18 +1160,58 @@ def savePos(request):
                     'nit': res.factura.cliente.nit_cc,
                     'telefono': res.factura.cliente.telefono,
                     'codigo': res.producto_id,
-                        'nombre': res.producto.nombre,
-                        'presentacion': res.producto.id_presentacion.tipo,
-                        'cantidad': res.cantidad,
-                        'iva': res.iva,
-                        'valor': res.val_unitario,
-                        'valneto': res.val_neto,
-                        'fecha': res.factura.fecha,
-                        'vivero': res.factura.vivero.nombre,
-                        'nit_vivero': res.factura.vivero.identificacion
+                    'nombre': res.producto.nombre,
+                    'presentacion': res.producto.id_presentacion.tipo,
+                    'cantidad': res.cantidad,
+                    'iva': res.iva,
+                    'valor': res.val_unitario,
+                    'valneto': res.val_neto,
+                    'fecha': res.factura.fecha,
+                    'vivero': res.factura.vivero.nombre,
+                    'nit_vivero': res.factura.vivero.identificacion
 
 
-                        }for res in informe]
+                }for res in informe]
+
+                informe = Detalle_FacturaReal.objects.select_related(
+                    'factura', 'producto',
+                    'producto__id_presentacion',
+                    'factura__cliente',
+                    'factura__vivero').filter(
+                    factura_id=id_fac, factura__vivero_id=vivero)
+                p = Usb(0x0456, 0x0808, 0, 0x82, 0x03)
+                p.set(align='center')
+                p.text('Vivero Versalles\n')
+                p.text(' NIT: %s \n' %
+                       informe[0].factura.vivero.identificacion)
+                p.text('Km. 15 Via a San Agustin \n')
+                p.text('Tel:  320-8021865\n\n')
+                p.text('Factura:                      id_fac\n')
+                p.text('Fecha:               %s\n\n' %
+                       informe[0].factura.fecha)
+                p.text('--------------------------------\n')
+                p.set(align=u'left')
+                tot = 0
+                for res in informe:
+                    nomb = res.producto.nombre.lower()
+                    total = Money(amount=res.cantidad *
+                                  res.val_unitario, currency='COP')
+                    nom_can = str(res.cantidad) + ' ' + nomb
+                    tot += res.val_neto
+                    if len(nom_can) > 12:
+
+                        p.text('%s %s\n' % (nom_can[0:12], total))
+                    elif len(res.producto.nombre) < 12:
+                        size = len(nom_can)
+                        new_size = (12 - size) * ' '
+                        p.text('%s %s\n' % (nom_can + new_size, total))
+                p.text('--------------------------------\n\n')
+                p.text('Total:     %s\n\n\n' %
+                       Money(amount=tot, currency='COP'))
+                p.set(align=u'center')
+                p.text(u'Esta factura de venta se asimila en todos sus efectos legales a una letra de cambio seg&aacuten el artículo No. 671 y S.S. 772 - 774 del código de comercio')
+
+                p.cut()
                 return JsonResponse({'data': data, 'nume': nume}, safe=True)
     else:
 
@@ -1202,6 +1284,43 @@ def savePos(request):
 
 
                     }for res in informe]
+
+            informe = Detalle_FacturaReal.objects.select_related(
+                'factura', 'producto',
+                'producto__id_presentacion',
+                'factura__cliente',
+                'factura__vivero').filter(
+                factura_id=id_fac, factura__vivero_id=vivero)
+            p = Usb(0x0456, 0x0808, 0, 0x82, 0x03)
+            p.set(align='center')
+            p.text('Vivero Versalles\n')
+            p.text(' NIT: %s \n' % informe[0].factura.vivero.identificacion)
+            p.text('Km. 15 Via a San Agustin \n')
+            p.text('Tel:  320-8021865\n\n')
+            p.text('Factura:                      id_fac\n')
+            p.text('Fecha:               %s\n\n' % informe[0].factura.fecha)
+            p.text('--------------------------------\n')
+            p.set(align=u'left')
+            tot = 0
+            for res in informe:
+                nomb = res.producto.nombre.lower()
+                total = Money(amount=res.cantidad *
+                              res.val_unitario, currency='COP')
+                nom_can = str(res.cantidad) + ' ' + nomb
+                tot += res.val_neto
+                if len(nom_can) > 12:
+
+                    p.text('%s %s\n' % (nom_can[0:12], total))
+                elif len(res.producto.nombre) < 12:
+                    size = len(nom_can)
+                    new_size = (12 - size) * ' '
+                    p.text('%s %s\n' % (nom_can + new_size, total))
+            p.text('--------------------------------\n\n')
+            p.text('Total:     %s\n\n\n' % Money(amount=tot, currency='COP'))
+            p.set(align=u'center')
+            p.text(u'Esta factura de venta se asimila en todos sus efectos legales a una letra de cambio seg&aacuten el artículo No. 671 y S.S. 772 - 774 del código de comercio')
+
+            p.cut()
             return JsonResponse({'data': data, 'nume': nume}, safe=True)
         else:
             c = Cliente.objects.all().filter(pk=datos['cliente']['id'])
@@ -1217,7 +1336,7 @@ def savePos(request):
 
             id_fac = f.codigo
             for res in datos['venta']:
-                print(res['id'])
+
                 Detalle_FacturaReal.objects.create(factura_id=id_fac,
                                                    cantidad=int(
                                                        res['cantidad']),
@@ -1272,4 +1391,41 @@ def savePos(request):
 
 
             }for res in informe]
+
+            informe = Detalle_FacturaReal.objects.select_related(
+                'factura', 'producto',
+                'producto__id_presentacion',
+                'factura__cliente',
+                'factura__vivero').filter(
+                factura_id=id_fac, factura__vivero_id=vivero)
+            p = Usb(0x0456, 0x0808, 0, 0x82, 0x03)
+            p.set(align='center')
+            p.text('Vivero Versalles\n')
+            p.text(' NIT: %s \n' % informe[0].factura.vivero.identificacion)
+            p.text('Km. 15 Via a San Agustin \n')
+            p.text('Tel:  320-8021865\n\n')
+            p.text('Factura:                      id_fac\n')
+            p.text('Fecha:               %s\n\n' % informe[0].factura.fecha)
+            p.text('--------------------------------\n')
+            p.set(align=u'left')
+            tot = 0
+            for res in informe:
+                nomb = res.producto.nombre.lower()
+                total = Money(amount=res.cantidad *
+                              res.val_unitario, currency='COP')
+                nom_can = str(res.cantidad) + ' ' + nomb
+                tot += res.val_neto
+                if len(nom_can) > 12:
+
+                    p.text('%s %s\n' % (nom_can[0:12], total))
+                elif len(res.producto.nombre) < 12:
+                    size = len(nom_can)
+                    new_size = (12 - size) * ' '
+                    p.text('%s %s\n' % (nom_can + new_size, total))
+            p.text('--------------------------------\n\n')
+            p.text('Total:     %s\n\n\n' % Money(amount=tot, currency='COP'))
+            p.set(align=u'center')
+            p.text(u'Esta factura de venta se asimila en todos sus efectos legales a una letra de cambio seg&aacuten el artículo No. 671 y S.S. 772 - 774 del código de comercio')
+
+            p.cut()
             return JsonResponse({'data': data, 'nume': nume}, safe=True)
