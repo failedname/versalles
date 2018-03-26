@@ -10,7 +10,7 @@ ALLOWED_HOSTS = ['*']
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'app_vivero',
+        'NAME': 'versalles',
         'USER': 'javier',
         'PASSWORD': 'luna',
         'HOST': 'localhost',
