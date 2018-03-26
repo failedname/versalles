@@ -1,0 +1,6 @@
+printer:
+        type: Usb
+        idVendor: 0x0456
+        idProduct: 0x0808
+        in_ep: 0x81
+        out_ep: 0x02

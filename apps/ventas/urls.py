@@ -8,7 +8,7 @@ from .views import (
     saveRemision, copiaFactura, ventasPOS, productosPos,
     viveroPos, savePos, clientePos, clienteFactura, detalleRemision, allPedidos,
     nuevoPedido, clientePedido, productoPedido, guardarPedi, copiaRemision, detallePedido, abonosPedido,
-    copiaAbono, copiaPedido, jsonPedidos, pagoFactura, cancelFactura
+    copiaAbono, copiaPedido, jsonPedidos, pagoFactura, cancelFactura, copiaTicket
 )
 
 urlpatterns = [
@@ -61,6 +61,8 @@ urlpatterns = [
         save_facturaReal, name='saveInvoicereal'),
     url(r'^facturas/detallefac/(?P<fac>\w+)/copia/$',
         copiaFactura, name='copiafactura'),
+    url(r'^facturas/detallefac/(?P<fac>\w+)/copiat/$',
+        copiaTicket, name='copiaticket'),
     url(r'^facturas/detallefac/(?P<fac>\w+)/$',
         SearchFac, name='detallefactura'),
     url(r'^facturas/detallefac/(?P<fac>\w+)/generar/$',

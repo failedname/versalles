@@ -218,19 +218,21 @@ function FacturaPdf(dat, nume) {
   var iva = 0
   var desc = 0
   var bruto = 0
+  let calc_iva = 0
   for (var i = 0; i < dat.length; i++) {
+    calc_iva = (dat[i].cantidad * dat[i].valor) / ((dat[i].iva + 100) / 100)
     rows.push([
       dat[i].codigo,
       dat[i].nombre,
       dat[i].presentacion,
       dat[i].valor,
       dat[i].cantidad,
-      dat[i].iva,
+      (dat[i].cantidad * dat[i].valor) - calc_iva,
       dat[i].valneto
     ])
     tot += (dat[i].cantidad * dat[i].valor)
-    iva += dat[i].iva
-    bruto += dat[i].cantidad * dat[i].valor
+    iva += (dat[i].cantidad * dat[i].valor) - calc_iva
+    bruto += (dat[i].cantidad * dat[i].valor) - ((dat[i].cantidad * dat[i].valor) - calc_iva)
   }
 
   doc.autoTable(columns, rows, {

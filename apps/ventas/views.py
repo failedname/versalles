@@ -1,7 +1,11 @@
 # -*- coding: utf-8 -*-
+# # -*- coding: 850 -*-
 from django.shortcuts import render
+import usb
+from escpos.printer import Usb
 from django.db.models import Sum
-from django.http import JsonResponse
+from money import Money
+from django.http import JsonResponse, HttpResponse
 from django.views.generic import TemplateView
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
@@ -617,7 +621,56 @@ def save_facturaReal(request):
         return JsonResponse({'data': data, 'nume': nume}, safe=True)
 
 
+def copiaTicket(request, fac):
+
+    vivero = request.session['vivero']
+    num = Numeracion.objects.all().filter(vivero_id=vivero)
+    nume = [{
+        'resu': res.resolucion,
+        'fecha': res.fecha,
+        'ini': res.num_ini,
+        'fin': res.num_fin
+    }for res in num]
+    informe = Detalle_FacturaReal.objects.select_related(
+        'factura', 'producto',
+        'producto__id_presentacion',
+        'factura__cliente',
+        'factura__vivero').filter(
+        factura_id=fac, factura__vivero_id=vivero)
+    p = Usb(0x0456, 0x0808, 0, 0x82, 0x03)
+    p.set(align='center')
+    p.text('Vivero Versalles\n')
+    p.text(' NIT: %s \n' % informe[0].factura.vivero.identificacion)
+    p.text('Km. 15 Via a San Agustin \n')
+    p.text('Tel:  320-8021865\n\n')
+    p.text('Factura:                      1\n')
+    p.text('Fecha:               %s\n\n' % informe[0].factura.fecha)
+    p.text('--------------------------------\n')
+    p.set(align=u'left')
+    tot = 0
+    for res in informe:
+        nomb = res.producto.nombre.lower()
+        total = Money(amount=res.cantidad * res.val_unitario, currency='COP')
+        nom_can = str(res.cantidad) + ' ' + nomb
+        tot += res.val_neto
+        if len(nom_can) > 12:
+
+            p.text('%s %s\n' % (nom_can[0:12], total))
+        elif len(res.producto.nombre) < 12:
+            size = len(nom_can)
+            new_size = (12 - size) * ' '
+            p.text('%s %s\n' % (nom_can + new_size, total))
+    p.text('--------------------------------\n\n')
+    p.text('Total:     %s\n\n\n' % Money(amount=tot, currency='COP'))
+    p.set(align=u'center')
+    p.text(u'Esta factura de venta se asimila en todos sus efectos legales a una letra de cambio seg&aacuten el artículo No. 671 y S.S. 772 - 774 del código de comercio')
+
+    p.cut()
+    return HttpResponse({'data': 'ticket impreso'}, status=200)
+
+
 def copiaFactura(request, fac):
+
     vivero = request.session['vivero']
     num = Numeracion.objects.all().filter(vivero_id=vivero)
     nume = [{
@@ -1063,8 +1116,8 @@ def savePos(request):
                     'cliente': res.factura.cliente.nombre,
                     'direccion': res.factura.cliente.direccion,
                     'nit': res.factura.cliente.nit_cc,
-                        'telefono': res.factura.cliente.telefono,
-                        'codigo': res.producto_id,
+                    'telefono': res.factura.cliente.telefono,
+                    'codigo': res.producto_id,
                         'nombre': res.producto.nombre,
                         'presentacion': res.producto.id_presentacion.tipo,
                         'cantidad': res.cantidad,
@@ -1131,8 +1184,8 @@ def savePos(request):
                 'factura__vivero').filter(
                 factura_id=id_fac)
             data = [{
-                    'factura': res.factura.codigo,
-                    'cliente': res.factura.cliente.nombre,
+                'factura': res.factura.codigo,
+                'cliente': res.factura.cliente.nombre,
                     'direccion': res.factura.cliente.direccion,
                     'nit': res.factura.cliente.nit_cc,
                     'telefono': res.factura.cliente.telefono,

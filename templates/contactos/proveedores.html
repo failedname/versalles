@@ -1,11 +1,11 @@
-{% extends "base.html" %}{% block title %} Contactos{% endblock %}{% load static from staticfiles %} {% block content %} {% csrf_token %}
+{% extends "base.html" %}{% block title %} Contactos{% endblock %}{% load static from staticfiles %} {% block content %}
 <div class="ui grid container">
 
   <div class="wide column border_links">
     <div class="grid_bar">
       <div class="links_bar">
         <a href="{% url 'contactos:clientes' %}" class="title-nav-link ">Clientes</a>
-        <a href="{% url 'contactos:proveedores' %}" class="title-nav-link ">Proveedores</a>
+        <a href="{% url 'ventas:pos' %}" class="title-nav-link ">Proveedores</a>
       </div>
 
     </div>
@@ -15,27 +15,30 @@
 <div class="ui grid container">
   <div class="grid_bar">
     <div class="four column">
-      <a href="{% url 'ventas:nuevafactura'%}" class="ui primary button btn">Nuevo cliente</a>
+      <a href="{% url 'ventas:nuevafactura'%}" class="ui primary button btn">Nuevo proveedor</a>
     </div>
   </div>
 
 </div>
 <section class="ui grid container">
   <div class="grid_bar">
-    <div class="wide sixteen column" id="id_contactos">
+    <div class="wide sixteen column" id="id_proveedores">
 
 
 
       <div>
         <vue-good-table title="" :columns="columns" :rows="rows" :paginate="true" :lineNumbers="true" styleClass="ui basic table">
           <template slot="table-row" scope="props">
-          <td class=" ">[[props.row.nombre]]</td>
-          <td class=" ">[[props.row.nit]]</td>
+          <td class=" "></td>
+          <td class=" "></td>
 
-          <td class=" ">[[props.row.telefono]]</td>
-          <td class=" ">[[props.row.direccion]]</td>
+          <td class=" "></td>
+          <td class=" "></td>
+          <td class=" "></td>
+          <td class=""></td>
+          <td class=""></td>
 
-
+          <td class="left aligned" :class="{'active':props.row.estado=='abierta','positive':props.row.estado=='cerrada'}">[[props.row.estado]]</td>
 
           <td>
             <div class="ui icon bottom top right pointing dropdown button icon_action ">
@@ -53,7 +56,7 @@
   </div>
 </section>
 {% endblock %} {% block js %}
-<script type="text/javascript" src="{% static 'js/contactos/contactos.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/contactos/proveedores.js' %}"></script>
 
 
 {% endblock %}
