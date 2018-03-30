@@ -102,9 +102,9 @@ function reRender(itemVenta) {
     let totRow = parseInt(row.cantidad) * parseInt(row.precio)
     let ivaRow = (parseInt(row.iva) + 100) / 100
 
-    let sinIva = totRow - (totRow / ivaRow)
+    let sinIva = (totRow * ivaRow)-totRow
     totIva += sinIva
-    subTotal += totRow - sinIva
+    subTotal += totRow
 
     rowItem += `
 

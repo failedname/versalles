@@ -117,7 +117,7 @@ new Vue({
           } else {
             let tot = parseInt(this.info.datos[i].cantidad) * parseInt(this.info.datos[i].precio)
             let real_iva = (parseInt(this.info.datos[i].iva) + 100) / 100
-            iva += tot - (tot / real_iva)
+            iva += (tot * real_iva) - tot
 
           }
         }
@@ -139,7 +139,7 @@ new Vue({
             let total = parseInt(this.info.datos[i].cantidad) * parseInt(this.info.datos[i].precio)
             let resIva = total - (total / realIva)
 
-            sub += total - resIva
+            sub += total
 
           }
         }
