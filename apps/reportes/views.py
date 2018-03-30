@@ -31,7 +31,7 @@ def report_ventas(request):
         fact = [{
             'id': res.factura.pk,
             'codigo': res.factura.codigo,
-            'fecha': str(res.factura.fecha),
+            'fecha': res.factura.fecha,
             'identificacion': res.factura.cliente.nit_cc,
             'nombre': res.factura.cliente.nombre,
             'estado': res.factura.estado.estado,
@@ -57,7 +57,7 @@ def report_ventas(request):
         fact = [{
             'id': res.factura.pk,
             'codigo': res.factura.codigo,
-            'fecha': str(res.factura.fecha),
+            'fecha': res.factura.fecha,
             'identificacion': res.factura.cliente.nit_cc,
             'nombre': res.factura.cliente.nombre,
             'estado': res.factura.estado.estado,
