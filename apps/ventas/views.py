@@ -500,12 +500,10 @@ def save_facturaReal(request):
 
         id_fac = f.codigo
         for res in datos['datos']:
-            Detalle_FacturaReal.objects.create(factura_id=id_fac,
-                                               cantidad=int(res['cantidad']),
-                                               producto_id=res['id'],
-                                               val_unitario=int(res['precio']),
-                                               iva=res['iva'],
-                                               val_neto=int(res['precio']) * res(res['cantidad']))
+            val_iva = ((int(res['iva']) + 100) / 100) * (int(res['precio']) * int(res['cantidad']))
+
+            Detalle_FacturaReal.objects.create(factura_id=id_fac, cantidad=int(res['cantidad']), producto_id=res['id'], val_unitario=int(
+                res['precio']), iva=val_iva - (int(res['precio']) * int(res['cantidad'])), val_neto=val_iva)
             stock = Almacen.objects.get(
                 producto_id=res['id'], vivero_id=request.session['vivero'])
             if stock.stock > 0:
@@ -539,20 +537,20 @@ def save_facturaReal(request):
             'cliente': res.factura.cliente.nombre,
             'direccion': res.factura.cliente.direccion,
             'nit': res.factura.cliente.nit_cc,
-                'telefono': res.factura.cliente.telefono,
-                'codigo': res.producto_id,
-                'nombre': res.producto.nombre,
-                'presentacion': res.producto.id_presentacion.tipo,
-                'cantidad': res.cantidad,
-                'iva': res.iva,
-                'valor': res.val_unitario,
-                'valneto': res.val_neto,
-                'fecha': res.factura.fecha,
-                'vivero': res.factura.vivero.nombre,
-                'nit_vivero': res.factura.vivero.identificacion
+            'telefono': res.factura.cliente.telefono,
+            'codigo': res.producto_id,
+            'nombre': res.producto.nombre,
+            'presentacion': res.producto.id_presentacion.tipo,
+            'cantidad': res.cantidad,
+            'iva': res.iva,
+            'valor': res.val_unitario,
+            'valneto': res.val_neto,
+            'fecha': res.factura.fecha,
+            'vivero': res.factura.vivero.nombre,
+            'nit_vivero': res.factura.vivero.identificacion
 
 
-                }for res in informe]
+        }for res in informe]
         return JsonResponse({'data': data, 'nume': nume}, safe=True)
     else:
 
@@ -568,13 +566,10 @@ def save_facturaReal(request):
         id_fac = f.codigo
 
         for res in datos['datos']:
-            Detalle_FacturaReal.objects.create(factura_id=id_fac,
-                                               cantidad=int(res['cantidad']),
-                                               producto_id=res['id'],
-                                               val_unitario=int(
-                                                   res['precio']),
-                                               iva=res['iva'],
-                                               val_neto=int(res['precio']) * int(res['cantidad']))
+            val_iva = ((int(res['iva']) + 100) / 100) * (int(res['precio']) * int(res['cantidad']))
+
+            Detalle_FacturaReal.objects.create(factura_id=id_fac, cantidad=int(res['cantidad']), producto_id=res['id'], val_unitario=int(
+                res['precio']), iva=val_iva - (int(res['precio']) * int(res['cantidad'])), val_neto=val_iva)
             stock = Almacen.objects.get(
                 producto_id=res['id'], vivero_id=request.session['vivero'])
             if stock.stock > 0:
@@ -1010,14 +1005,10 @@ def savePos(request):
 
             id_fac = f.codigo
             for res in datos['datos']:
-                Detalle_FacturaReal.objects.create(factura_id=id_fac,
-                                                   cantidad=int(
-                                                       res['cantidad']),
-                                                   producto_id=res['id'],
-                                                   val_unitario=int(
-                                                       res['precio']),
-                                                   iva=res['iva'],
-                                                   val_neto=int(res['precio']) * res(res['cantidad']))
+                val_iva = ((int(res['iva']) + 100) / 100) * (int(res['precio']) * int(res['cantidad']))
+
+                Detalle_FacturaReal.objects.create(factura_id=id_fac, cantidad=int(res['cantidad']), producto_id=res['id'], val_unitario=int(
+                    res['precio']), iva=val_iva - (int(res['precio']) * int(res['cantidad'])), val_neto=val_iva)
                 stock = Almacen.objects.get(
                     producto_id=res['id'], vivero_id=request.session['vivero'])
                 if stock.stock > 0:
@@ -1079,7 +1070,7 @@ def savePos(request):
                        informe[0].factura.vivero.identificacion)
                 p.text('Km. 15 Via a San Agustin \n')
                 p.text('Tel:  320-8021865\n\n')
-                p.text('Factura:                      id_fac\n')
+                p.text('Factura:                      %s\n' % id_fac)
                 p.text('Fecha:               %s\n\n' %
                        informe[0].factura.fecha)
                 p.text('--------------------------------\n')
@@ -1118,14 +1109,10 @@ def savePos(request):
 
                 id_fac = f.codigo
                 for res in datos['venta']:
-                    Detalle_FacturaReal.objects.create(factura_id=id_fac,
-                                                       cantidad=int(
-                                                           res['cantidad']),
-                                                       producto_id=res['id'],
-                                                       val_unitario=int(
-                                                           res['precio']),
-                                                       iva=res['iva'],
-                                                       val_neto=int(res['precio']) * res(res['cantidad']))
+                    val_iva = ((int(res['iva']) + 100) / 100) * (int(res['precio']) * int(res['cantidad']))
+
+                    Detalle_FacturaReal.objects.create(factura_id=id_fac, cantidad=int(res['cantidad']), producto_id=res['id'], val_unitario=int(
+                        res['precio']), iva=val_iva - (int(res['precio']) * int(res['cantidad'])), val_neto=val_iva)
                     stock = Almacen.objects.get(
                         producto_id=res['id'], vivero_id=request.session['vivero'])
                     if stock.stock > 0:
@@ -1186,7 +1173,7 @@ def savePos(request):
                        informe[0].factura.vivero.identificacion)
                 p.text('Km. 15 Via a San Agustin \n')
                 p.text('Tel:  320-8021865\n\n')
-                p.text('Factura:                      id_fac\n')
+                p.text('Factura:                      %s\n' % id_fac)
                 p.text('Fecha:               %s\n\n' %
                        informe[0].factura.fecha)
                 p.text('--------------------------------\n')
@@ -1230,14 +1217,11 @@ def savePos(request):
 
             id_fac = f.codigo
             for res in datos['venta']:
-                Detalle_FacturaReal.objects.create(factura_id=id_fac,
-                                                   cantidad=int(
-                                                       res['cantidad']),
-                                                   producto_id=res['id'],
-                                                   val_unitario=int(
-                                                       res['precio']),
-                                                   iva=res['iva'],
-                                                   val_neto=int(res['precio']) * int(res['cantidad']))
+                val_iva = ((int(res['iva']) + 100) / 100) * (int(res['precio']) * int(res['cantidad']))
+
+                Detalle_FacturaReal.objects.create(factura_id=id_fac, cantidad=int(res['cantidad']), producto_id=res['id'], val_unitario=int(
+                    res['precio']), iva=val_iva - (int(res['precio']) * int(res['cantidad'])), val_neto=val_iva)
+
                 stock = Almacen.objects.get(
                     producto_id=res['id'], vivero_id=request.session['vivero'])
                 if stock.stock > 0:
@@ -1245,19 +1229,18 @@ def savePos(request):
                     rest = int(stock.stock) - int(res['cantidad'])
                     stock.stock = rest
                     stock.save()
-            if(len(datos['pago']) != 0):
-                print(len(datos['pago']))
-                PagosFactura.objects.create(
-                    pedido_id=id_fac, valorabono=datos['pago'])
-                pago = PagosFactura.objects.annotate(
-                    total=Sum('valorabono')).filter(pedido_id=id_fac)
-                detalle = Detalle_FacturaReal.objects.annotate(
-                    total=Sum('val_neto')).filter(factura_id=id_fac)
-                if(pago[0].total == detalle[0].total):
-                    esta = EstadoFactura.objects.all().filter(estado='cerrada')
-                    update = FacturaReal.objects.get(pk=id_fac)
-                    update.estado_id = esta[0].pk
-                    update.save()
+                if(len(datos['pago']) != 0):
+                    PagosFactura.objects.create(
+                        pedido_id=id_fac, valorabono=datos['pago'])
+                    pago = PagosFactura.objects.annotate(
+                        total=Sum('valorabono')).filter(pedido_id=id_fac)
+                    detalle = Detalle_FacturaReal.objects.annotate(
+                        total=Sum('val_neto')).filter(factura_id=id_fac)
+                    if(pago[0].total == detalle[0].total):
+                        esta = EstadoFactura.objects.all().filter(estado='cerrada')
+                        update = FacturaReal.objects.get(pk=id_fac)
+                        update.estado_id = esta[0].pk
+                        update.save()
 
             informe = Detalle_FacturaReal.objects.select_related(
                 'factura', 'producto',
@@ -1268,12 +1251,12 @@ def savePos(request):
             data = [{
                 'factura': res.factura.codigo,
                 'cliente': res.factura.cliente.nombre,
-                    'direccion': res.factura.cliente.direccion,
-                    'nit': res.factura.cliente.nit_cc,
-                    'telefono': res.factura.cliente.telefono,
-                    'codigo': res.producto_id,
-                    'nombre': res.producto.nombre,
-                    'presentacion': res.producto.id_presentacion.tipo,
+                'direccion': res.factura.cliente.direccion,
+                'nit': res.factura.cliente.nit_cc,
+                'telefono': res.factura.cliente.telefono,
+                'codigo': res.producto_id,
+                'nombre': res.producto.nombre,
+                'presentacion': res.producto.id_presentacion.tipo,
                     'cantidad': res.cantidad,
                     'iva': res.iva,
                     'valor': res.val_unitario,
@@ -1297,7 +1280,7 @@ def savePos(request):
             p.text(' NIT: %s \n' % informe[0].factura.vivero.identificacion)
             p.text('Km. 15 Via a San Agustin \n')
             p.text('Tel:  320-8021865\n\n')
-            p.text('Factura:                      id_fac\n')
+            p.text('Factura:                      %s\n' % id_fac)
             p.text('Fecha:               %s\n\n' % informe[0].factura.fecha)
             p.text('--------------------------------\n')
             p.set(align=u'left')
@@ -1337,14 +1320,10 @@ def savePos(request):
             id_fac = f.codigo
             for res in datos['venta']:
 
-                Detalle_FacturaReal.objects.create(factura_id=id_fac,
-                                                   cantidad=int(
-                                                       res['cantidad']),
-                                                   producto_id=res['id'],
-                                                   val_unitario=int(
-                                                       res['precio']),
-                                                   iva=res['iva'],
-                                                   val_neto=int(res['precio']) * int(res['cantidad']))
+                val_iva = ((int(res['iva']) + 100) / 100) * (int(res['precio']) * int(res['cantidad']))
+
+                Detalle_FacturaReal.objects.create(factura_id=id_fac, cantidad=int(res['cantidad']), producto_id=res['id'], val_unitario=int(
+                    res['precio']), iva=val_iva - (int(res['precio']) * int(res['cantidad'])), val_neto=val_iva)
                 stock = Almacen.objects.get(
                     producto_id=res['id'], vivero_id=request.session['vivero'])
                 if stock.stock > 0:
@@ -1404,7 +1383,7 @@ def savePos(request):
             p.text(' NIT: %s \n' % informe[0].factura.vivero.identificacion)
             p.text('Km. 15 Via a San Agustin \n')
             p.text('Tel:  320-8021865\n\n')
-            p.text('Factura:                      id_fac\n')
+            p.text('Factura:                      %s\n' % id_fac)
             p.text('Fecha:               %s\n\n' % informe[0].factura.fecha)
             p.text('--------------------------------\n')
             p.set(align=u'left')

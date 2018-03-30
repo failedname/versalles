@@ -36,8 +36,8 @@ LOCAL_APPS = (
 EXTERNAL_APPS = (
     'whitenoise',
     'openpyxl',
-    'import_export',
-    'djmoney',
+    'import_export'
+
 )
 
 
