@@ -16,7 +16,7 @@ class ventasReport(TemplateView):
 
 def report_ventas(request):
     if 'vivero' in request.session:
-        fechas = json.loads(request.body)
+        fechas = json.loads(request.body.decode('utf-8'))
 
         data = Detalle_FacturaReal.objects.extra(
             select={'total': 'SELECT sum(ventas_detalle_facturareal.val_neto)  FROM ventas_detalle_facturareal WHERE ventas_detalle_facturareal.factura_id = ventas_facturareal.codigo',
@@ -42,7 +42,7 @@ def report_ventas(request):
     else:
         vivero = detalleUser.objects.get(usuario__pk=request.user.id)
         request.session['vivero'] = vivero.vivero.id
-        fechas = json.loads(request.body)
+        fechas = json.loads(request.body.decode('utf-8'))
 
         data = Detalle_FacturaReal.objects.extra(
             select={'total': 'SELECT sum(ventas_detalle_facturareal.val_neto)  FROM ventas_detalle_facturareal WHERE ventas_detalle_facturareal.factura_id = ventas_facturareal.codigo',
@@ -152,7 +152,7 @@ class report_remisiones(TemplateView):
 
     def post(self, request, *args, **kwargs):
         if 'vivero' in request.session:
-            fechas = json.loads(request.body)
+            fechas = json.loads(request.body.decode('utf-8'))
 
             data = detalleRemison.objects.extra(
                 select={'total': 'SELECT sum(ventas_detalleremison.val_neto)  FROM ventas_detalleremison WHERE ventas_detalleremison.remision_id = ventas_remision.id',
@@ -177,7 +177,7 @@ class report_remisiones(TemplateView):
         else:
             vivero = detalleUser.objects.get(usuario__pk=request.user.id)
             request.session['vivero'] = vivero.vivero.id
-            fechas = json.loads(request.body)
+            fechas = json.loads(request.body.decode('utf-8'))
 
             data = detalleRemison.objects.extra(
                 select={'total': 'SELECT sum(ventas_detalleremison.val_neto)  FROM ventas_detalleremison WHERE ventas_detalleremison.remision_id = ventas_remision.id',
@@ -210,7 +210,7 @@ class ReportCat(TemplateView):
 
     def post(self, request, *args, **kwargs):
         if 'vivero' in request.session:
-            fechas = json.loads(request.body)
+            fechas = json.loads(request.body.decode('utf-8'))
 
             data = Producto.objects.raw(''' SELECT
             ventas_producto.nombre,
@@ -241,7 +241,7 @@ class ReportCat(TemplateView):
         else:
             vivero = detalleUser.objects.get(usuario__pk=request.user.id)
             request.session['vivero'] = vivero.vivero.id
-            fechas = json.loads(request.body)
+            fechas = json.loads(request.body.decode('utf-8'))
 
             data = Producto.objects.raw(''' SELECT
             ventas_producto.nombre,
