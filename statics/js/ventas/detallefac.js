@@ -58,13 +58,13 @@ function copiaFactura() {
     doc.setFontType("normal")
     var nit_vivero = dat[0].nit_vivero
     doc.setFontSize(10)
-    doc.text(40, 38, `NIT:  ${nit_vivero}`)
+    doc.text(15, 38, `OSCAR MURCIA MUÑOZ NIT:  ${nit_vivero}`)
 
     doc.addImage(imagen, 'jpeg', 15, 4, 70, 30)
 
     doc.setFontSize(13)
     var cod = dat[0].factura
-    doc.text(140, 20, 'COPIA FACTURA DE VENTA')
+    doc.text(145, 20, 'FACTURA DE VENTA')
     doc.text(165, 25, 'No.')
     doc.text(165, 35, cod.toString())
     doc.setFillColor(150)

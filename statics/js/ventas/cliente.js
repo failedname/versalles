@@ -158,7 +158,7 @@ function FacturaPdf(dat, nume) {
   doc.setFontType("normal")
   var nit_vivero = dat[0].nit_vivero
   doc.setFontSize(10)
-  doc.text(40, 38, `NIT:  ${nit_vivero}`)
+  doc.text(15, 38, `OSCAR MURCIA MUÑOZ NIT:  ${nit_vivero}`)
 
   doc.addImage(imagen, 'jpeg', 15, 4, 70, 30)
 
