@@ -282,7 +282,7 @@ function FacturaPdf(dat, nume) {
       fillColor: [96, 187, 82]
     },
     styles: {
-      fontSize: 6,
+      fontSize: 7,
       font: 'courier',
       cellPadding: 1,
       cell: 6
