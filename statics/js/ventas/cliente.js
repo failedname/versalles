@@ -159,14 +159,14 @@ function FacturaPdf(dat, nume) {
   var nit_vivero = dat[0].nit_vivero
   doc.setFontSize(10)
   doc.text(15, 38, `OSCAR MURCIA MUÑOZ NIT:  ${nit_vivero}`)
+  doc.text(30, 42, 'IVA REGIMEN COMUN')
 
   doc.addImage(imagen, 'jpeg', 15, 4, 70, 30)
 
   doc.setFontSize(13)
   var cod = dat[0].factura
   doc.text(145, 20, 'FACTURA DE VENTA')
-  doc.text(165, 25, 'No.')
-  doc.text(165, 35, cod.toString())
+  doc.text(165, 25, `No. ${cod.toString()}`)
   doc.setFillColor(150)
   doc.roundedRect(5, 45, 200, 10, 1, 1, 'F')
   doc.setTextColor(0)

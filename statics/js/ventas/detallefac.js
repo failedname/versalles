@@ -59,14 +59,14 @@ function copiaFactura() {
     var nit_vivero = dat[0].nit_vivero
     doc.setFontSize(10)
     doc.text(15, 38, `OSCAR MURCIA MUÑOZ NIT:  ${nit_vivero}`)
+    doc.text(30, 42, 'IVA REGIMEN COMUN')
 
     doc.addImage(imagen, 'jpeg', 15, 4, 70, 30)
 
     doc.setFontSize(13)
     var cod = dat[0].factura
     doc.text(145, 20, 'FACTURA DE VENTA')
-    doc.text(165, 25, 'No.')
-    doc.text(165, 35, cod.toString())
+    doc.text(165, 25, `No. ${cod.toString()}`)
     doc.setFillColor(150)
     doc.roundedRect(5, 45, 200, 10, 1, 1, 'F')
     doc.setTextColor(0)
@@ -169,7 +169,7 @@ function copiaFactura() {
         var vivero_nit = dat[0].nit_vivero
         doc.text(data.settings.margin.left, doc.internal.pageSize.height - 15, `NUMERACION HABILITADA SEGUN RESOLUCION DIAN ${numer} DEL ${fecha} DEL ${ini} al ${fin} `)
         doc.text(data.settings.margin.left, doc.internal.pageSize.height - 12, `FACTURACION POR COMPUTADOR, IMPRESO POR ${vivero} NIT ${vivero_nit}`)
-
+        // doc.text(data.settings.margin.left,doc.internal.pageSize.height - 5,' Esta factura de venta se asimila en todos sus efectos legales a una letra de cambio según el artículo No. 671 y S.S. 772-774 del código de comercio.')
       },
       theme: 'grid',
       startY: 96,
