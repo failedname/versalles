@@ -42,8 +42,10 @@ new Vue({
           label: ''
         }
       ],
+      selected:'',
       rows: data,
-      categoria: categoria,
+      cate: categoria,
+
       presentacion: presentacion,
       id_inventario: '',
       pago: {
@@ -53,7 +55,45 @@ new Vue({
       index: ''
     }
   },
+  mounted(){
+    $('.ui.dropdown').dropdown();
+  },
   methods: {
+    printPro(){
+      let csrftoken = Cookies.get('csrftoken');
+      let myHeaders = new Headers({"X-CSRFToken": csrftoken});
+      var myInit = {
+        method: 'POST',
+        body:JSON.stringify({id:this.selected}),
+        headers: myHeaders,
+        credentials: 'include'
+      }
+      fetch('print/', myInit).then((res) => {
+        return res.json()
+      }).then((data) => {
+        let rows = []
+        let len = data.data.length
+        for(let i = 0; i< len; i++){
+          rows.push([data.data[i].nombre,
+                      data.data[i].presentacion,
+                      moneda(data.data[i].precioventa),
+                      moneda(data.data[i].precioxmayor)]
+
+                    )
+        }
+        var doc = new jsPDF('A4')
+        let columns = ['Nombre', 'Presentacion', 'Precio Venta', 'Precio x Mayor']
+        doc.autoTable(columns, rows,{theme: 'grid', headerStyles:{
+          fontSize: 7
+        },
+        styles: {
+          fontSize: 7
+        }
+        })
+        doc.autoPrint();
+
+        window.open(doc.output('bloburl'), '_blank');      })
+    },
     showModal() {
       $('#id_nuevo').modal('show');
     },

@@ -15,10 +15,17 @@
   </div>
   <div class="ui grid container">
     <div class="grid_bar">
-      <div class="four column">
+      <div class="two column">
         <a @click="showModal" class="ui primary button btn">Nuevo producto</a>
+        <select class="ui " v-model="selected" name="" @change="printPro">
+          <option value=""></option>
+          <option v-for="it in cate" v-bind:value="it.id">[[it.nombre]]</option>
+        </select>
+
       </div>
+
     </div>
+
 
 
   </div>
@@ -210,5 +217,9 @@
 <script type="text/javascript" src="{% static 'js/barcode.min.js' %}"></script>
 
 <script type="text/javascript" src="{% static 'js/inventario/productos.js' %}"></script>
+<script src="{% static 'js/jspdf.min.js'%}"></script>
+<script src="{% static 'js/autotable.js'%}"></script>
+
+
 
 {% endblock js %}

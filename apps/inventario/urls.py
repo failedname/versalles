@@ -1,6 +1,6 @@
 
 from django.conf.urls import url
-from .views import Productos, SaveProducto, Script, AddInventario, DelInventario
+from .views import Productos, SaveProducto, Script, AddInventario, DelInventario,Printproduct
 
 urlpatterns = [
     url(r'^productos/$',
@@ -12,6 +12,8 @@ urlpatterns = [
         AddInventario, name='add'),
     url(r'^productos/del/$',
         DelInventario, name='del'),
+    url(r'^productos/print/$',
+        Printproduct, name='print'),
 
 
 

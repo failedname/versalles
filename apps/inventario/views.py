@@ -46,7 +46,6 @@ def Productos(request):
 
 
 def SaveProducto(request):
-    print('hola')
     nombre = request.POST['nombre']
     iva = request.POST['iva']
     categoria = request.POST['categoria']
@@ -117,3 +116,21 @@ def DelInventario(request):
     }
 
     return JsonResponse({'data': data_final}, safe=True)
+
+def Printproduct(request):
+     id = request.body.decode('utf-8')
+     data = json.loads(id)
+     data = Producto.objects.select_related('id_categoria',
+                                            'id_presentacion'
+                                            ).filter(
+         vivero=request.session['vivero'],id_categoria_id=data['id']
+     ).order_by('nombre')
+     res = [{
+         'nombre': response.nombre,
+         'precioventa': response.precio_venta,
+         'preciocompra': response.precio_compra,
+         'categoria': response.id_categoria.nomb_cate,
+         'presentacion': response.id_presentacion.tipo,
+         'precioxmayor': response.precioxmayor
+     }for response in data]
+     return JsonResponse({'data': res},safe=True)

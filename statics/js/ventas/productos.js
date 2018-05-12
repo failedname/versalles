@@ -23,7 +23,7 @@ function generarPdf () {
 
               )
   }
-  
+
   pdfProductos(array)
 
 }
@@ -38,5 +38,7 @@ function pdfProductos (rows) {
     fontSize: 7
   }
 })
-  doc.output('dataurlnewwindow')
+doc.autoPrint();
+
+window.open(doc.output('bloburl'), '_blank');
 }
