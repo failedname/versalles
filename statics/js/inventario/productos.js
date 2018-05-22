@@ -15,34 +15,32 @@ new Vue({
   ],
   data() {
     return {
-      columns: [
-        {
-          label: 'Codigo',
-          field: 'id'
-        }, {
-          label: 'Barras'
-        }, {
-          label: 'Nombre',
-          field: 'nombre',
-          filterable: true
-        }, {
-          label: 'Categoria',
-          field: 'categoria'
-        }, {
-          label: 'IVA'
-        }, {
-          label: 'Presentación',
-          field: 'presentacion'
-        }, {
-          label: 'Precio'
-        }, {
-          label: 'Stock',
-          field: 'stock'
-        }, {
-          label: ''
-        }
-      ],
-      selected:'',
+      columns: [{
+        label: 'Codigo',
+        field: 'id'
+      }, {
+        label: 'Barras'
+      }, {
+        label: 'Nombre',
+        field: 'nombre',
+        filterable: true
+      }, {
+        label: 'Categoria',
+        field: 'categoria'
+      }, {
+        label: 'IVA'
+      }, {
+        label: 'Presentación',
+        field: 'presentacion'
+      }, {
+        label: 'Precio'
+      }, {
+        label: 'Stock',
+        field: 'stock'
+      }, {
+        label: ''
+      }],
+      selected: '',
       rows: data,
       cate: categoria,
 
@@ -55,16 +53,20 @@ new Vue({
       index: ''
     }
   },
-  mounted(){
+  mounted() {
     $('.ui.dropdown').dropdown();
   },
   methods: {
-    printPro(){
+    printPro() {
       let csrftoken = Cookies.get('csrftoken');
-      let myHeaders = new Headers({"X-CSRFToken": csrftoken});
+      let myHeaders = new Headers({
+        "X-CSRFToken": csrftoken
+      });
       var myInit = {
         method: 'POST',
-        body:JSON.stringify({id:this.selected}),
+        body: JSON.stringify({
+          id: this.selected
+        }),
         headers: myHeaders,
         credentials: 'include'
       }
@@ -73,26 +75,31 @@ new Vue({
       }).then((data) => {
         let rows = []
         let len = data.data.length
-        for(let i = 0; i< len; i++){
+        for (let i = 0; i < len; i++) {
           rows.push([data.data[i].nombre,
-                      data.data[i].presentacion,
-                      moneda(data.data[i].precioventa),
-                      moneda(data.data[i].precioxmayor)]
+              data.data[i].presentacion,
+              data.data[i].iva,
+              moneda(data.data[i].precioventa * ((data.data[i].iva + 100) / 100)),
+              moneda(data.data[i].precioxmayor * ((data.data[i].iva + 100) / 100))
+            ]
 
-                    )
+          )
         }
         var doc = new jsPDF('A4')
-        let columns = ['Nombre', 'Presentacion', 'Precio Venta', 'Precio x Mayor']
-        doc.autoTable(columns, rows,{theme: 'grid', headerStyles:{
-          fontSize: 7
-        },
-        styles: {
-          fontSize: 7
-        }
+        let columns = ['Nombre', 'Presentacion', 'iva', 'Precio Venta', 'Precio x Mayor']
+        doc.autoTable(columns, rows, {
+          theme: 'grid',
+          headerStyles: {
+            fontSize: 7
+          },
+          styles: {
+            fontSize: 7
+          }
         })
         doc.autoPrint();
 
-        window.open(doc.output('bloburl'), '_blank');      })
+        window.open(doc.output('bloburl'), '_blank');
+      })
     },
     showModal() {
       $('#id_nuevo').modal('show');
@@ -105,10 +112,15 @@ new Vue({
       let form = document.getElementById('form_add')
 
       let csrftoken = Cookies.get('csrftoken');
-      let myHeaders = new Headers({"X-CSRFToken": csrftoken});
+      let myHeaders = new Headers({
+        "X-CSRFToken": csrftoken
+      });
       var myInit = {
         method: 'POST',
-        body: JSON.stringify({valor: form.add.value, id: this.id_inventario}),
+        body: JSON.stringify({
+          valor: form.add.value,
+          id: this.id_inventario
+        }),
         headers: myHeaders,
         credentials: 'include'
       }
@@ -130,10 +142,15 @@ new Vue({
       let form = document.getElementById('form_del')
 
       let csrftoken = Cookies.get('csrftoken');
-      let myHeaders = new Headers({"X-CSRFToken": csrftoken});
+      let myHeaders = new Headers({
+        "X-CSRFToken": csrftoken
+      });
       var myInit = {
         method: 'POST',
-        body: JSON.stringify({valor: form.del.value, id: this.id_inventario}),
+        body: JSON.stringify({
+          valor: form.del.value,
+          id: this.id_inventario
+        }),
         headers: myHeaders,
         credentials: 'include'
       }
@@ -156,7 +173,9 @@ new Vue({
         let form = document.getElementById('form-producto')
         let data = new FormData(form)
         let csrftoken = Cookies.get('csrftoken');
-        let myHeaders = new Headers({"X-CSRFToken": csrftoken});
+        let myHeaders = new Headers({
+          "X-CSRFToken": csrftoken
+        });
         var myInit = {
           method: 'POST',
           body: data,

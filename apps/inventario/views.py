@@ -131,6 +131,7 @@ def Printproduct(request):
          'preciocompra': response.precio_compra,
          'categoria': response.id_categoria.nomb_cate,
          'presentacion': response.id_presentacion.tipo,
-         'precioxmayor': response.precioxmayor
+         'precioxmayor': response.precioxmayor,
+         'iva': response.iva_porce
      }for response in data]
      return JsonResponse({'data': res},safe=True)
