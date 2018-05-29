@@ -226,8 +226,7 @@ class ReportCat(TemplateView):
             JOIN "public"."ventas_facturareal"
             ON ventas_detalle_facturareal.factura_id = ventas_facturareal.codigo
             WHERE
-            (ventas_facturareal.fecha BETWEEN %s AND %s) and (ventas_facturareal.vivero_id=%s) AND ventas_producto.id_categoria_id=%s
-            GROUP BY
+            ventas_facturareal.fecha BETWEEN %s AND %s AND ventas_facturareal.vivero_id=%s AND ventas_producto.id_categoria_id=%s  AND (ventas_facturareal.estado_id=1 OR ventas_facturareal.estado_id=3 ) GROUP BY
             ventas_producto.id ''', [fechas['start'], fechas['end'], request.session['vivero'], fechas['cate']])
             fact = [{
                 'id': res.pk,
@@ -257,7 +256,7 @@ class ReportCat(TemplateView):
             JOIN "public"."ventas_facturareal"
             ON ventas_detalle_facturareal.factura_id = ventas_facturareal.codigo
             WHERE
-            (ventas_facturareal.fecha BETWEEN %s AND %s) and (ventas_facturareal.vivero_id=%s) AND ventas_producto.id_categoria_id=%s
+            (ventas_facturareal.fecha BETWEEN %s AND %s) and (ventas_facturareal.vivero_id=%s) AND ventas_producto.id_categoria_id=%s AND (ventas_facturareal.estado_id=1 OR ventas_facturareal.estado_id=3 )
             GROUP BY
             ventas_producto.id ''', [fechas['start'], fechas['end'], request.session['vivero'], fechas['cate']])
             fact = [{

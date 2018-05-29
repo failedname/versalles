@@ -67,7 +67,7 @@ class CategoriaAdmin(admin.ModelAdmin):
 
 @admin.register(EstadoFactura)
 class EstadoFacturaAdmin(admin.ModelAdmin):
-    pass
+    list_display=('id','estado')
 
 
 @admin.register(Presentacion)
