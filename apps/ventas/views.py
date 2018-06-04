@@ -18,7 +18,21 @@ import json
 
 
 def cancelFactura(request):
-    return JsonResponse({'data': 'hola'}, safe=True)
+    data=request.body.decode('utf-8')
+    index=json.loads(data)
+    estado=EstadoFactura.objects.filter(estado='anulada')
+    FacturaReal.objects.filter(codigo=index).update(estado_id=estado[0].pk)
+    products=Detalle_FacturaReal.objects.filter(factura_id=index)
+    for res in products:
+        stock=Almacen.objects.filter(producto=res.producto_id,vivero_id=request.session['vivero'])
+        total=int(res.cantidad) + int(stock[0].stock)
+        Almacen.objects.filter(producto=res.producto_id,vivero_id=request.session['vivero']).update(stock=total)
+    update=FacturaReal.objects.filter(codigo=index)
+    fact = [{
+        'id':res.codigo,
+        'estado':res.estado.estado
+    }for res in update]
+    return JsonResponse({'data': fact}, safe=True)
 
 
 def pagoFactura(request):

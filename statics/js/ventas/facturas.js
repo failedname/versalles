@@ -44,8 +44,24 @@ new Vue({
   },
   methods: {
     showCancel(index) {
-      $('#cancelModal').modal('show');
+      // $('#cancelModal').modal('show');
       this.index = index
+      let csrftoken = Cookies.get('csrftoken');
+      let myHeaders = new Headers({"X-CSRFToken": csrftoken});
+      var myInit = {
+        method: 'POST',
+        body: JSON.stringify(this.index),
+        headers: myHeaders,
+        credentials: 'include'
+      }
+      fetch('cancel/', myInit).then((res) => {
+        return res.json()
+      }).then((data) => {
+        let idFact=this.rows.findIndex((element)=>{
+          return element.codigo === data.data[0].id
+        })
+        this.rows[idFact].estado=data.data[0].estado
+      })
     },
     cancelFactura() {
 
