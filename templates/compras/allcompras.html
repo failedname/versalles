@@ -1,0 +1,161 @@
+{% extends "base.html" %} {% block title %}Compras{% endblock %} {% load static from staticfiles %} {% block content %} {% csrf_token %}
+<div class="ui grid container">
+
+  <div class="wide column border_links">
+    <div class="grid_bar">
+      <div class="links_bar">
+        <a href="{% url 'ventas:allfacturas' %}" class="title-nav-link ">Compras</a>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+<div class="ui grid container">
+  <div class="grid_bar">
+    <div class="four column">
+      <a href="{% url 'compras:nuevacompra'%}" class="ui primary button btn">Nueva Compra</a>
+    </div>
+  </div>
+
+</div>
+<section class="ui grid container">
+  <div class="grid_bar">
+    <div class="wide sixteen column" id="id_facturas">
+      {% comment %}
+      <table class="ui celled structured small table">
+        <thead>
+          <tr>
+            <th>Número</th>
+            <th>Creación</th>
+            <th>Vencimiento</th>
+            <th>Cliente</th>
+            <th>Nombre</th>
+            <th>Total</th>
+            <th>Pagado</th>
+            <th>Por Pagar</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody id="TableFact">
+
+        </tbody>
+        <tfoot>
+          <tr>
+            <th colspan="7">
+              <div class="ui right floated" id="pagging">
+
+              </div>
+            </th>
+          </tr>
+        </tfoot>
+
+      </table> {% endcomment %}
+      <div class="ui modal" id="modalPago">
+        <i class="close icon"></i>
+        <div class="header">
+          Ingresar Pago Factura No. [[pago.factura]]
+        </div>
+        <div class="image content">
+
+          <div class="description">
+            <div class="ui form">
+              <div class="inline fields">
+                <div class="eight wide field">
+                  <label>Valor Pago</label>
+                  <input v-model="pago.valor" type="number" placeholder="" required>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="actions">
+          <div class="ui black deny button">
+            Cancelar
+          </div>
+          <div class="ui positive right labeled icon button" @click="savePago">
+            Guardar Pago
+            <i class="checkmark icon"></i>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <vue-good-table title="" :columns="columns" :rows="rows" :paginate="true" :lineNumbers="true" styleClass="ui basic table">
+          <template slot="table-row" scope="props">
+          <td class=" ">[[props.row.codigo]]</td>
+          <td class=" ">[[props.row.fecha]]</td>
+          <td class=" ">[[props.row.identificacion]]</td>
+          <td class=" ">[[props.row.nombre]]</td>
+          <td class=" ">[[moneda(props.row.total)]]</td>
+
+         <td>
+            {% comment %} <div class="ui icon bottom top right pointing dropdown button icon_action ">
+            <i class="caret down icon"></i>
+            <div class="menu">
+              <a class="item" :href="'/ventas/facturas/detallefac/'+ props.row.codigo">Ver</a>
+              <a class="item" @click="modalPago(props.row.codigo)" v-bind:class="[(props.row.estado=='cerrada' || props.row.estado=='anulada' ) ? 'disabled':'']">Agregar Pago</a>
+              {% if user.is_superuser %}
+                <div class="item" @click="showCancel(props.row.codigo)" :class="[(props.row.estado=='cerrada' || props.row.estado=='anulada' ) ? 'disabled':'']">Anular</div>
+              {% endif %}
+
+
+            </div>
+          </div> {% endcomment %}
+          </td>
+        </template>
+
+        </vue-good-table>
+      </div>
+
+
+    </div>
+  </div>
+</section>
+<div class="ui basic modal" id="cancelModal">
+  <div class="ui icon header">
+    <i class="archive icon"></i> Anular Facturas
+  </div>
+  <div class="content">
+    <p>
+      ¿Está seguro de que desea anular la factura de venta?</p>
+  </div>
+  <div class="actions">
+    <div class="ui red basic cancel inverted button">
+      <i class="remove icon"></i> No
+    </div>
+    <button class="ui green ok inverted button" v-bind:click="cancelFactura">
+      <i class="checkmark icon"></i> Si
+    </button>
+  </div>
+</div>
+<div class="ui basic modal" id="deleteModal">
+  <div class="ui icon header">
+    <i class="archive icon"></i> Eliminar Facturas
+  </div>
+  <div class="content">
+    <p>
+      ¿Está seguro de que desea eliminar la factura de venta?</p>
+  </div>
+  <div class="actions">
+    <div class="ui red basic cancel inverted button">
+      <i class="remove icon"></i> No
+    </div>
+    <div class="ui green ok inverted button">
+      <i class="checkmark icon"></i> Si
+    </div>
+  </div>
+</div>
+{% endblock %} 
+
+{% block js %}
+
+<script type="text/javascript">
+  let data = JSON.parse('{{data|safe}}')
+</script>
+<script type="text/javascript" src="{% static 'js/compras/compras.js' %}"></script>
+
+
+{% endblock %}

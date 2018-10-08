@@ -18,19 +18,21 @@ import json
 
 
 def cancelFactura(request):
-    data=request.body.decode('utf-8')
-    index=json.loads(data)
-    estado=EstadoFactura.objects.filter(estado='anulada')
+    data = request.body.decode('utf-8')
+    index = json.loads(data)
+    estado = EstadoFactura.objects.filter(estado='anulada')
     FacturaReal.objects.filter(codigo=index).update(estado_id=estado[0].pk)
-    products=Detalle_FacturaReal.objects.filter(factura_id=index)
+    products = Detalle_FacturaReal.objects.filter(factura_id=index)
     for res in products:
-        stock=Almacen.objects.filter(producto=res.producto_id,vivero_id=request.session['vivero'])
-        total=int(res.cantidad) + int(stock[0].stock)
-        Almacen.objects.filter(producto=res.producto_id,vivero_id=request.session['vivero']).update(stock=total)
-    update=FacturaReal.objects.filter(codigo=index)
+        stock = Almacen.objects.filter(
+            producto=res.producto_id, vivero_id=request.session['vivero'])
+        total = int(res.cantidad) + int(stock[0].stock)
+        Almacen.objects.filter(
+            producto=res.producto_id, vivero_id=request.session['vivero']).update(stock=total)
+    update = FacturaReal.objects.filter(codigo=index)
     fact = [{
-        'id':res.codigo,
-        'estado':res.estado.estado
+        'id': res.codigo,
+        'estado': res.estado.estado
     }for res in update]
     return JsonResponse({'data': fact}, safe=True)
 
@@ -514,7 +516,8 @@ def save_facturaReal(request):
 
         id_fac = f.codigo
         for res in datos['datos']:
-            val_iva = ((int(res['iva']) + 100) / 100) * (int(res['precio']) * int(res['cantidad']))
+            val_iva = ((int(res['iva']) + 100) / 100) * \
+                (int(res['precio']) * int(res['cantidad']))
 
             Detalle_FacturaReal.objects.create(factura_id=id_fac, cantidad=int(res['cantidad']), producto_id=res['id'], val_unitario=int(
                 res['precio']), iva=val_iva - (int(res['precio']) * int(res['cantidad'])), val_neto=val_iva)
@@ -523,9 +526,9 @@ def save_facturaReal(request):
             if stock.stock > 0:
 
                 rest = int(stock.stock) - int(res['cantidad'])
-                print(rest)
                 stock.stock = rest
                 stock.save()
+
         if(len(datos['pago']) != 0):
 
             PagosFactura.objects.create(
@@ -580,7 +583,8 @@ def save_facturaReal(request):
         id_fac = f.codigo
 
         for res in datos['datos']:
-            val_iva = ((int(res['iva']) + 100) / 100) * (int(res['precio']) * int(res['cantidad']))
+            val_iva = ((int(res['iva']) + 100) / 100) * \
+                (int(res['precio']) * int(res['cantidad']))
 
             Detalle_FacturaReal.objects.create(factura_id=id_fac, cantidad=int(res['cantidad']), producto_id=res['id'], val_unitario=int(
                 res['precio']), iva=val_iva - (int(res['precio']) * int(res['cantidad'])), val_neto=val_iva)
@@ -589,9 +593,9 @@ def save_facturaReal(request):
             if stock.stock > 0:
 
                 rest = int(stock.stock) - int(res['cantidad'])
-                print(rest)
                 stock.stock = rest
                 stock.save()
+
         if(len(datos['pago']) != 0):
             PagosFactura.objects.create(
                 pedido_id=id_fac, valorabono=datos['pago'])
@@ -1019,7 +1023,8 @@ def savePos(request):
 
             id_fac = f.codigo
             for res in datos['datos']:
-                val_iva = ((int(res['iva']) + 100) / 100) * (int(res['precio']) * int(res['cantidad']))
+                val_iva = ((int(res['iva']) + 100) / 100) * \
+                    (int(res['precio']) * int(res['cantidad']))
 
                 Detalle_FacturaReal.objects.create(factura_id=id_fac, cantidad=int(res['cantidad']), producto_id=res['id'], val_unitario=int(
                     res['precio']), iva=val_iva - (int(res['precio']) * int(res['cantidad'])), val_neto=val_iva)
@@ -1123,7 +1128,8 @@ def savePos(request):
 
                 id_fac = f.codigo
                 for res in datos['venta']:
-                    val_iva = ((int(res['iva']) + 100) / 100) * (int(res['precio']) * int(res['cantidad']))
+                    val_iva = ((int(res['iva']) + 100) / 100) * \
+                        (int(res['precio']) * int(res['cantidad']))
 
                     Detalle_FacturaReal.objects.create(factura_id=id_fac, cantidad=int(res['cantidad']), producto_id=res['id'], val_unitario=int(
                         res['precio']), iva=val_iva - (int(res['precio']) * int(res['cantidad'])), val_neto=val_iva)
@@ -1231,7 +1237,8 @@ def savePos(request):
 
             id_fac = f.codigo
             for res in datos['venta']:
-                val_iva = ((int(res['iva']) + 100) / 100) * (int(res['precio']) * int(res['cantidad']))
+                val_iva = ((int(res['iva']) + 100) / 100) * \
+                    (int(res['precio']) * int(res['cantidad']))
 
                 Detalle_FacturaReal.objects.create(factura_id=id_fac, cantidad=int(res['cantidad']), producto_id=res['id'], val_unitario=int(
                     res['precio']), iva=val_iva - (int(res['precio']) * int(res['cantidad'])), val_neto=val_iva)
@@ -1334,7 +1341,8 @@ def savePos(request):
             id_fac = f.codigo
             for res in datos['venta']:
 
-                val_iva = ((int(res['iva']) + 100) / 100) * (int(res['precio']) * int(res['cantidad']))
+                val_iva = ((int(res['iva']) + 100) / 100) * \
+                    (int(res['precio']) * int(res['cantidad']))
 
                 Detalle_FacturaReal.objects.create(factura_id=id_fac, cantidad=int(res['cantidad']), producto_id=res['id'], val_unitario=int(
                     res['precio']), iva=val_iva - (int(res['precio']) * int(res['cantidad'])), val_neto=val_iva)

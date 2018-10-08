@@ -8,7 +8,7 @@ class ProveedorAdmin(admin.ModelAdmin):
 
 
 @admin.register(DetalleCompra)
-class CompraAdmin(admin.ModelAdmin):
+class CompraDeAdmin(admin.ModelAdmin):
     list_display = ('compra',)
 
 @admin.register(Compra)

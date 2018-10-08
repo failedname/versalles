@@ -3,8 +3,9 @@ from django.views.generic import TemplateView
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from openpyxl import Workbook
+from django.db.models import Q
 from django.http import JsonResponse, HttpResponse
-from apps.ventas.models import Detalle_FacturaReal, detalleUser, detalleRemison, Categoria, Producto
+from apps.ventas.models import Detalle_FacturaReal, detalleUser, detalleRemison, Categoria, Producto,Cliente
 
 import json
 
@@ -100,6 +101,7 @@ def export_ventas(request, start, end):
         ws['E3'] = 'NOMBRE'
         ws['F3'] = 'IVA'
         ws['G3'] = 'TOTAL'
+        ws['H3'] = 'ESTADO'
         cont = 4
         for ventas in data:
             ws.cell(row=cont, column=2).value = ventas.factura.pk
@@ -108,6 +110,7 @@ def export_ventas(request, start, end):
             ws.cell(row=cont, column=5).value = ventas.factura.cliente.nombre
             ws.cell(row=cont, column=6).value = ventas.iva
             ws.cell(row=cont, column=7).value = ventas.total
+            ws.cell(row=cont, column=8).value = ventas.factura.estado.estado
             cont = cont + 1
         nombre_archivo = "ReporteVentasExcel.xlsx"
         # Definimos que el tipo de respuesta a devolver es un archivo de microsoft
@@ -268,3 +271,74 @@ class ReportCat(TemplateView):
                 'totalcompra': res.valor_compra
             }for res in data]
             return JsonResponse({'data': fact}, safe=True)
+
+
+class ReportCli(TemplateView):
+    template_name = 'reportes/cliente.html'
+
+    def post(self, request, *args, **kwargs):
+        data = request.body.decode('utf-8')
+        cliente = Cliente.objects.all().filter(
+            Q(nombre__icontains=data) | Q(nit_cc__icontains=data))[:5]
+        items = [{
+            'id': res.pk,
+            'nombre': res.nombre,
+            'iden': res.nit_cc
+
+        }for res in cliente]
+        return JsonResponse({'data': items}, safe=True)
+
+
+def ventascli(request, start, end, iden):
+    if 'vivero' in request.session:
+        data = Detalle_FacturaReal.objects.extra(
+            select={'total': 'SELECT sum(ventas_detalle_facturareal.val_neto)  FROM ventas_detalle_facturareal WHERE ventas_detalle_facturareal.factura_id = ventas_facturareal.codigo',
+                    'iva': 'SELECT sum(ventas_detalle_facturareal.iva) FROM ventas_detalle_facturareal WHERE ventas_detalle_facturareal.factura_id = ventas_facturareal.codigo'
+                    }).select_related(
+            'factura',
+            'factura__estado',
+            'factura__vivero',
+            'factura__cliente').filter(
+            factura__vivero_id=request.session['vivero'], factura__fecha__gte=start, factura__fecha__lte=end,factura__cliente__nit_cc=iden).distinct(
+            'factura_id')
+        fact = [{
+            'id': res.factura.pk,
+            'codigo': res.factura.codigo,
+            'fecha': str(res.factura.fecha),
+            'identificacion': res.factura.cliente.nit_cc,
+            'nombre': res.factura.cliente.nombre,
+            'estado': res.factura.estado.estado,
+            'totaliva': res.iva,
+            'total': res.total
+        }for res in data]
+        wb = Workbook()
+        ws = wb.active
+        ws['B1'] = 'REPORTE DE VENTAS'
+        ws.merge_cells('B1:E1')
+        # Creamos los encabezados desde la celda B3 hasta la E3
+        ws['B3'] = 'FACTURA'
+        ws['C3'] = 'FECHA'
+        ws['D3'] = 'IDENTIFICACIÓN'
+        ws['E3'] = 'NOMBRE'
+        ws['F3'] = 'IVA'
+        ws['G3'] = 'TOTAL'
+        ws['H3'] = 'ESTADO'
+        cont = 4
+        for ventas in data:
+            ws.cell(row=cont, column=2).value = ventas.factura.pk
+            ws.cell(row=cont, column=3).value = ventas.factura.fecha
+            ws.cell(row=cont, column=4).value = ventas.factura.cliente.nit_cc
+            ws.cell(row=cont, column=5).value = ventas.factura.cliente.nombre
+            ws.cell(row=cont, column=6).value = ventas.iva
+            ws.cell(row=cont, column=7).value = ventas.total
+            ws.cell(row=cont, column=8).value = ventas.factura.estado.estado
+            cont = cont + 1
+        nombre_archivo = "ReporteVentasExcel.xlsx"
+        # Definimos que el tipo de respuesta a devolver es un archivo de microsoft
+        # excel
+        response = HttpResponse(content_type="application/ms-excel")
+        contenido = "attachment; filename={0}".format(nombre_archivo)
+        response["Content-Disposition"] = contenido
+        wb.save(response)
+        return response
+        return JsonResponse({'data': fact}, safe=True)

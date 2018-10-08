@@ -1,6 +1,6 @@
 from django.conf.urls import url
 from .views import (ventasReport, report_ventas,
-                    report_remisiones, export_ventas, ReportCat)
+                    report_remisiones, export_ventas, ReportCat, ReportCli,ventascli)
 
 urlpatterns = [
 
@@ -14,6 +14,9 @@ urlpatterns = [
         report_remisiones.as_view(), name='reportremisiones'),
     url(r'^categoria/$',
         ReportCat.as_view(), name='reportcategoria'),
+    url(r'^cliente/$', ReportCli.as_view(), name='reportcli'),
+    url(r'^cliente/excel/(?P<start>[\w-]+)/(?P<end>[\w-]+)/(?P<iden>[\w-]+)/$',
+        ventascli, name='exportcli'),
 
 
 ]

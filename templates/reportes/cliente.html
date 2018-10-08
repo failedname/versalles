@@ -1,4 +1,4 @@
-{% extends "base.html" %} {% block title %}Reporte de Ventas{% endblock title %} {% load static from staticfiles %} {% block css %}
+{% extends "base.html" %} {% block title %}Reporte x Cliente{% endblock title %} {% load static from staticfiles %} {% block css %}
 <link rel="stylesheet" href="{% static 'css/calendar.css' %}">
 <link rel="stylesheet" href="{% static 'css/pagination.css'%}"> {% endblock css %} {% block content %}
 <div class="ui grid container">
@@ -9,8 +9,6 @@
         <a href="{% url 'reportes:reportventas' %}" class="title-nav-link ">Reporte Ventas General</a>
         <a href="{% url 'reportes:reportcategoria' %}" class="title-nav-link ">Reporte Ventas x Categoria</a>
         <a href="{% url 'reportes:reportremisiones' %}" class="title-nav-link ">Reporte Remisiones</a>
-        <a href="{% url 'reportes:reportcli' %}" class="title-nav-link ">Reporte x Cliente</a>
-
       </div>
     </div>
 
@@ -21,9 +19,9 @@
     <div class="ui message ">
       <div class="content header_report_invoice">
         <div class="header ">
-          VENTAS
+          VENTAS X CLIENTE
         </div>
-        <p>Consulta el detalle de las facturas de venta en un período de tiempo.</p>
+        <p>Consulta el detalle de las facturas de venta por cliente.</p>
       </div>
     </div>
   </div>
@@ -31,6 +29,31 @@
 <div class="ui grid container">
   <div class="wide column ">
     <div class="ui form">
+      <div class="fields" id='client'>
+        <div class="six wide field">
+            <label for="" class="label-form">Cliente</label>
+            <div class="ui search">
+              <div class="ui icon input">
+
+                <input :value='iden' v-on:keyup="la" v-model="text" id="cliente_search" class="prompt" type="text" placeholder="Buscar...">
+                <i class="search icon"></i>
+
+              </div>
+              <div class="results transition" :class="{'visible':client.length , 'hidden': !client.length }">
+                <a @click="selectClient(index)" v-for="(cliente,index) in client" class="result">
+                  <div class="content">
+                    <div class="title" v-text="cliente.nombre"></div>
+                    <div class="description" v-text="cliente.iden"></div>
+                  </div>
+                </a>
+              </div>
+            </div>
+        </div>
+        <div class="six wide field">
+            <label for="">Identificacion    </label>
+            <input :value='iden' type="number" id='numIden'>
+        </div>
+      </div>
       <div class="fields">
         <div class=" eight wide field">
           <label>Desde</label>
@@ -55,11 +78,11 @@
       </div>
       <div class="fields">
         <div class="field">
-          <div id="btn_reportVentas" class="ui submit button btn">Generar Reporte</div>
+          {% comment %} <div id="btn_reportVentas" class="ui submit button btn">Generar Reporte</div> {% endcomment %}
         </div>
         <div class="field">
           <div id="exportExcel" class="ui submit button btn">Exportar a excel</div>
-        </div>
+        </div> 
       </div>
 
     </div>
@@ -70,11 +93,12 @@
     <table id="tableFactura" class="ui celled structured small table">
       <thead>
         <tr>
-          <th>Número</th>
-          <th>Cliente</th>
-          <th>Creación</th>
+          <th>Producto</th>
+          <th>Cantidad</th>
+          <th>Total ventas</th>
           <th>IVA</th>
-          <th>Total</th>
+          <th>Total compras</th>
+          <th>Ganancia</th>
         </tr>
       </thead>
       <tbody id="report_body">
@@ -82,13 +106,16 @@
       </tbody>
       <tfoot class="full-width">
         <tr>
-          <th colspan="5">
+          <th colspan="6">
             <div class="total_subtotal ">
               <div class="labeled label">
                 Total
               </div>
-              <div id="totiva" class="value">$</div>
-              <div id="total" class="value" style="width:200px">$</div>
+
+              <div id="total" class="value" style="width:200px"></div>
+              <div id="totalcompra" class="value" style="width:200px"></div>
+              <div id="totiva" class="value"></div>
+              <div id="ganancia" class="value"></div>
             </div>
           </th>
         </tr>
@@ -105,5 +132,5 @@
 <script type="text/javascript" src="{% static 'js/pagination.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/moneda.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/calendar.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/reportes/reportVenta.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/reportes/reportCli.js' %}"></script>
 {% endblock js %}
