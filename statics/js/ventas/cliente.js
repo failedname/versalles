@@ -166,7 +166,7 @@ function FacturaPdf(dat, nume) {
   doc.setFontSize(13)
   var cod = dat[0].factura
   doc.text(145, 20, 'FACTURA DE VENTA')
-  doc.text(165, 25, `No. ${cod.toString()}`)
+  doc.text(160, 25, `No. FC-${cod.toString()}`)
   doc.setFillColor(150)
   doc.roundedRect(5, 45, 200, 10, 1, 1, 'F')
   doc.setTextColor(0)
